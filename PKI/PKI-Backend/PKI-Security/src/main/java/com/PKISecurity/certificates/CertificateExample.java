@@ -1,11 +1,11 @@
-package com.example.PKISecurity.certificates;
+package com.PKISecurity.certificates;
 
 
-import com.example.PKISecurity.data.Issuer;
-import com.example.PKISecurity.data.Subject;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.springframework.stereotype.Component;
+
+import com.PKISecurity.data.Subject;
 
 import java.security.*;
 import java.security.cert.X509Certificate;
@@ -17,7 +17,7 @@ import java.util.Date;
 public class CertificateExample {
 
     public Subject generateSubject() {
-        KeyPair keyPairSubject = generateKeyPair();
+        KeyPair kp = generateKeyPair();
 
         //klasa X500NameBuilder pravi X500Name objekat koji predstavlja podatke o vlasniku
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
@@ -31,10 +31,10 @@ public class CertificateExample {
         //UID (USER ID) je ID korisnika
         builder.addRDN(BCStyle.UID, "123456");
 
-        return new Subject(keyPairSubject.getPublic(), builder.build());
+        return new Subject(kp.getPrivate(), kp.getPublic(), builder.build());
     }
 
-    public Issuer generateIssuer() {
+    public Subject generateIssuer() {
         KeyPair kp = generateKeyPair();
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
         builder.addRDN(BCStyle.CN, "IT sluzba");
@@ -50,7 +50,7 @@ public class CertificateExample {
         //Kreiraju se podaci za issuer-a, sto u ovom slucaju ukljucuje:
         // - privatni kljuc koji ce se koristiti da potpise sertifikat koji se izdaje
         // - podatke o vlasniku sertifikata koji izdaje nov sertifikat
-        return new Issuer(kp.getPrivate(), kp.getPublic(), builder.build());
+        return new Subject(kp.getPrivate(), kp.getPublic(), builder.build());
     }
 
     private KeyPair generateKeyPair() {
@@ -67,10 +67,10 @@ public class CertificateExample {
         return null;
     }
 
-    public com.example.PKISecurity.data.Certificate getCertificate() {
+    public com.PKISecurity.data.Certificate getCertificate() {
 
         try {
-            Issuer issuer = generateIssuer();
+            Subject issuer = generateIssuer();
             Subject subject = generateSubject();
 
             //Datumi od kad do kad vazi sertifikat
@@ -81,7 +81,7 @@ public class CertificateExample {
             X509Certificate certificate = CertificateGenerator.generateCertificate(subject,
                     issuer, startDate, endDate, "1");
 
-            return new com.example.PKISecurity.data.Certificate(subject, issuer,
+            return new com.PKISecurity.data.Certificate(subject, issuer,
                     "1", startDate, endDate, certificate);
         } catch (ParseException e) {
             e.printStackTrace();

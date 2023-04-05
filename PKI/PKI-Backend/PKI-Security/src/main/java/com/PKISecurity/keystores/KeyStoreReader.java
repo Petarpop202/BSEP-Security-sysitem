@@ -1,9 +1,10 @@
-package com.example.PKISecurity.keystores;
+package com.PKISecurity.keystores;
 
-import com.example.PKISecurity.data.Issuer;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.springframework.stereotype.Component;
+
+import com.PKISecurity.data.Subject;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -43,7 +44,7 @@ public class KeyStoreReader {
      * @param keyPass - lozinka koja je neophodna da se izvuce privatni kljuc
      * @return - podatke o izdavaocu i odgovarajuci privatni kljuc
      */
-    public Issuer readIssuerFromStore(String keyStoreFile, String alias, char[] password, char[] keyPass) {
+    public Subject readIssuerFromStore(String keyStoreFile, String alias, char[] password, char[] keyPass) {
         try {
             //Datoteka se ucitava
             BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
@@ -56,7 +57,7 @@ public class KeyStoreReader {
             PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, keyPass);
 
             X500Name issuerName = new JcaX509CertificateHolder((X509Certificate) cert).getSubject();
-            return new Issuer(privateKey, cert.getPublicKey(), issuerName);
+            return new Subject(privateKey, cert.getPublicKey(), issuerName);
         } catch (KeyStoreException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {

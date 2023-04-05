@@ -1,4 +1,4 @@
-package com.example.PKISecurity.keystores;
+package com.PKISecurity.keystores;
 
 import org.springframework.stereotype.Component;
 

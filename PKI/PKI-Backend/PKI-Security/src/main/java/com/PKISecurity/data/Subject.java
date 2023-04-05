@@ -1,4 +1,4 @@
-package com.example.PKISecurity.data;
+package com.PKISecurity.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bouncycastle.asn1.x500.X500Name;
 
+import java.security.PrivateKey;
 import java.security.PublicKey;
 
 @Getter
@@ -13,6 +14,7 @@ import java.security.PublicKey;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Subject {
+    private PrivateKey privateKey;
     private PublicKey publicKey;
     private X500Name x500Name;
 }

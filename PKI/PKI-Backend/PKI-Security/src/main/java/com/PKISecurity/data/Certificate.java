@@ -1,6 +1,5 @@
-package com.example.PKISecurity.data;
+package com.PKISecurity.data;
 
-import com.example.PKISecurity.data.Issuer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import java.util.Date;
 public class Certificate {
 
     private Subject subject;
-    private Issuer issuer;
+    private Subject issuer;
     private String serialNumber;
     private Date startDate;
     private Date endDate;
