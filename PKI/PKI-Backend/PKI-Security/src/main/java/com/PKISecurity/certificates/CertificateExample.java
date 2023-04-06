@@ -79,7 +79,7 @@ public class CertificateExample {
             Date endDate = sdf.parse("2028-03-25");
 
             X509Certificate certificate = CertificateGenerator.generateCertificate(subject,
-                    issuer, startDate, endDate, "1");
+                    issuer, startDate, endDate);
 
             return new com.PKISecurity.data.Certificate(subject, issuer,
                     "1", startDate, endDate, certificate);

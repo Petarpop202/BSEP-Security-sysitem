@@ -14,6 +14,9 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 @Component
 public class KeyStoreReader {
@@ -32,6 +35,39 @@ public class KeyStoreReader {
         } catch (NoSuchProviderException e) {
             e.printStackTrace();
         }
+    }
+    
+    public List<Subject> readAllIssuersFromStore(String keyStoreFile, char[] password, char[] keyPass) {
+        try {
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
+            keyStore.load(in, password);
+
+            Enumeration<String> aliases = keyStore.aliases();
+            List<Subject> issuers = new ArrayList<Subject>();
+            
+            while (aliases.hasMoreElements()) {
+            	String alias = aliases.nextElement();
+            	Certificate cert = keyStore.getCertificate(alias);
+            	X500Name issuerName = new JcaX509CertificateHolder((X509Certificate) cert).getIssuer();
+            	PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, keyPass);
+            	issuers.add(new Subject(privateKey, cert.getPublicKey(), issuerName));
+            }
+            
+            return issuers;
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -56,7 +92,7 @@ public class KeyStoreReader {
             //Iscitava se privatni kljuc vezan za javni kljuc koji se nalazi na sertifikatu sa datim aliasom
             PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, keyPass);
 
-            X500Name issuerName = new JcaX509CertificateHolder((X509Certificate) cert).getSubject();
+            X500Name issuerName = new JcaX509CertificateHolder((X509Certificate) cert).getIssuer();
             return new Subject(privateKey, cert.getPublicKey(), issuerName);
         } catch (KeyStoreException e) {
             e.printStackTrace();
@@ -67,6 +103,36 @@ public class KeyStoreReader {
         } catch (CertificateException e) {
             e.printStackTrace();
         } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List<Certificate> readAllCertificates(String keyStoreFile, String keyStorePass){
+    	try {
+            KeyStore ks = KeyStore.getInstance("JKS", "SUN");
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
+            ks.load(in, keyStorePass.toCharArray());
+
+            List<Certificate> certificates = new ArrayList<Certificate>();
+            Enumeration<String> aliases = ks.aliases();
+            
+            while (aliases.hasMoreElements()) {
+            	certificates.add(ks.getCertificate(aliases.nextElement()));
+            }
+            
+            return certificates;
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (NoSuchProviderException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

@@ -26,7 +26,7 @@ public class CertificateGenerator {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    public static X509Certificate generateCertificate(Subject subject, Subject issuer, Date startDate, Date endDate, String serialNumber) {
+    public static X509Certificate generateCertificate(Subject subject, Subject issuer, Date startDate, Date endDate) {
         try {
             //Posto klasa za generisanje sertifiakta ne moze da primi direktno privatni kljuc pravi se builder za objekat
             //Ovaj objekat sadrzi privatni kljuc izdavaoca sertifikata i koristiti se za potpisivanje sertifikata
@@ -40,7 +40,7 @@ public class CertificateGenerator {
 
             //Postavljaju se podaci za generisanje sertifiakta
             X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuer.getX500Name(),
-                    new BigInteger(serialNumber),
+            		BigInteger.valueOf(System.currentTimeMillis()),
                     startDate,
                     endDate,
                     subject.getX500Name(),

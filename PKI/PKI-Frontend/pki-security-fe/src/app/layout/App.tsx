@@ -2,6 +2,8 @@ import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/materia
 import CreateCertificate from "../../features/create-certificate/CreateCertificate";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { Outlet } from "react-router-dom";
 
 function App() {
 
@@ -25,7 +27,7 @@ function App() {
       <ToastContainer position="bottom-right" hideProgressBar theme="colored" />
       <CssBaseline />
       <Container>
-        <CreateCertificate></CreateCertificate>
+        <Outlet></Outlet>
       </Container>
     </ThemeProvider>
   );
