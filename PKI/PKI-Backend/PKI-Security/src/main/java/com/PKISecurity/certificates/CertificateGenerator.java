@@ -1,6 +1,9 @@
 package com.PKISecurity.certificates;
 
 
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -46,6 +49,26 @@ public class CertificateGenerator {
                     subject.getX500Name(),
                     subject.getPublicKey());
 
+
+
+
+
+            //Na frontu predloziti dodavanje nekih ekstenzija i onda na beku dodati neophodne
+
+            // Da li moze da kreira nove sertifikate ili je end-entity ovaj moze nove
+
+            BasicConstraints basicConstraints = new BasicConstraints(true);
+            certGen.addExtension(
+                    Extension.basicConstraints,
+                    true,
+                    basicConstraints
+            );
+
+
+
+
+
+
             //Generise se sertifikat
             X509CertificateHolder certHolder = certGen.build(contentSigner);
 
@@ -67,6 +90,8 @@ public class CertificateGenerator {
             e.printStackTrace();
         } catch (CertificateException e) {
             e.printStackTrace();
+        } catch (CertIOException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
