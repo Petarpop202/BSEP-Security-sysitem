@@ -1,5 +1,6 @@
 package com.PKISecurity.data;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,6 @@ public class Certificate {
     private String serialNumber;
     private Date startDate;
     private Date endDate;
-
     // svi prethodni podaci mogu da se izvuku i iz X509Certificate, osim privatnog kljuca issuera
     private X509Certificate x509Certificate;
 
