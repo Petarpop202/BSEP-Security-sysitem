@@ -74,7 +74,7 @@ public class CertificateService {
 		}
 
 		X509Certificate cert = CertificateGenerator.generateCertificate(
-				subject, issuer, certificate.startDate, certificate.endDate);
+				subject, issuer, certificate.startDate, certificate.endDate, false);
 
 		System.out.println("Kreiran novi sertifikat: ");
 		System.out.println(cert);
@@ -153,7 +153,7 @@ public class CertificateService {
 		List<String> aliases = new ArrayList<String>();
 		aliases.add(alias);
 
-		SubjectData newSub = new SubjectData(uid, subjectDto.commonName, subjectDto.surname,subjectDto.givenName,subjectDto.organization,subjectDto.organizationalUnitName,subjectDto.country,subjectDto.email,aliases);
+		SubjectData newSub = new SubjectData(0L, subjectDto.commonName, subjectDto.surname,subjectDto.givenName,subjectDto.organization,subjectDto.organizationalUnitName,subjectDto.country,subjectDto.email,aliases);
 		subjectDataService.create(newSub);
 	}
 }

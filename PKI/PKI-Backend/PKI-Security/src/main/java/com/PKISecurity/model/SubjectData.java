@@ -14,7 +14,7 @@ public class SubjectData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private String id;
+    private Long id;
     @Column
     public String commonName;
     @Column

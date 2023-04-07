@@ -1,7 +1,9 @@
 package com.PKISecurity.keystores;
 
 import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
+import org.bouncycastle.util.Arrays;
 import org.springframework.stereotype.Component;
 
 import com.PKISecurity.data.Subject;
@@ -11,10 +13,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.*;
+import java.security.cert.*;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -48,9 +50,21 @@ public class KeyStoreReader {
             while (aliases.hasMoreElements()) {
             	String alias = aliases.nextElement();
             	Certificate cert = keyStore.getCertificate(alias);
-            	X500Name issuerName = new JcaX509CertificateHolder((X509Certificate) cert).getIssuer();
-            	PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, keyPass);
-            	issuers.add(new Subject(privateKey, cert.getPublicKey(), issuerName));
+                X509Certificate cert1 = (X509Certificate) cert;
+
+                int pathLenConstraint = cert1.getBasicConstraints();
+                if (pathLenConstraint == -1) {
+                    // Extension not present or not a CA certificate
+                    System.out.println("Certificate is not CA");
+                } else {
+                    // Extension present and is a CA certificate with path length constraint
+                    X500Name subjectName = new JcaX509CertificateHolder((X509Certificate) cert).getSubject();
+                    PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, keyPass);
+                    issuers.add(new Subject(privateKey, cert.getPublicKey(), subjectName));
+                }
+
+
+
             }
             
             return issuers;
