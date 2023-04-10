@@ -1,6 +1,10 @@
 package com.PKISecurity.controllers;
 
+import java.io.IOException;
+import java.security.cert.CRLException;
 import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Base64.Encoder;
@@ -8,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.PKISecurity.model.CertificateData;
+import org.bouncycastle.operator.OperatorCreationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,5 +81,11 @@ public class CertificateController {
 		}
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<>(builder.toString(), headers, HttpStatus.OK);
+	}
+
+	@GetMapping("/revoke")
+	ResponseEntity<List<String>> RevokeCertificate() throws IOException, OperatorCreationException, CRLException, CertificateException {
+		certificateService.revokeCertificate("Nista");
+		return null;
 	}
 }

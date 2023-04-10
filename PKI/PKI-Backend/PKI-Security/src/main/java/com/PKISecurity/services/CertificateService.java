@@ -1,5 +1,6 @@
 package com.PKISecurity.services;
 
+import java.io.*;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.KeyPair;
@@ -8,17 +9,25 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.security.cert.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 import com.PKISecurity.model.CertificateData;
 import com.PKISecurity.model.SubjectData;
 import com.PKISecurity.services.servicesImplementation.SubjectDataService;
+import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.x509.CRLReason;
+import org.bouncycastle.cert.X509CRLHolder;
+import org.bouncycastle.cert.X509v2CRLBuilder;
+
+import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
+import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.springframework.stereotype.Service;
 
 import com.PKISecurity.Dto.CertificateDto;
@@ -148,12 +157,45 @@ public class CertificateService {
     }
 
 	public void saveSubjectData(SubjectDto subjectDto, String alias, String uid){
-		
+
 
 		List<String> aliases = new ArrayList<String>();
 		aliases.add(alias);
 
 		SubjectData newSub = new SubjectData(0L, subjectDto.commonName, subjectDto.surname,subjectDto.givenName,subjectDto.organization,subjectDto.organizationalUnitName,subjectDto.country,subjectDto.email,aliases);
 		subjectDataService.create(newSub);
+	}
+
+
+	public X509Certificate revokeCertificate(String alias) throws CRLException, IOException, OperatorCreationException, CertificateException {
+		java.security.cert.Certificate certificate = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks",  "password","�[�u��\u0016");
+		X509Certificate rootCert = (X509Certificate)certificate;
+		PrivateKey pk = keyStoreReader.readPrivateKey("src/main/resources/static/keystore.jks","password","�[�u��\u0016","password");
+		Subject issuer = keyStoreReader.readIssuerFromStore("src/main/resources/static/keystore.jks","�[�u��\u0016", "password".toCharArray(), "password".toCharArray());
+
+		java.security.cert.Certificate revokedCertificate = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks",  "password","���gk�");
+		X509Certificate revoked = (X509Certificate)revokedCertificate;
+
+
+		InputStream crlInputStream = new FileInputStream("src/main/resources/static/crl.crl");
+		X509CRLHolder crlHolder1 = new X509CRLHolder(crlInputStream);
+
+
+		X509v2CRLBuilder crlBuilder = new X509v2CRLBuilder(issuer.getX500Name(), Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		crlBuilder.addCRLEntry(revoked.getSerialNumber(), Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()), CRLReason.privilegeWithdrawn);
+		crlBuilder.addCRL(crlHolder1);
+
+		ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256WithRSA").build(pk);
+		X509CRLHolder crlHolder = crlBuilder.build(contentSigner);
+		X509CRL crl = new JcaX509CRLConverter().getCRL(crlHolder);
+
+		FileOutputStream fos = new FileOutputStream("src/main/resources/static/crl.crl");
+		fos.write(crl.getEncoded());
+		fos.close();
+
+
+
+
+		return revoked;
 	}
 }
