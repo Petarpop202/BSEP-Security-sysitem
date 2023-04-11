@@ -30,6 +30,7 @@ export default function CreateCertificate() {
     const [subject_country, setSubjectCountry] = useState<string>("");
     const [subject_email, setSubjectEmail] = useState<string>("");
 
+    const [isCA, setIsCA] = useState<boolean>(false);
     const [selfSigned, setSelfSigned] = useState<boolean>(false);
 
     const [issuer_commonName, setIssuerCommonName] = useState<string>("");
@@ -78,6 +79,10 @@ export default function CreateCertificate() {
     const handleMenuItemChange = (key: string) => {
         setSelectedIssuerUID(key);
     }
+
+    const handleIsCAChange = () => {
+        setIsCA(!isCA);
+    };
 
     const handleIsSelfSignedChange = () => {
         setSelfSigned(!selfSigned);
@@ -150,6 +155,7 @@ export default function CreateCertificate() {
             subject: subject,
             issuer: issuer,
             issuerUID: "",
+            isCA: isCA,
             isSelfSigned: selfSigned,
             startDate: certStartDate,
             endDate: certEndDate,
@@ -175,7 +181,20 @@ export default function CreateCertificate() {
             <form onSubmit={handleSubmit}>
                 <Grid container>
                     <Grid item xs={6} sx={{mb: 2, border: 1, borderColor: "gray", padding: 2}}>
-                        <Typography variant="h4">Subject</Typography>
+                        <Box display='flex' alignItems='center' sx={{mt: 2.4, mb: 2.3}}>
+                            <Grid item xs={8}>
+                                    <Typography variant="h4">Subject</Typography>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Grid container justifyContent={"flex-end"}>
+                                    <FormControlLabel sx={{ml: 5}}
+                                        control = {<Switch checked={isCA} onChange={handleIsCAChange}/>}
+                                        label={<Typography variant="h5">Is CA</Typography>}
+                                        labelPlacement="start"
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Box>
                         <TextField
                             label="Subject Common Name"
                             value={subject_commonName}

@@ -7,6 +7,7 @@ public class CertificateDto {
 	public SubjectDto issuer;
 	public Date startDate;
 	public Date endDate;
+	public boolean isCA;
 	public boolean isSelfSigned;
 	public String issuerUID;
 	
@@ -33,6 +34,12 @@ public class CertificateDto {
 	}
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+	public boolean isCA() {
+		return isCA;
+	}
+	public void setIsCA(boolean isCA) {
+		this.isCA = isCA;
 	}
 	public boolean isSelfSigned() {
 		return isSelfSigned;

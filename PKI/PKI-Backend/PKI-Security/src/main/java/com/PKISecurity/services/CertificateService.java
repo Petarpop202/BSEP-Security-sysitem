@@ -83,7 +83,7 @@ public class CertificateService {
 		}
 
 		X509Certificate cert = CertificateGenerator.generateCertificate(
-				subject, issuer, certificate.startDate, certificate.endDate, false);
+				subject, issuer, certificate.startDate, certificate.endDate, certificate.isCA);
 
 		System.out.println("Kreiran novi sertifikat: ");
 		System.out.println(cert);
