@@ -21,10 +21,13 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.CRLReason;
+import org.bouncycastle.asn1.x509.CertificateList;
+import org.bouncycastle.asn1.x509.TBSCertList;
 import org.bouncycastle.cert.X509CRLHolder;
 import org.bouncycastle.cert.X509v2CRLBuilder;
 
 import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
+import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -60,14 +63,26 @@ public class CertificateService {
 		return keyStoreReader.readAllCertificates("src/main/resources/static/keystore.jks", "password");
 	}
 
-	public HashMap<String, String> getAllIssuers(){
+	public HashMap<String, String> getAllIssuers() throws CertificateException, IOException, OperatorCreationException, CRLException {
 		List<Subject> issuers = keyStoreReader.readAllIssuersFromStore("src/main/resources/static/keystore.jks", "password".toCharArray(), "password".toCharArray());
 		HashMap<String, String> issuersCNs = new HashMap<String, String>();
 
 		for (Subject issuer : issuers) {
-			String uid = issuer.getX500Name().getRDNs(BCStyle.UID)[0].getFirst().getValue().toString();
-			String cn = issuer.getX500Name().getRDNs(BCStyle.CN)[0].getFirst().getValue().toString();
-			issuersCNs.put(uid, cn);
+			for(java.security.cert.Certificate certificate: keyStoreReader.readAllCertificates("src/main/resources/static/keystore.jks", "password")){
+				String uid = issuer.getX500Name().getRDNs(BCStyle.UID)[0].getFirst().getValue().toString();
+				X509Certificate cert = (X509Certificate) certificate;
+				X500Name name = new X500Name(cert.getSubjectX500Principal().toString());
+
+
+				if (uid.equals(name.getRDNs(BCStyle.UID)[0].getFirst().getValue().toString())){
+					if(verifyCertificate("0" + cert.getSerialNumber().toString(16))){
+
+						String cn = issuer.getX500Name().getRDNs(BCStyle.CN)[0].getFirst().getValue().toString();
+						issuersCNs.put(uid, cn);
+					}
+				}
+			}
+
 		}
 		return issuersCNs;
 	}
@@ -214,4 +229,65 @@ public class CertificateService {
 		return revoked;
 	}
 
+	public boolean verifyCertificate(String serialNum) throws CRLException, IOException, OperatorCreationException, CertificateException {
+		String alias = keyStoreReader.getAlias(serialNum,"src/main/resources/static/keystore.jks", "password".toCharArray());
+		Subject issuer = keyStoreReader.readIssuerFromStore("src/main/resources/static/keystore.jks",alias, "password".toCharArray(), "password".toCharArray());
+
+		java.security.cert.Certificate cert = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks",  "password",alias);
+		X509Certificate toVerify = (X509Certificate)cert;
+
+		if(!verifyRevoke(toVerify) || !verifyDate(toVerify)) return false;
+		for(java.security.cert.Certificate certificate: keyStoreReader.readAllCertificates("src/main/resources/static/keystore.jks",  "password")){
+			X509Certificate check = (X509Certificate) certificate;
+			if(check.getSubjectX500Principal().equals(toVerify.getIssuerX500Principal()) && !check.getSubjectX500Principal().equals(check.getIssuerX500Principal())){
+				verifyCertificate("0" + check.getSerialNumber().toString(16));
+			}
+		}
+
+
+
+
+
+		return true;
+	}
+
+	public boolean verifyRevoke(X509Certificate certificate) throws IOException, CertificateException, CRLException {
+		try {
+			CertificateFactory cf = CertificateFactory.getInstance("X.509");
+			FileInputStream fis = new FileInputStream("src/main/resources/static/crl.crl");
+			X509CRL crl = (X509CRL) cf.generateCRL(fis);
+
+			Set revokedCertificates = crl.getRevokedCertificates();
+			Iterator it = revokedCertificates.iterator();
+			while (it.hasNext()) {
+				X509CRLEntry entry = (X509CRLEntry) it.next();
+//				System.out.println("Serial Number: " + entry.getSerialNumber());
+				if(entry.getSerialNumber().equals(certificate.getSerialNumber())){
+					return false;
+				}
+			}
+
+		} catch (CRLException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+
+
+		return true;
+	}
+
+	public boolean verifyDate(X509Certificate certificate) {
+		Date expirationDate = certificate.getNotAfter();
+		Date currentDate = new Date();
+		if(currentDate.after(expirationDate)) return false;
+		return true;
+	}
+
+//	public boolean verifyCertificateSignature(X509Certificate certificate, Subject issuer){
+//		try {
+//			certificate.verify(issuer.getPublicKey());
+//		}
+//	}
 }

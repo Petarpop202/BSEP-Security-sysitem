@@ -8,6 +8,7 @@ public class PkiSecurityApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PkiSecurityApplication.class, args);
+
 	}
 
 }

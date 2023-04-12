@@ -56,8 +56,13 @@ public class CertificateController {
 	}
 	
 	@GetMapping("/issuers")
-	HashMap<String, String> GetIssuers(){
+	HashMap<String, String> GetIssuers() throws CertificateException, IOException, OperatorCreationException, CRLException {
 		return certificateService.getAllIssuers();
+	}
+
+	@GetMapping("/verify/{serialNum}")
+	boolean Verify(@PathVariable String serialNum) throws IOException, CertificateException, CRLException, OperatorCreationException {
+		return certificateService.verifyCertificate(serialNum);
 	}
 	
 	@PostMapping("/create")

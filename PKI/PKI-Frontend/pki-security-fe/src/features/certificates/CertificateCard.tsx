@@ -18,6 +18,18 @@ export default function CertificateCard({certificate} : Props) {
             })
             .catch(() => toast.error("Invalid arguments. Failed creating a new certificate"))
     };
+
+    const verifyCertificate = (event: any) => {
+        axios.get("http://localhost:8080/certificate/verify/" + event, )
+            .then(function (response) {
+                if(response.data){
+                    toast.success("Certificate is valid!")
+                } else {
+                    toast.error("Invalid certificate!")
+                }
+            })
+            .catch(() => toast.error("Fail"))
+    };
     
 
     return (
@@ -123,6 +135,7 @@ export default function CertificateCard({certificate} : Props) {
                                 <Button
                                 variant="contained"
                                 color="success"
+                                onClick={()=>verifyCertificate(certificate.serialNumber)}
                                 >Verify certificate
                                 </Button>
                             </ButtonGroup>
