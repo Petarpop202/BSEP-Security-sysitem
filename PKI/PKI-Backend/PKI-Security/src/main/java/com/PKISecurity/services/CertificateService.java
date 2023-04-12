@@ -21,6 +21,8 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.CRLReason;
+import org.bouncycastle.asn1.x509.CertificateList;
+import org.bouncycastle.asn1.x509.TBSCertList;
 import org.bouncycastle.cert.X509CRLHolder;
 import org.bouncycastle.cert.X509v2CRLBuilder;
 
@@ -212,6 +214,55 @@ public class CertificateService {
 
 
 		return revoked;
+	}
+
+	public boolean verifyCertificate(String serialNum) throws CRLException, IOException, OperatorCreationException, CertificateException {
+		String alias = keyStoreReader.getAlias(serialNum,"src/main/resources/static/keystore.jks", "password".toCharArray());
+		Subject issuer = keyStoreReader.readIssuerFromStore("src/main/resources/static/keystore.jks",alias, "password".toCharArray(), "password".toCharArray());
+
+		java.security.cert.Certificate cert = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks",  "password",alias);
+		X509Certificate toVerify = (X509Certificate)cert;
+
+		if(!verifyRevoke(toVerify)) return false;
+		for(java.security.cert.Certificate certificate: keyStoreReader.readAllCertificates("src/main/resources/static/keystore.jks",  "password")){
+			X509Certificate check = (X509Certificate) certificate;
+			if(check.getSubjectX500Principal().equals(toVerify.getIssuerX500Principal()) && !check.getSubjectX500Principal().equals(check.getIssuerX500Principal())){
+				verifyCertificate("0" + check.getSerialNumber().toString(16));
+			}
+		}
+
+
+
+
+
+		return true;
+	}
+
+	public boolean verifyRevoke(X509Certificate certificate) throws IOException, CertificateException, CRLException {
+		try {
+			CertificateFactory cf = CertificateFactory.getInstance("X.509");
+			FileInputStream fis = new FileInputStream("src/main/resources/static/crl.crl");
+			X509CRL crl = (X509CRL) cf.generateCRL(fis);
+
+			Set revokedCertificates = crl.getRevokedCertificates();
+			Iterator it = revokedCertificates.iterator();
+			while (it.hasNext()) {
+				X509CRLEntry entry = (X509CRLEntry) it.next();
+//				System.out.println("Serial Number: " + entry.getSerialNumber());
+				if(entry.getSerialNumber().equals(certificate.getSerialNumber())){
+					return false;
+				}
+			}
+
+		} catch (CRLException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+
+
+		return true;
 	}
 
 }
