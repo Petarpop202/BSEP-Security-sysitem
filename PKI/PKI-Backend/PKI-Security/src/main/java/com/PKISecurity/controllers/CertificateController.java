@@ -1,6 +1,8 @@
 package com.PKISecurity.controllers;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
@@ -15,6 +17,7 @@ import com.PKISecurity.model.CertificateData;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,5 +90,17 @@ public class CertificateController {
 	ResponseEntity<List<String>> RevokeCertificate(@PathVariable String serialNum) throws IOException, OperatorCreationException, CRLException, CertificateException {
 		certificateService.revokeCertificatesByIssuer(serialNum);
 		return null;
+	}
+
+	@GetMapping("/download/{serialNum}")
+	public ResponseEntity<byte[]> downloadCert(@PathVariable String serialNum) throws Exception {
+		X509Certificate cert = certificateService.getCertificateForDownload(serialNum);
+		byte[] certBytes = cert.getEncoded();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDispositionFormData("attachment", "certificate.crt");
+
+		return new ResponseEntity<>(certBytes, headers, HttpStatus.OK);
 	}
 }

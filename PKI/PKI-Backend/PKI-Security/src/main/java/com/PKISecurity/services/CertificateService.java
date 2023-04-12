@@ -285,6 +285,13 @@ public class CertificateService {
 		return true;
 	}
 
+	public X509Certificate getCertificateForDownload(String serialNum){
+		String alias = keyStoreReader.getAlias(serialNum,"src/main/resources/static/keystore.jks", "password".toCharArray());
+		java.security.cert.Certificate cert = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks",  "password",alias);
+		X509Certificate toDownload = (X509Certificate)cert;
+		return toDownload;
+	}
+
 //	public boolean verifyCertificateSignature(X509Certificate certificate, Subject issuer){
 //		try {
 //			certificate.verify(issuer.getPublicKey());
