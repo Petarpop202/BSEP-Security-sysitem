@@ -22,9 +22,13 @@ export default function CertificateCard({certificate} : Props) {
     const verifyCertificate = (event: any) => {
         axios.get("http://localhost:8080/certificate/verify/" + event, )
             .then(function (response) {
-                console.log(response.data)
+                if(response.data){
+                    toast.success("Certificate is valid!")
+                } else {
+                    toast.error("Invalid certificate!")
+                }
             })
-            .catch(() => toast.error("Invalid arguments. Failed creating a new certificate"))
+            .catch(() => toast.error("Fail"))
     };
     
 
