@@ -179,7 +179,6 @@ public class CertificateService {
 		List<java.security.cert.Certificate> certificates = keyStoreReader.readAllCertificates("src/main/resources/static/keystore.jks", "password");
 		for(java.security.cert.Certificate certificate : certificates) {
 			X509Certificate newCert = (X509Certificate) certificate;
-			X500Principal issuer = newCert.getIssuerX500Principal();
 			if(subj.equals(newCert.getIssuerX500Principal()))
 				revokeCertificatesByIssuer("0" + newCert.getSerialNumber().toString(16));
 		}
