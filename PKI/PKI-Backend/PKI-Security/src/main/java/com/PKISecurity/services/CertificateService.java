@@ -27,6 +27,7 @@ import org.bouncycastle.cert.X509CRLHolder;
 import org.bouncycastle.cert.X509v2CRLBuilder;
 
 import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
+import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -62,14 +63,26 @@ public class CertificateService {
 		return keyStoreReader.readAllCertificates("src/main/resources/static/keystore.jks", "password");
 	}
 
-	public HashMap<String, String> getAllIssuers(){
+	public HashMap<String, String> getAllIssuers() throws CertificateException, IOException, OperatorCreationException, CRLException {
 		List<Subject> issuers = keyStoreReader.readAllIssuersFromStore("src/main/resources/static/keystore.jks", "password".toCharArray(), "password".toCharArray());
 		HashMap<String, String> issuersCNs = new HashMap<String, String>();
 
 		for (Subject issuer : issuers) {
-			String uid = issuer.getX500Name().getRDNs(BCStyle.UID)[0].getFirst().getValue().toString();
-			String cn = issuer.getX500Name().getRDNs(BCStyle.CN)[0].getFirst().getValue().toString();
-			issuersCNs.put(uid, cn);
+			for(java.security.cert.Certificate certificate: keyStoreReader.readAllCertificates("src/main/resources/static/keystore.jks", "password")){
+				String uid = issuer.getX500Name().getRDNs(BCStyle.UID)[0].getFirst().getValue().toString();
+				X509Certificate cert = (X509Certificate) certificate;
+				X500Name name = new X500Name(cert.getSubjectX500Principal().toString());
+
+
+				if (uid.equals(name.getRDNs(BCStyle.UID)[0].getFirst().getValue().toString())){
+					if(verifyCertificate("0" + cert.getSerialNumber().toString(16))){
+
+						String cn = issuer.getX500Name().getRDNs(BCStyle.CN)[0].getFirst().getValue().toString();
+						issuersCNs.put(uid, cn);
+					}
+				}
+			}
+
 		}
 		return issuersCNs;
 	}
@@ -271,6 +284,10 @@ public class CertificateService {
 		if(currentDate.after(expirationDate)) return false;
 		return true;
 	}
-	
 
+//	public boolean verifyCertificateSignature(X509Certificate certificate, Subject issuer){
+//		try {
+//			certificate.verify(issuer.getPublicKey());
+//		}
+//	}
 }
