@@ -30,6 +30,21 @@ export default function CertificateCard({certificate} : Props) {
             })
             .catch(() => toast.error("Fail"))
     };
+
+    const downloadCertificate = (event : any) => {
+        axios.get('http://localhost:8080/certificate/download/'+ event, { responseType: 'blob' })
+    .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'certificate.crt');
+        document.body.appendChild(link);
+        link.click();
+    })
+    .catch(error => {
+        console.error(error);
+    });
+    }
     
 
     return (
@@ -132,11 +147,17 @@ export default function CertificateCard({certificate} : Props) {
                                 onClick={()=>revokeCertificate(certificate.serialNumber)}
                                 >Revoke certificate
                                 </Button>
-                                <Button
+                                <Button sx={{mr: 2}}
                                 variant="contained"
                                 color="success"
                                 onClick={()=>verifyCertificate(certificate.serialNumber)}
                                 >Verify certificate
+                                </Button>
+                                <Button 
+                                variant="contained"
+                                color="primary"
+                                onClick={()=>downloadCertificate(certificate.serialNumber)}
+                                >Download certificate
                                 </Button>
                             </ButtonGroup>
                         </Grid>
