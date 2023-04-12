@@ -80,7 +80,7 @@ public class CertificateController {
 
 	@GetMapping("/revoke/{serialNum}")
 	ResponseEntity<List<String>> RevokeCertificate(@PathVariable String serialNum) throws IOException, OperatorCreationException, CRLException, CertificateException {
-		certificateService.revokeCertificate(serialNum);
+		certificateService.revokeCertificatesByIssuer(serialNum);
 		return null;
 	}
 }
