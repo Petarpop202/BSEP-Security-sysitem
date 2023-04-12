@@ -1,4 +1,4 @@
-import { Box, Button, FormControlLabel, Grid, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Switch, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, InputLabel, MenuItem, Paper, Select, Switch, TextField, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import axios from "axios";
@@ -30,15 +30,8 @@ export default function CreateCertificate() {
     const [subject_country, setSubjectCountry] = useState<string>("");
     const [subject_email, setSubjectEmail] = useState<string>("");
 
+    const [isCA, setIsCA] = useState<boolean>(false);
     const [selfSigned, setSelfSigned] = useState<boolean>(false);
-
-    const [issuer_commonName, setIssuerCommonName] = useState<string>("");
-    const [issuer_surname, setIssuerSurname] = useState<string>("");
-    const [issuer_givenName, setIssuerGivenName] = useState<string>("");
-    const [issuer_organization, setIssuerOrganization] = useState<string>("");
-    const [issuer_organizationalUnitName, setIssuerOrganizationalUnitName] = useState<string>("");
-    const [issuer_country, setIssuerCountry] = useState<string>("");
-    const [issuer_email, setIssuerEmail] = useState<string>("");
 
     const [certStartDate, setCertStartDate] = useState(new Date());
     const [certEndDate, setCertEndDate] = useState(new Date());
@@ -79,36 +72,12 @@ export default function CreateCertificate() {
         setSelectedIssuerUID(key);
     }
 
+    const handleIsCAChange = () => {
+        setIsCA(!isCA);
+    };
+
     const handleIsSelfSignedChange = () => {
         setSelfSigned(!selfSigned);
-    };
-
-    const handleIssuerCommonNameChange = (event: any) => {
-        setIssuerCommonName(event.target.value);
-    };
-
-    const handleIssuerSurnameChange = (event: any) => {
-        setIssuerSurname(event.target.value);
-    };
-
-    const handleIssuerGivenNameChange = (event: any) => {
-        setIssuerGivenName(event.target.value);
-    };
-
-    const handleIssuerOrganizationChange = (event: any) => {
-        setIssuerOrganization(event.target.value);
-    };
-
-    const handleIssuerOrganizationalUnitNameChange = (event: any) => {
-        setIssuerOrganizationalUnitName(event.target.value);
-    };
-
-    const handleIssuerCountryChange = (event: any) => {
-        setIssuerCountry(event.target.value);
-    };
-
-    const handleIssuerEmailChange = (event: any) => {
-        setIssuerEmail(event.target.value);
     };
 
     const handleCertStartDateChange = (value : any) => {
@@ -133,23 +102,12 @@ export default function CreateCertificate() {
         }
 
         let issuer = null
-
-        if (!selfSigned){   
-            issuer = {
-                commonName: issuer_commonName,
-                surname: issuer_surname,
-                givenName: issuer_givenName,
-                organization: issuer_organization,
-                organizationalUnitName: issuer_organizationalUnitName,
-                country: issuer_country,
-                email: issuer_email,
-            }
-        }
             
         let newCertificate = {
             subject: subject,
             issuer: issuer,
             issuerUID: "",
+            isCA: isCA,
             isSelfSigned: selfSigned,
             startDate: certStartDate,
             endDate: certEndDate,
@@ -173,164 +131,111 @@ export default function CreateCertificate() {
                 Create a new certificate
             </Typography>
             <form onSubmit={handleSubmit}>
-                <Grid container>
-                    <Grid item xs={6} sx={{mb: 2, border: 1, borderColor: "gray", padding: 2}}>
-                        <Typography variant="h4">Subject</Typography>
-                        <TextField
-                            label="Subject Common Name"
-                            value={subject_commonName}
-                            onChange={handleSubjectCommonNameChange}
-                            margin="normal"
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Subject Surname"
-                            value={subject_surname}
-                            onChange={handleSubjectSurnameChange}
-                            margin="normal"
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Subject Given Name"
-                            value={subject_givenName}
-                            onChange={handleSubjectGivenNameChange}
-                            margin="normal"
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Subject Organization"
-                            value={subject_organization}
-                            onChange={handleSubjectOrganizationChange}
-                            margin="normal"
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Subject Organization Unit Name"
-                            value={subject_organizationalUnitName}
-                            onChange={handleSubjectOrganizationalUnitNameChange}
-                            margin="normal"
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Subject Country"
-                            value={subject_country}
-                            onChange={handleSubjectCountryChange}
-                            margin="normal"
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Subject Email"
-                            value={subject_email}
-                            onChange={handleSubjectEmailChange}
-                            margin="normal"
-                            fullWidth
-                            required
-                        />
-                    </Grid>
-                    <Grid item xs={6} sx={{mb: 2, border: 1, borderColor: "gray", padding: 2}}>
+                <Grid sx={{mb: 2, border: 1, borderColor: "gray", padding: 2}}>
+                    <Typography variant="h4">Subject</Typography>
+                    <TextField
+                        label="Subject Common Name"
+                        value={subject_commonName}
+                        onChange={handleSubjectCommonNameChange}
+                        margin="normal"
+                        fullWidth
+                        required
+                    />
+                    <TextField
+                        label="Subject Surname"
+                        value={subject_surname}
+                        onChange={handleSubjectSurnameChange}
+                        margin="normal"
+                        fullWidth
+                        required
+                    />
+                    <TextField
+                        label="Subject Given Name"
+                        value={subject_givenName}
+                        onChange={handleSubjectGivenNameChange}
+                        margin="normal"
+                        fullWidth
+                        required
+                    />
+                    <TextField
+                        label="Subject Organization"
+                        value={subject_organization}
+                        onChange={handleSubjectOrganizationChange}
+                        margin="normal"
+                        fullWidth
+                        required
+                    />
+                    <TextField
+                        label="Subject Organization Unit Name"
+                        value={subject_organizationalUnitName}
+                        onChange={handleSubjectOrganizationalUnitNameChange}
+                        margin="normal"
+                        fullWidth
+                        required
+                    />
+                    <TextField
+                        label="Subject Country"
+                        value={subject_country}
+                        onChange={handleSubjectCountryChange}
+                        margin="normal"
+                        fullWidth
+                        required
+                    />
+                    <TextField
+                        label="Subject Email"
+                        value={subject_email}
+                        onChange={handleSubjectEmailChange}
+                        margin="normal"
+                        fullWidth
+                        required
+                    />
+                </Grid>
+                <Grid container sx={{mb: 2, border: 1, borderColor: "gray", padding: 2}}>
+                    <Grid item xs={12}>
                         <Box display='flex' alignItems='center'>
-                            <Grid item xs={3}>
+                            <Grid item xs={1.5}>
                                 <Typography variant="h4">Issuer</Typography>
                             </Grid>
-                            <Grid item xs={5}>
-                                <InputLabel sx={{color: "black"}}>Issuer</InputLabel>
+                            <Grid item xs={3.5}>
                                 <Select
                                     value={selectedIssuer || ""}
                                     onChange={handleSelectedIssuerChange}
                                     fullWidth
-                                >
+                                    required = {!selfSigned}
+                                    >
                                     {Object.entries(issuers).map(([key, value]) => {
                                         return <MenuItem
                                                     key = {key}
                                                     value={value}
                                                     onClick={() => handleMenuItemChange(key)}
-                                                >
+                                                    >
                                                     {value}
                                                 </MenuItem>
                                     })}
                                 </Select>
                             </Grid>
-                            <Grid item xs={4}>
-                                <Grid container justifyContent={"flex-end"}>
-                                    <FormControlLabel sx={{ml: 5}}
-                                        control = {<Switch checked={selfSigned} onChange={handleIsSelfSignedChange}/>}
-                                        label={<Typography variant="h5">Self Signed</Typography>}
-                                        labelPlacement="start"
-                                    />
-                                </Grid>
-                            </Grid>
                         </Box>
-                        <TextField
-                            label="Issuer Common Name"
-                            value={issuer_commonName}
-                            onChange={handleIssuerCommonNameChange}
-                            margin="normal"
-                            disabled={selfSigned || selectedIssuer?.length > 0}
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Issuer Surname"
-                            value={issuer_surname}
-                            onChange={handleIssuerSurnameChange}
-                            margin="normal"
-                            disabled={selfSigned || selectedIssuer?.length > 0}
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Issuer Given Name"
-                            value={issuer_givenName}
-                            onChange={handleIssuerGivenNameChange}
-                            margin="normal"
-                            disabled={selfSigned || selectedIssuer?.length > 0}
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Issuer Organization"
-                            value={issuer_organization}
-                            onChange={handleIssuerOrganizationChange}
-                            margin="normal"
-                            disabled={selfSigned || selectedIssuer?.length > 0}
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Issuer Organization Unit Name"
-                            value={issuer_organizationalUnitName}
-                            onChange={handleIssuerOrganizationalUnitNameChange}
-                            margin="normal"
-                            disabled={selfSigned || selectedIssuer?.length > 0}
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Issuer Country"
-                            value={issuer_country}
-                            onChange={handleIssuerCountryChange}
-                            margin="normal"
-                            disabled={selfSigned || selectedIssuer?.length > 0}
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            label="Issuer Email"
-                            value={issuer_email}
-                            onChange={handleIssuerEmailChange}
-                            margin="normal"
-                            disabled={selfSigned || selectedIssuer?.length > 0}
-                            fullWidth
-                            required
-                        />
                     </Grid>
                 </Grid>
+                <Grid sx={{mb: 2, border: 1, borderColor: "gray", padding: 2}}>
+                    <Grid container sx={{mt:2, mb: 2}}>
+                        <Grid item xs={4.5}>
+                            <Typography variant="h5">Certificate is self signed (is Root)</Typography>    
+                        </Grid>
+                        <Grid item>
+                            <Switch checked={selfSigned} onChange={handleIsSelfSignedChange}/>
+                        </Grid>
+                    </Grid>
+                    <Grid container sx={{mt:2, mb: 2}}>
+                        <Grid item xs={4.5}>
+                            <Typography variant="h5">Subject can sign certificates (is CA)</Typography>
+                        </Grid>
+                        <Grid item>
+                            <Switch checked={isCA} onChange={handleIsCAChange}/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid sx={{mb: 2, border: 1, borderColor: "gray", padding: 2}}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                         label="Start Date"
@@ -349,6 +254,7 @@ export default function CreateCertificate() {
                         slotProps={{ textField: { fullWidth: true, margin: "normal", required: true} }}
                     />
                 </LocalizationProvider>
+                </Grid>
                 <Button
                     type="submit"
                     variant="contained"

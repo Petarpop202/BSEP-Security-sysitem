@@ -1,10 +1,24 @@
-import { Card, CardContent, Container, Grid, Typography } from "@mui/material"
+import { Button, ButtonGroup, Card, CardContent, Container, Grid, Typography } from "@mui/material"
+import axios from "axios";
+import { toast } from "react-toastify";
 
 interface Props {
     certificate: any
 }
 
 export default function CertificateCard({certificate} : Props) {
+
+    
+    
+
+    const revokeCertificate = (event: any) => {
+        axios.get("http://localhost:8080/certificate/revoke/" + event, )
+            .then(() => {
+                toast.success("Successfully created a new certificate")
+            })
+            .catch(() => toast.error("Invalid arguments. Failed creating a new certificate"))
+    };
+    
 
     return (
         <>
@@ -97,6 +111,21 @@ export default function CertificateCard({certificate} : Props) {
                                 UID: {certificate.issuer.attributes[7].value}
                             </Typography>
                         </Container>
+                        </Grid>
+                        <Grid sx={{mt: 2}}>
+                            <ButtonGroup >
+                                <Button sx={{mr: 2}}
+                                variant="contained"
+                                color="error"
+                                onClick={()=>revokeCertificate(certificate.serialNumber)}
+                                >Revoke certificate
+                                </Button>
+                                <Button
+                                variant="contained"
+                                color="success"
+                                >Verify certificate
+                                </Button>
+                            </ButtonGroup>
                         </Grid>
                     </Grid>
                 </CardContent>

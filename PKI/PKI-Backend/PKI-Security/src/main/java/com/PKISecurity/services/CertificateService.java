@@ -83,7 +83,7 @@ public class CertificateService {
 		}
 
 		X509Certificate cert = CertificateGenerator.generateCertificate(
-				subject, issuer, certificate.startDate, certificate.endDate, false);
+				subject, issuer, certificate.startDate, certificate.endDate, certificate.isCA);
 
 		System.out.println("Kreiran novi sertifikat: ");
 		System.out.println(cert);
@@ -167,13 +167,14 @@ public class CertificateService {
 	}
 
 
-	public X509Certificate revokeCertificate(String alias) throws CRLException, IOException, OperatorCreationException, CertificateException {
+	public X509Certificate revokeCertificate(String serialNum) throws CRLException, IOException, OperatorCreationException, CertificateException {
+		String alias = keyStoreReader.getAlias(serialNum,"src/main/resources/static/keystore.jks", "password".toCharArray());
 		java.security.cert.Certificate certificate = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks",  "password","�[�u��\u0016");
 		X509Certificate rootCert = (X509Certificate)certificate;
 		PrivateKey pk = keyStoreReader.readPrivateKey("src/main/resources/static/keystore.jks","password","�[�u��\u0016","password");
 		Subject issuer = keyStoreReader.readIssuerFromStore("src/main/resources/static/keystore.jks","�[�u��\u0016", "password".toCharArray(), "password".toCharArray());
 
-		java.security.cert.Certificate revokedCertificate = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks",  "password","���gk�");
+		java.security.cert.Certificate revokedCertificate = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks",  "password",alias);
 		X509Certificate revoked = (X509Certificate)revokedCertificate;
 
 
@@ -194,8 +195,7 @@ public class CertificateService {
 		fos.close();
 
 
-
-
 		return revoked;
 	}
+
 }

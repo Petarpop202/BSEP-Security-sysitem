@@ -84,6 +84,36 @@ public class KeyStoreReader {
         return null;
     }
 
+    public String getAlias(String serialNum,String keyStoreFile, char[] password){
+        try {
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
+            keyStore.load(in, password);
+
+            Enumeration<String> aliases = keyStore.aliases();
+
+            while (aliases.hasMoreElements()) {
+                String alias = aliases.nextElement();
+                Certificate cert = keyStore.getCertificate(alias);
+                X509Certificate x509Certificate = (X509Certificate) cert;
+                if(("0" + x509Certificate.getSerialNumber().toString(16)).equals(serialNum))
+                    return alias;
+
+            }
+
+            return null;
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     /**
      * Zadatak ove funkcije jeste da ucita podatke o izdavaocu i odgovarajuci privatni kljuc.
      * Ovi podaci se mogu iskoristiti da se novi sertifikati izdaju.
