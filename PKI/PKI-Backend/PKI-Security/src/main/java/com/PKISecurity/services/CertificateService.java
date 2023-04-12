@@ -223,7 +223,7 @@ public class CertificateService {
 		java.security.cert.Certificate cert = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks",  "password",alias);
 		X509Certificate toVerify = (X509Certificate)cert;
 
-		if(!verifyRevoke(toVerify)) return false;
+		if(!verifyRevoke(toVerify) || !verifyDate(toVerify)) return false;
 		for(java.security.cert.Certificate certificate: keyStoreReader.readAllCertificates("src/main/resources/static/keystore.jks",  "password")){
 			X509Certificate check = (X509Certificate) certificate;
 			if(check.getSubjectX500Principal().equals(toVerify.getIssuerX500Principal()) && !check.getSubjectX500Principal().equals(check.getIssuerX500Principal())){
@@ -264,5 +264,13 @@ public class CertificateService {
 
 		return true;
 	}
+
+	public boolean verifyDate(X509Certificate certificate) {
+		Date expirationDate = certificate.getNotAfter();
+		Date currentDate = new Date();
+		if(currentDate.after(expirationDate)) return false;
+		return true;
+	}
+	
 
 }
