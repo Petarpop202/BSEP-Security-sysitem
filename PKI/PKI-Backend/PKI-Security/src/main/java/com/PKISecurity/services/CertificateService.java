@@ -39,6 +39,8 @@ import com.PKISecurity.keystores.KeyStoreReader;
 import com.PKISecurity.keystores.KeyStoreWriter;
 import com.PKISecurity.services.servicesImplementation.CerificateDataService;
 
+import javax.security.auth.x500.X500Principal;
+
 @Service
 public class CertificateService {
 
@@ -166,11 +168,25 @@ public class CertificateService {
 		subjectDataService.create(newSub);
 	}
 
+	public void revokeCertificatesByIssuer(String serialNum) throws CertificateException, IOException, OperatorCreationException, CRLException {
+		revokeCertificate(serialNum);
+		String alias = keyStoreReader.getAlias(serialNum,"src/main/resources/static/keystore.jks", "password".toCharArray());
+		java.security.cert.Certificate cert  = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks", "password", alias);
+
+		X509Certificate mainCert = (X509Certificate)cert;
+		X500Principal subj = mainCert.getSubjectX500Principal();
+
+		List<java.security.cert.Certificate> certificates = keyStoreReader.readAllCertificates("src/main/resources/static/keystore.jks", "password");
+		for(java.security.cert.Certificate certificate : certificates) {
+			X509Certificate newCert = (X509Certificate) certificate;
+			if(subj.equals(newCert.getIssuerX500Principal()))
+				revokeCertificatesByIssuer("0" + newCert.getSerialNumber().toString(16));
+		}
+	}
+
 
 	public X509Certificate revokeCertificate(String serialNum) throws CRLException, IOException, OperatorCreationException, CertificateException {
 		String alias = keyStoreReader.getAlias(serialNum,"src/main/resources/static/keystore.jks", "password".toCharArray());
-		java.security.cert.Certificate certificate = keyStoreReader.readCertificate("src/main/resources/static/keystore.jks",  "password","�[�u��\u0016");
-		X509Certificate rootCert = (X509Certificate)certificate;
 		PrivateKey pk = keyStoreReader.readPrivateKey("src/main/resources/static/keystore.jks","password","�[�u��\u0016","password");
 		Subject issuer = keyStoreReader.readIssuerFromStore("src/main/resources/static/keystore.jks","�[�u��\u0016", "password".toCharArray(), "password".toCharArray());
 
