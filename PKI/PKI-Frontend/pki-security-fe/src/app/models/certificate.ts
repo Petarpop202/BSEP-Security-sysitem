@@ -8,4 +8,5 @@ export interface Certificate {
     isSelfSigned: boolean
     startDate: Date
     endDate: Date
+    alias: string
 }

@@ -16,12 +16,7 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.PKISecurity.Dto.CertificateDto;
 import com.PKISecurity.data.Certificate;
@@ -83,9 +78,9 @@ public class CertificateController {
 		return new ResponseEntity<>(builder.toString(), headers, HttpStatus.OK);
 	}
 
-	@GetMapping("/revoke")
-	ResponseEntity<List<String>> RevokeCertificate() throws IOException, OperatorCreationException, CRLException, CertificateException {
-		certificateService.revokeCertificate("Nista");
+	@GetMapping("/revoke/{serialNum}")
+	ResponseEntity<List<String>> RevokeCertificate(@PathVariable String serialNum) throws IOException, OperatorCreationException, CRLException, CertificateException {
+		certificateService.revokeCertificate(serialNum);
 		return null;
 	}
 }
