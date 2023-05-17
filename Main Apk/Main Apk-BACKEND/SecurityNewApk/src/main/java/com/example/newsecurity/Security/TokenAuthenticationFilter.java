@@ -1,10 +1,12 @@
-package com.example.newsecurity.Security;
+package com.example.bloodbank.Security;
 
-
+import com.example.newsecurity.Util.TokenBasedAuthentication;
 import com.example.newsecurity.Util.TokenUtils;
-
+import io.jsonwebtoken.ExpiredJwtException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -13,6 +15,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+
 
 // Filter koji ce presretati SVAKI zahtev klijenta ka serveru
 // (sem nad putanjama navedenim u WebSecurityConfig.configure(WebSecurity web))
@@ -32,11 +36,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-    }
-/*
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -73,9 +72,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException ex) {
             LOGGER.debug("Token expired!");
         }
-       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         // prosledi request dalje u sledeci filter
         chain.doFilter(request, response);
     }
-    */
+
 }

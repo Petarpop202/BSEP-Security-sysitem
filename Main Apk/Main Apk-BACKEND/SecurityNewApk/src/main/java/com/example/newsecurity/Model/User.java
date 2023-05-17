@@ -47,6 +47,10 @@ public class User implements UserDetails {
     private String phoneNumber;
     @Column
     private String jmbg;
+    @Column
+    private String title;
+    @Column
+    private boolean requestApproved;
     @Column(name = "enabled")
     private boolean enabled;
     @Column(name = "verification_code")

@@ -1,6 +1,8 @@
 package com.example.newsecurity.Util;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.example.newsecurity.Model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -50,8 +52,8 @@ public class TokenUtils {
      * @param //username Korisničko ime korisnika kojem se token izdaje
      * @return JWT token
      */
-    public String generateToken() {
-        /*return Jwts.builder()
+    public String generateToken(User user) {
+        return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(user.getUsername())
                 .setAudience(generateAudience())
@@ -61,8 +63,7 @@ public class TokenUtils {
                 .claim("name", user.getName())
                 .claim("surname", user.getSurname())
                 .claim("id", user.getId())
-                .signWith(SIGNATURE_ALGORITHM, SECRET).compact();*/
-        return " ";
+                .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 
 
 
@@ -235,7 +236,7 @@ public class TokenUtils {
      * @return Informacija da li je token validan ili ne.
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
-        /*User user = (User) userDetails;
+        User user = (User) userDetails;
         final String username = getUsernameFromToken(token);
         final Date created = getIssuedAtDateFromToken(token);
 
@@ -243,8 +244,7 @@ public class TokenUtils {
         return (username != null // korisnicko ime nije null
                 && username.equals(userDetails.getUsername()) // korisnicko ime iz tokena se podudara sa korisnickom imenom koje pise u bazi
                 && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate())); // nakon kreiranja tokena korisnik nije menjao svoju lozinku
-   */
-        return true;
+
     }
 
     /**
