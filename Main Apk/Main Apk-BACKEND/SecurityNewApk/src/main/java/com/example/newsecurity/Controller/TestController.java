@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("test")
+@RequestMapping("/test")
 @CrossOrigin(origins = "http://localhost:4200")
 public class TestController {
 
@@ -22,6 +22,7 @@ public class TestController {
     }
     @GetMapping("/get")
     public List<Test> getAll(){
+        System.out.println("USAOOOOO!");
         return assetService.getAll();
     }
 }

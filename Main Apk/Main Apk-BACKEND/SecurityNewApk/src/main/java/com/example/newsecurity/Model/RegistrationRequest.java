@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "RegistrationRequests")
@@ -14,7 +15,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RegsitrationRequest {
+public class RegistrationRequest {
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -24,5 +25,5 @@ public class RegsitrationRequest {
     @Column
     private boolean Accepted;
     @Column
-    private Timestamp ResponseDate;
+    private LocalDate ResponseDate;
 }
