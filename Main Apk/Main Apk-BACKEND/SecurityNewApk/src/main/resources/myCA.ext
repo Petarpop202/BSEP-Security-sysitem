@@ -1,0 +1,5 @@
+basicConstraints=CA:TRUE
+subjectAltName = @localhost
+
+[localhost]
+DNS.1 = localhost
