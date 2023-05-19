@@ -20,6 +20,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Date;
@@ -56,37 +58,19 @@ public class AuthenticationController {
         String verification = RandomString.make();
         userRequest.setVerification(verification);
         User user = this.userService.save(userRequest);
-/*
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        Future<?> future = executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                MailDetails mail = new MailDetails();
-                mail.setRecipient(user.getMail());
-                mail.setSubject("Verifikacija naloga !");
-                mail.setMsgBody("Kako biste verifikovali vas nalog potrebno je da odete na sledeci link :" +
-                        " http://localhost:8081/auth/activate?code=" + verification);
-                try {
-                    _emailService.sendSimpleMail(mail);
-                } catch (MessagingException e) {
-                    throw new RuntimeException(e);
-                } catch (UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });*/
+
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PutMapping ("/response")
-    public ResponseEntity<RequestResponse> RequestResponse(@RequestBody RequestResponse response, UriComponentsBuilder ucBuilder){
+    public ResponseEntity<RequestResponse> RequestResponse(@RequestBody RequestResponse response, UriComponentsBuilder ucBuilder) throws NoSuchAlgorithmException, InvalidKeyException {
         registrationRequestService.setResponse(response);
-        return null;
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/get")
-    public List<User> getAll(){
-        System.out.println("USAOOOOO!");
-        return null;
+    @GetMapping("/activate")
+    public ResponseEntity<User> activateUser(@RequestParam String code) throws NoSuchAlgorithmException, InvalidKeyException {
+        registrationRequestService.Activate(code);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

@@ -56,7 +56,7 @@ public class UserService implements IUserService {
     @Override
     public User save(UserRequest userRequest) {
         RegistrationRequest registrationRequest = new RegistrationRequest();
-        registrationRequest.setUserId(userRequest.getId());
+        registrationRequest.setUserUsername(userRequest.getUsername());
         _registrationRequestService.create(registrationRequest);
         User u = new User();
         u.setUsername(userRequest.getUsername());
@@ -90,6 +90,8 @@ public class UserService implements IUserService {
 
     @Override
     public User activate(User u) {
-        return null;
+        User old = _userRepository.findByUsername(u.getUsername());
+        old.setEnabled(u.isEnabled());
+        return _userRepository.save(old);
     }
 }
