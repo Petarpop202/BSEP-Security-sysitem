@@ -67,7 +67,6 @@ public class UserService implements IUserService {
         u.setSurname(userRequest.getSurname());
         u.setEnabled(false);
         u.setRequestApproved(false);
-        u.setVerificationCode(userRequest.getVerification());
         u.setAddress(userRequest.getAddress());
         u.setJmbg(userRequest.getJmbg());
         u.setGender(userRequest.getGender());
@@ -81,11 +80,6 @@ public class UserService implements IUserService {
         u.setRoles(r);
 
         return this._userRepository.save(u);
-    }
-
-    @Override
-    public User getByVerificationCode(String code) {
-        return null;
     }
 
     @Override
