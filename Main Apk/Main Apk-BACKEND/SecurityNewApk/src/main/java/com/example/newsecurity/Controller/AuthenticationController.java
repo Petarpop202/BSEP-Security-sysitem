@@ -1,9 +1,6 @@
 package com.example.newsecurity.Controller;
 
-import com.example.newsecurity.DTO.Jwt;
-import com.example.newsecurity.DTO.JwtAuthenticationRequest;
-import com.example.newsecurity.DTO.RequestResponse;
-import com.example.newsecurity.DTO.UserRequest;
+import com.example.newsecurity.DTO.*;
 import com.example.newsecurity.Model.RegistrationRequest;
 import com.example.newsecurity.Model.Test;
 import com.example.newsecurity.Model.User;
@@ -62,17 +59,34 @@ public class AuthenticationController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
-        // Ukoliko je autentifikacija uspesna, ubaci korisnika u trenutni security
-        // kontekst
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Kreiraj token za tog korisnika
         User user = (User) authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user);
         String refreshJwt = tokenUtils.generateRefreshToken(user);
 
         int expiresIn = tokenUtils.getExpiredIn();
         return ResponseEntity.ok(new Jwt(jwt,refreshJwt, expiresIn));
+    }
+
+    @GetMapping("/passwordlessLogin")
+    public ResponseEntity<Jwt> passwordlessLogin(@RequestParam String mail) {
+        String token = tokenUtils.generatePasswordlessToken(mail);
+        userService.passwordlessLogin(token,mail);
+        return null;
+    }
+
+    @GetMapping("/passwordlessLoginActivate")
+    public ResponseEntity<Jwt> activatePasswordless(@RequestParam String code) {
+        String token = code;
+        if (tokenUtils.validatePasswordlessToken(token))
+        {
+            String mail = tokenUtils.getUsernameFromToken(token);
+            String jwt = tokenUtils.generatePasswordlessToken(mail);
+            String refreshJwt = tokenUtils.generatePasswordlessRefreshToken(mail);
+            return ResponseEntity.ok(new Jwt(jwt,refreshJwt, tokenUtils.getExpiredIn()));
+        }
+        return null;
     }
 
     @PostMapping("/signup")
@@ -107,7 +121,7 @@ public class AuthenticationController {
     public ResponseEntity<?> refreshAccessToken(@RequestBody Jwt refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshJwt();
         if (tokenUtils.validateRefreshToken(refreshToken)) {
-            String username = tokenUtils.getUsernameFromRefreshToken(refreshToken);
+            String username = tokenUtils.getUsernameFromToken(refreshToken);
             User user = userService.findByUsername(username);
 
             String accessToken = tokenUtils.generateToken(user);
@@ -120,7 +134,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/getString")
-    @PreAuthorize("hasAnyRole('ROLE_HUMAN_RESOURCE_MANAGER', 'ROLE_PROJECT_MANAGER', 'ROLE_ADMINISTRATOR', 'ROLE_ENGINEER')")
+    @PreAuthorize("hasAnyRole('ROLE_HUMAN_RESOURCE_MANAGER', 'ROLE_PROJECT_MANAGER', 'ROLE_ADMINISTRATOR', 'ROLE_ENGINEER', 'ROLE_GUEST')")
     public ResponseEntity<?> getString(){
         String Jej = "JEEEEJ";
         return ResponseEntity.ok(Jej);
