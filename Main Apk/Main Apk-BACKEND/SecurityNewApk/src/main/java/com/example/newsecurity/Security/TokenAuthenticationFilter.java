@@ -1,4 +1,4 @@
-package com.example.bloodbank.Security;
+package com.example.newsecurity.Security;
 
 import com.example.newsecurity.Util.TokenBasedAuthentication;
 import com.example.newsecurity.Util.TokenUtils;
