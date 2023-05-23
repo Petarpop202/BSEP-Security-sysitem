@@ -25,7 +25,6 @@ public class UserRequest {
 	private GenderEnum gender;
 
 	private Address address;
-	private String verification;
 	private String role;
 
 	private String title;
@@ -109,15 +108,8 @@ public class UserRequest {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-
-	public String getVerification() {
-		return verification;
-	}
 	public String getTitle(){return title;}
 	public void setTitle(String title){this.title = title;}
 	public String getRole(){return role;}
 	public void setRole(String role){this.role = role;}
-	public void setVerification(String verification) {
-		this.verification = verification;
-	}
 }

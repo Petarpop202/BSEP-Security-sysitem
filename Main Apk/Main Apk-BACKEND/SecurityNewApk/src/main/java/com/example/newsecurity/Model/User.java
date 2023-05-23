@@ -53,8 +53,6 @@ public class User implements UserDetails {
     private boolean requestApproved;
     @Column(name = "enabled")
     private boolean enabled;
-    @Column(name = "verification_code")
-    private String verificationCode;
     @Column
     private GenderEnum gender;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

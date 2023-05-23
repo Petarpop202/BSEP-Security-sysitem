@@ -1,6 +1,7 @@
 package com.example.newsecurity.Service.ServiceImplementation;
 
 import com.example.newsecurity.DTO.UserRequest;
+import com.example.newsecurity.Model.MailDetails;
 import com.example.newsecurity.Model.RegistrationRequest;
 import com.example.newsecurity.Model.Role;
 import com.example.newsecurity.Model.User;
@@ -12,8 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Service
 public class UserService implements IUserService {
@@ -24,6 +30,9 @@ public class UserService implements IUserService {
     UserService(IUserRepository userRepository,IRoleService roleService,IRegistrationRequestService registrationRequestService){_userRepository = userRepository;_roleService = roleService;_registrationRequestService=registrationRequestService;}
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public Iterable<User> getAll() {
@@ -56,7 +65,7 @@ public class UserService implements IUserService {
     @Override
     public User save(UserRequest userRequest) {
         RegistrationRequest registrationRequest = new RegistrationRequest();
-        registrationRequest.setUserId(userRequest.getId());
+        registrationRequest.setUserUsername(userRequest.getUsername());
         _registrationRequestService.create(registrationRequest);
         User u = new User();
         u.setUsername(userRequest.getUsername());
@@ -67,7 +76,6 @@ public class UserService implements IUserService {
         u.setSurname(userRequest.getSurname());
         u.setEnabled(false);
         u.setRequestApproved(false);
-        u.setVerificationCode(userRequest.getVerification());
         u.setAddress(userRequest.getAddress());
         u.setJmbg(userRequest.getJmbg());
         u.setGender(userRequest.getGender());
@@ -84,12 +92,32 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getByVerificationCode(String code) {
-        return null;
+    public User activate(User u) {
+        User old = _userRepository.findByUsername(u.getUsername());
+        old.setEnabled(u.isEnabled());
+        return _userRepository.save(old);
     }
 
     @Override
-    public User activate(User u) {
-        return null;
+    public void passwordlessLogin(String token, String email) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        Future<?> future = executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                MailDetails mail = new MailDetails();
+                mail.setSubject("Logovanje mejlom!");
+                mail.setRecipient(email);
+                mail.setMsgBody("Da bi ste se ulogovali kliknite na sledeci link imate 10 minuta :" +
+                        " http://localhost:8080/auth/passwordlessLoginActivate?code=" + token);
+                try {
+                    emailService.sendSimpleMail(mail);
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
+
 }

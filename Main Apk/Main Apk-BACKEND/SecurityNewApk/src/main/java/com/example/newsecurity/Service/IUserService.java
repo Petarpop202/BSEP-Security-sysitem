@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface IUserService extends ICRUDService<User>{
     User findByUsername(String username);
     User save(UserRequest userRequest);
-    User getByVerificationCode(String code);
     User activate(User u);
+    void passwordlessLogin(String token, String mail);
 }

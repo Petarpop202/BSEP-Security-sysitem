@@ -3,10 +3,7 @@ package com.example.newsecurity.Util;
 import javax.servlet.http.HttpServletRequest;
 
 import com.example.newsecurity.Model.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -23,8 +20,8 @@ public class TokenUtils {
     @Value("somesecret")
     public String SECRET;
 
-    // Period vazenja tokena - 30 minuta
-    @Value("1800000")
+    // Period vazenja tokena - 1 minut
+    @Value("60000")
     private int EXPIRES_IN;
 
     // Naziv headera kroz koji ce se prosledjivati JWT u komunikaciji server-klijent
@@ -74,6 +71,45 @@ public class TokenUtils {
      * Funkcija za utvrđivanje tipa uređaja za koji se JWT kreira.
      * @return Tip uređaja.
      */
+
+    public String generateRefreshToken(User user) {
+        long expirationTimeInMilliseconds = 900000; // 15 minuta
+        String refreshToken = Jwts.builder()
+                .setSubject(user.getUsername())
+                .claim("id", user.getId())
+                .claim("email", user.getMail())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTimeInMilliseconds))
+                .signWith(SIGNATURE_ALGORITHM, SECRET)
+                .compact();
+        return refreshToken;
+    }
+
+    public String generatePasswordlessToken(String mail) {
+        long expirationTimeInMilliseconds = 600000; // 10 minuta
+        return Jwts.builder()
+                .setIssuer(APP_NAME)
+                .setSubject("guest")
+                .setAudience(generateAudience())
+                .claim("email", mail)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTimeInMilliseconds))
+                .claim("roles", "ROLE_GUEST")
+                .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
+
+        // moguce je postavljanje proizvoljnih podataka u telo JWT tokena pozivom funkcije .claim("key", value), npr. .claim("role", user.getRole())
+    }
+
+    public String generatePasswordlessRefreshToken(String mail) {
+        long expirationTimeInMilliseconds = 900000; // 15 minuta
+        String refreshToken = Jwts.builder()
+                .setSubject(mail)
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTimeInMilliseconds))
+                .signWith(SIGNATURE_ALGORITHM, SECRET)
+                .compact();
+        return refreshToken;
+    }
+
+
     private String generateAudience() {
 
         //	Moze se iskoristiti org.springframework.mobile.device.Device objekat za odredjivanje tipa uredjaja sa kojeg je zahtev stigao.
@@ -224,6 +260,7 @@ public class TokenUtils {
         return claims;
     }
 
+
     // =================================================================
 
     // ============= Funkcije za validaciju JWT tokena =============
@@ -246,6 +283,42 @@ public class TokenUtils {
                 && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate())); // nakon kreiranja tokena korisnik nije menjao svoju lozinku
 
     }
+
+    public Boolean validateRefreshToken(String refreshToken){
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+
+            Date expirationDate = claims.getExpiration();
+            Date currentDate = new Date();
+
+            return expirationDate.after(currentDate);
+        } catch (JwtException | IllegalArgumentException e) {
+            // Token nije valjan ili je istekao
+            return false;
+        }
+    }
+
+    public Boolean validatePasswordlessToken(String token){
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            Date expirationDate = claims.getExpiration();
+            Date currentDate = new Date();
+
+            return expirationDate.after(currentDate);
+        } catch (JwtException | IllegalArgumentException e) {
+            // Token nije valjan ili je istekao
+            return false;
+        }
+    }
+
+
 
     /**
      * Funkcija proverava da li je lozinka korisnika izmenjena nakon izdavanja tokena.
