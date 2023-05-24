@@ -16,14 +16,14 @@ import java.util.List;
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "projectId", nullable = false)
+    private Long projectId;
     private String name;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "project_employee", joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "project_employee", joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "projectId"),
                 inverseJoinColumns =  @JoinColumn(name = "employee_id", referencedColumnName = "id"))
     private List<Employee> employees;
 

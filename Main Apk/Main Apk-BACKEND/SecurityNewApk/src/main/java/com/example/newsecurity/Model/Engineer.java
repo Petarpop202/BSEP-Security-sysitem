@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,4 +19,6 @@ import java.util.HashMap;
 @Table(name = "Engineers")
 public class Engineer extends User{
     private HashMap<String, Integer> skills;
+
+
 }
