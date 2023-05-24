@@ -1,5 +1,7 @@
 package com.example.newsecurity.Controller;
 
+import com.example.newsecurity.DTO.EngineerUpdateDTO;
+import com.example.newsecurity.DTO.EngineerUpdateSkillsDTO;
 import com.example.newsecurity.Model.Engineer;
 import com.example.newsecurity.Model.Project;
 import com.example.newsecurity.Service.IEngineerService;
@@ -35,5 +37,13 @@ public class EngineerController {
     public String deleteEngineertById(@PathVariable Long id){
         engineerService.deleteEngineerById(id);
         return "Engineer deleted successfully!";
+    }
+    @PutMapping
+    public void updateEngineer(@RequestBody EngineerUpdateDTO engineerUpdateDTO){
+        engineerService.updateEngineer(engineerUpdateDTO);
+    }
+    @PutMapping("/skills-update")
+    public void updateEnginnerSkills(@RequestBody EngineerUpdateSkillsDTO engineerUpdateSkillsDTO){
+        engineerService.updateEngineerSkills(engineerUpdateSkillsDTO);
     }
 }
