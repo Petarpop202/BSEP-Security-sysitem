@@ -30,6 +30,7 @@ INSERT INTO user_role (user_id, role_id) VALUES (7, 2);
 INSERT INTO user_role (user_id, role_id) VALUES (8, 2);
 
 insert into managers (id) values (3);
+insert into system_administrators (id) values (4);
 
 
 

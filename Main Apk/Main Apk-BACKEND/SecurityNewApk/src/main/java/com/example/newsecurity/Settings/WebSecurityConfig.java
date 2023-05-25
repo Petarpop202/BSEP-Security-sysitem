@@ -88,6 +88,7 @@ public class WebSecurityConfig {
     	http.authorizeRequests().antMatchers("/auth/**").permitAll()		// /auth/**
 			.antMatchers("/h2-console/**").permitAll()	// /h2-console/** ako se koristi H2 baza)
 			.antMatchers("/engineers/**").permitAll()		// /api/foo
+				.antMatchers("/system-administrators/**").permitAll()
 				.antMatchers("/projects/**").permitAll()
 				.antMatchers("/managers/**").permitAll()
 				.antMatchers("/employees/**").permitAll()
