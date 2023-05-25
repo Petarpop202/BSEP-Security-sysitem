@@ -43,4 +43,9 @@ public class ProjectService implements IProjectService {
         return projectRepository.findByEmployeesId(id);
     }
 
+    @Override
+    public List<Project> getProjectsByManagerId(Long id) {
+        return projectRepository.findByManagerId(id);
+    }
+
 }

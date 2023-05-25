@@ -34,4 +34,9 @@ public class ProjectController {
         projectService.deleteProjectById(id);
         return "Project deleted successfully!";
     }
+
+    @GetMapping("/manager/{id}")
+    public List<Project> getProjectsByManagerId(@PathVariable("id") Long id){
+        return projectService.getProjectsByManagerId(id);
+    }
 }

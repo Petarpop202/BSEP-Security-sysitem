@@ -1,5 +1,6 @@
 package com.example.newsecurity.Service;
 
+import com.example.newsecurity.DTO.ManagerUpdateDTO;
 import com.example.newsecurity.Model.Manager;
 import org.springframework.stereotype.Service;
 
@@ -14,4 +15,6 @@ public interface IManagerService {
     Manager getManagerById(Long id);
 
     void deleteManagerById(Long id);
+
+    Manager updateManager(ManagerUpdateDTO managerUpdateDTO);
 }

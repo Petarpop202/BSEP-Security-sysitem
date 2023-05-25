@@ -1,5 +1,6 @@
 package com.example.newsecurity.Controller;
 
+import com.example.newsecurity.DTO.ManagerUpdateDTO;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Manager;
 import com.example.newsecurity.Service.IEmployeeService;
@@ -35,5 +36,11 @@ public class ManagerController {
     public String deleteManagerById(@PathVariable Long id){
         managerService.deleteManagerById(id);
         return "Manager deleted successfully!";
+    }
+
+    @PutMapping
+    public Manager updateManager(@RequestBody ManagerUpdateDTO managerUpdateDTO){
+        return managerService.updateManager(managerUpdateDTO);
+
     }
 }
