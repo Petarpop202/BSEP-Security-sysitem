@@ -1,6 +1,8 @@
 package com.example.newsecurity.Service.ServiceImplementation;
 
+import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Project;
+import com.example.newsecurity.Repository.IEmployeeRepository;
 import com.example.newsecurity.Repository.IProjectRepository;
 import com.example.newsecurity.Service.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import java.util.Optional;
 public class ProjectService implements IProjectService {
     @Autowired
     private IProjectRepository projectRepository;
+    @Autowired
+    private IEmployeeRepository employeeRepository;
     @Override
     public Project newProject(Project project) {
         return projectRepository.save(project);
@@ -46,6 +50,34 @@ public class ProjectService implements IProjectService {
     @Override
     public List<Project> getProjectsByManagerId(Long id) {
         return projectRepository.findByManagerId(id);
+    }
+
+    @Override
+    public void addEmployeeToProject(Long projectId, Long employeeId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        if (optionalProject.isPresent() && optionalEmployee.isPresent()) {
+            Project project = optionalProject.get();
+            Employee employee = optionalEmployee.get();
+            project.addEmployee(employee);
+            projectRepository.save(project);
+        } else {
+            throw new IllegalArgumentException("Project with the given projectId not found: " + projectId);
+        }
+    }
+
+    @Override
+    public void removeEmployeeFromProject(Long projectId, Long employeeId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        if (optionalProject.isPresent() && optionalEmployee.isPresent()) {
+            Project project = optionalProject.get();
+            Employee employee = optionalEmployee.get();
+            project.removeEmployee(employee);
+            projectRepository.save(project);
+        } else {
+            throw new IllegalArgumentException("Project with the given projectId not found: " + projectId);
+        }
     }
 
 }

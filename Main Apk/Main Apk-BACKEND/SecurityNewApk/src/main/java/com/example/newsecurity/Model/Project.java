@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,4 +31,16 @@ public class Project {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
+
+    public void addEmployee(Employee employee){
+        if(employees == null){
+            employees = new ArrayList<>();
+        }
+        employees.add(employee);
+    }
+    public void removeEmployee(Employee employee){
+        if(employees != null) {
+            employees.remove(employee);
+        }
+    }
 }

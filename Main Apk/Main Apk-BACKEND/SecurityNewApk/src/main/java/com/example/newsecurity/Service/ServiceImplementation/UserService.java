@@ -4,9 +4,11 @@ import com.example.newsecurity.DTO.UserRequest;
 import com.example.newsecurity.Model.*;
 import com.example.newsecurity.Repository.IEngineerRepository;
 import com.example.newsecurity.Repository.IManagerRepository;
+import com.example.newsecurity.Repository.ISystemAdministratorRepository;
 import com.example.newsecurity.Repository.IUserRepository;
 import com.example.newsecurity.Service.IRegistrationRequestService;
 import com.example.newsecurity.Service.IRoleService;
+import com.example.newsecurity.Service.ISystemAdministratorService;
 import com.example.newsecurity.Service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +31,8 @@ public class UserService implements IUserService {
     private IEngineerRepository _engineerRepository;
     @Autowired
     private IManagerRepository _managerRepository;
+    @Autowired
+    private ISystemAdministratorRepository _systemAdministratorRepository;
 
     UserService(IUserRepository userRepository,IRoleService roleService,IRegistrationRequestService registrationRequestService){_userRepository = userRepository;_roleService = roleService;_registrationRequestService=registrationRequestService;}
     @Autowired
@@ -127,6 +131,24 @@ public class UserService implements IUserService {
             manager.setRoles(r);
             manager.setProjects(null);
             return _managerRepository.save(manager);
+        }
+        if(roles1.getName().equals("ROLE_ADMINISTRATOR")){
+            SystemAdministrator administrator = new SystemAdministrator();
+            administrator.setName(u.getName());
+            administrator.setUsername(userRequest.getUsername());
+            administrator.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+            administrator.setName(userRequest.getName());
+            administrator.setSurname(userRequest.getSurname());
+            administrator.setEnabled(false);
+            administrator.setRequestApproved(false);
+            administrator.setAddress(userRequest.getAddress());
+            administrator.setJmbg(userRequest.getJmbg());
+            administrator.setGender(userRequest.getGender());
+            administrator.setMail(userRequest.getMail());
+            administrator.setPhoneNumber(userRequest.getPhoneNumber());
+            administrator.setTitle(userRequest.getTitle());
+            administrator.setRoles(r);
+            return _systemAdministratorRepository.save(administrator);
         }
         return this._userRepository.save(u);
     }

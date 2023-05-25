@@ -1,5 +1,6 @@
 package com.example.newsecurity.Controller;
 
+import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Engineer;
 import com.example.newsecurity.Model.Project;
 import com.example.newsecurity.Service.IProjectService;
@@ -16,7 +17,7 @@ public class ProjectController {
     private IProjectService projectService;
 
     @PostMapping
-    public Project newEngineer(@RequestBody Project project) {
+    public Project newProject(@RequestBody Project project) {
         return projectService.newProject(project);
     }
     @GetMapping
@@ -38,5 +39,15 @@ public class ProjectController {
     @GetMapping("/manager/{id}")
     public List<Project> getProjectsByManagerId(@PathVariable("id") Long id){
         return projectService.getProjectsByManagerId(id);
+    }
+
+    @PostMapping("/{projectId}/employee={employeeId}")
+    public void addEmployeeToProject(@PathVariable("projectId") Long projectId, @PathVariable("employeeId") Long employeeId){
+        projectService.addEmployeeToProject(projectId, employeeId);
+    }
+
+    @DeleteMapping("/{projectId}/employee={employeeId}")
+    public void removeEmployeeFromProject(@PathVariable("projectId") Long projectId, @PathVariable("employeeId") Long employeeId) {
+        projectService.removeEmployeeFromProject(projectId, employeeId);
     }
 }

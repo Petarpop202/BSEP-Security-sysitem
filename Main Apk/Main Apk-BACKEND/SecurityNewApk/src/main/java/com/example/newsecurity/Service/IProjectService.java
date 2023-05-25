@@ -1,5 +1,6 @@
 package com.example.newsecurity.Service;
 
+import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Engineer;
 import com.example.newsecurity.Model.Project;
 import org.springframework.stereotype.Service;
@@ -19,4 +20,8 @@ public interface IProjectService {
     List<Project> getProjectsByEmployeeId(Long id);
 
     List<Project> getProjectsByManagerId(Long id);
+
+    void addEmployeeToProject(Long projectId, Long employeeId);
+
+    void removeEmployeeFromProject(Long projectId, Long employeeId);
 }
