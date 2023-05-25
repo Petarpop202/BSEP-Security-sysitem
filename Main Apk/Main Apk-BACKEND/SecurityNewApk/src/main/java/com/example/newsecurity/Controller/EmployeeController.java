@@ -1,7 +1,10 @@
 package com.example.newsecurity.Controller;
 
+import com.example.newsecurity.DTO.EmployeeUpdateDTO;
+import com.example.newsecurity.DTO.ManagerUpdateDTO;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Engineer;
+import com.example.newsecurity.Model.Manager;
 import com.example.newsecurity.Model.Project;
 import com.example.newsecurity.Service.IEmployeeService;
 import com.example.newsecurity.Service.IProjectService;
@@ -47,6 +50,16 @@ public class EmployeeController {
     @PutMapping("/{id}/description")
     public Employee updateEmployeeDescription(@PathVariable("id") Long id, @RequestBody String newDesctiption){
         return employeeService.updateEmployeeDescription(id, newDesctiption);
+    }
+    @PutMapping
+    public Employee updateEmployee(@RequestBody EmployeeUpdateDTO employeeUpdateDTO){
+        return employeeService.updateEmployee(employeeUpdateDTO);
+
+    }
+
+    @GetMapping("/project-id/{id}")
+    public List<Employee> getEmployeesByProjectId(@PathVariable("id") Long id){
+        return employeeService.getEmployeesByProjectId(id);
     }
 
 }

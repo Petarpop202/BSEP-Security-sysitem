@@ -1,5 +1,6 @@
 package com.example.newsecurity.Service;
 
+import com.example.newsecurity.DTO.EmployeeUpdateDTO;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Engineer;
 import org.springframework.stereotype.Service;
@@ -17,4 +18,8 @@ public interface IEmployeeService {
     void deleteEmployeeById(Long id);
 
     Employee updateEmployeeDescription(Long id, String newDesctiption);
+
+    List<Employee> getEmployeesByProjectId(Long id);
+
+    Employee updateEmployee(EmployeeUpdateDTO employeeUpdateDTO);
 }
