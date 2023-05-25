@@ -15,4 +15,6 @@ public interface IProjectService {
     Project getProjectById(Long id);
 
     void deleteProjectById(Long id);
+
+    List<Project> getProjectsByEmployeeId(Long id);
 }

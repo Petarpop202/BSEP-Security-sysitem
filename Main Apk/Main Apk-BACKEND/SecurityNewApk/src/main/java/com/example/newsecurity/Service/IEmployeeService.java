@@ -15,4 +15,6 @@ public interface IEmployeeService {
     Employee getEmployeeById(Long id);
 
     void deleteEmployeeById(Long id);
+
+    Employee updateEmployeeDescription(Long id, String newDesctiption);
 }

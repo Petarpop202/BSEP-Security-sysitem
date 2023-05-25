@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -38,5 +39,12 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public void deleteEmployeeById(Long id) {
         employeeRepository.deleteById(id);
+    }
+
+    @Override
+    public Employee updateEmployeeDescription(Long id, String newDesctiption) {
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Employee not found!"));
+        employee.setDescription(newDesctiption);
+        return employeeRepository.save(employee);
     }
 }

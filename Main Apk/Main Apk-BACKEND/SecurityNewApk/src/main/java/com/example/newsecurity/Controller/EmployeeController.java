@@ -2,7 +2,9 @@ package com.example.newsecurity.Controller;
 
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Engineer;
+import com.example.newsecurity.Model.Project;
 import com.example.newsecurity.Service.IEmployeeService;
+import com.example.newsecurity.Service.IProjectService;
 import com.example.newsecurity.Service.ServiceImplementation.EngineerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,6 +17,8 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     private IEmployeeService employeeService;
+    @Autowired
+    private IProjectService projectService;
 
     @PostMapping
     public Employee newEmployee(@RequestBody Employee employee) {
@@ -35,4 +39,14 @@ public class EmployeeController {
         employeeService.deleteEmployeeById(id);
         return "Employee deleted successfully!";
     }
+
+    @GetMapping("/{id}/projects")
+    public List<Project> getProjectsByEmployeeId(@PathVariable("id") Long id){
+        return projectService.getProjectsByEmployeeId(id);
+    }
+    @PutMapping("/{id}/description")
+    public Employee updateEmployeeDescription(@PathVariable("id") Long id, @RequestBody String newDesctiption){
+        return employeeService.updateEmployeeDescription(id, newDesctiption);
+    }
+
 }
