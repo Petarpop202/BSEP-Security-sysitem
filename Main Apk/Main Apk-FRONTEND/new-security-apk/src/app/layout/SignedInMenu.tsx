@@ -40,6 +40,12 @@ export default function SignedInMenu() {
         }
         )
     };
+    const handleProfile = () => {
+        if (user?.userRole === 'ROLE_ENGINEER'){
+            navigate('/profile-engineer')
+        }
+    }
+
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -64,7 +70,7 @@ export default function SignedInMenu() {
                 onClose={handleClose}
                 TransitionComponent={Fade}
             >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleProfile}>Profile</MenuItem>
                 <MenuItem onClick={() => dispatch(signOut())}>Logout</MenuItem>
             </Menu>
         </>

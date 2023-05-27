@@ -14,7 +14,6 @@ public class EngineerUpdateDTO {
     private String name;
     private String surname;
     private String username;
-    private String password;
     private String phoneNumber;
     private String jmbg;
     private GenderEnum gender;

@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/engineers",produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin
+@CrossOrigin(origins = "https://localhost:3000")
 public class EngineerController {
     @Autowired
     private IEngineerService engineerService;
@@ -31,6 +31,11 @@ public class EngineerController {
     @GetMapping("/{id}")
     public Engineer getEngineerById(@PathVariable Long id){
         return engineerService.getEngineerById(id);
+    }
+
+    @GetMapping("/username={username}")
+    public Engineer getEngineerByUsername(@PathVariable String username){
+        return engineerService.getEngineerByUsername(username);
     }
 
     @DeleteMapping("/{id}")

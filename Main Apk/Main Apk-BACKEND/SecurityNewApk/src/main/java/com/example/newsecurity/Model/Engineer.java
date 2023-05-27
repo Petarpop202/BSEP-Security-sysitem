@@ -19,6 +19,4 @@ import java.util.List;
 @Table(name = "Engineers")
 public class Engineer extends User{
     private HashMap<String, Integer> skills;
-
-
 }

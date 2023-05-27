@@ -29,9 +29,15 @@ const Account = {
     getString: () => requests.get('auth/getString')
 }
 
+const Engineer = {
+    getByUsername: (username: any) => requests.get(`engineers/username=${username}`),
+    updateEngineer: (values: any) => requests.put('engineers', values),
+    updateEngineerSkills: (values: any) => requests.put('engineers/skills-update', values),
+}
 
 const agent = {
-    Account
+    Account,
+    Engineer
 }
 
 export default agent;
