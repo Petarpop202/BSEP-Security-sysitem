@@ -1,5 +1,8 @@
+import { Jwt } from "./Jwt";
+
 export interface User {
     email: string;
-    token: string;
+    jwt: string;
+    refreshJwt: string;
     userRole: string;
 }

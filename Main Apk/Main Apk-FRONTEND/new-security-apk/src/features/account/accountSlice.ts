@@ -4,6 +4,7 @@ import agent from "../../app/api/agent";
 import { router } from "../../app/router/Router";
 import { toast } from "react-toastify";
 import { User } from "../../app/models/User";
+import jwt from 'jsonwebtoken';
 
 interface AccountState {
     user: User | null;
@@ -18,21 +19,23 @@ export const signInUser = createAsyncThunk<User,  FieldValues>(
     async (data, thunkAPI) => {
         try {
             const user = await agent.Account.login(data);
+            const decodedToken = jwt.verify(user?.jwt, 'tajna_lozinka');
+            const role = decodedToken.role;
             localStorage.setItem('user', JSON.stringify(user));
-            localStorage.setItem('userRole', JSON.stringify(user.userRole));
+            localStorage.setItem('userRole', JSON.stringify(role));
             return user;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({error: error.data})
         }
     }
 )
-
+//const user = await agent.Account.currentUser();
 export const fetchCurrentUser = createAsyncThunk<User>(
     'account/fetchCurrentUser',
     async (_, thunkAPI) => {
         thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem('user')!)));
         try {
-            const user = await agent.Account.currentUser();
+            const user = await agent.Account.refresh("aasd");
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('userRole', JSON.stringify(user.userRole));
             return user;

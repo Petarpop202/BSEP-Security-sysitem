@@ -44,7 +44,7 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                         to='/'
                         sx={navStyles}    
                     >
-                        FLY-MATE
+                        SECURITY-APK
                     </Typography>
                     <Switch checked={darkMode} onChange={handleThemeChange}/>
                 </Box>
