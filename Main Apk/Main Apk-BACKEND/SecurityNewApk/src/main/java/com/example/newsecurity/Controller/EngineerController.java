@@ -34,7 +34,7 @@ public class EngineerController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteEngineertById(@PathVariable Long id){
+    public String deleteEngineerById(@PathVariable Long id){
         engineerService.deleteEngineerById(id);
         return "Engineer deleted successfully!";
     }
