@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -56,18 +57,26 @@ public class AuthenticationController {
     public ResponseEntity<Jwt> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
         // AuthenticationException
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User user = (User) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user);
-        String refreshJwt = tokenUtils.generateRefreshToken(user);
+            User user = (User) authentication.getPrincipal();
+            String jwt = tokenUtils.generateToken(user);
+            String refreshJwt = tokenUtils.generateRefreshToken(user);
 
-        int expiresIn = tokenUtils.getExpiredIn();
-        return ResponseEntity.ok(new Jwt(jwt,refreshJwt, expiresIn));
+            int expiresIn = tokenUtils.getExpiredIn();
+            return ResponseEntity.ok(new Jwt(jwt, refreshJwt, expiresIn));
+        }
+        catch (AuthenticationException e) {
+            // Greška pri autentifikaciji
+            // Ovde možete dodati odgovarajuću logiku za obradu greške
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
+
 
     @GetMapping("/passwordlessLogin")
     public ResponseEntity<Jwt> passwordlessLogin(@RequestParam String mail) {
