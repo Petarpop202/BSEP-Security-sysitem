@@ -4,13 +4,14 @@ import agent from "../../app/api/agent";
 import { useAppSelector } from "../../app/apk/configureApk";
 import { useNavigate } from "react-router";
 import { Skills } from "../../app/models/Skills";
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { textAlign, width } from "@mui/system";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export default function EngineerSkills() {
     const {user} = useAppSelector((state: { acount: any; }) => state.acount);
     const [id, setId] = useState<number>();
-    const [skills, setSkills] = useState<Skills>()
+    const [skills, setSkills] = useState<Map<string, number>>(new Map<string, number>())
+    const [tableData, setTableData] = useState<Array<[string, number]>>([])
 
     const [newName, setNewName] = useState<string>('')
     const [newValue, setNewValue] = useState<number>(0)
@@ -24,40 +25,66 @@ export default function EngineerSkills() {
 
         agent.Engineer.getByUsername(user!.username)
             .then((response) =>{
-                console.log(response)
                 setId(response.id)
-                setSkills(response.skills)
+                setTableData(Array.from(new Map<string, number>(Object.entries(response.skills)).entries()))
+                setSkills(new Map<string, number>(Object.entries(response.skills)))
             })
+            .catch((error) => console.log(error)) 
     }, []);
 
-    const columns: GridColDef[] = [
-        {
-          field: 'name',
-          headerName: 'Name',
-        },
-        {
-          field: 'value',
-          headerName: 'Value',
-        },
-        {
-          field: 'delete',
-          headerName: 'Delete?',
-        },
-    ];
-
     const handleAddSkill = () => {
-        if (skills == null){
-            setSkills({
-                id: id!,
-                skills: new Map<string, number>()
-            })
+        if (skills === null || skills?.size === undefined){
+            setSkills(new Map<string, number>())
+        }else {
+            updateSkills()
         }
-        skills?.skills.set(newName, newValue)
-        console.log(skills)
     };
 
-    const handleDeleteSkill = (key: string) => {
+    useEffect(() =>{
+        if (newName === '' || newValue < 1 || newValue > 5){
+            return
+        }
+        updateSkills()
+    }, [skills]);
 
+    const handleDeleteSkill = (key: string) => {
+        skills!.delete(key)
+        let newSkills = {
+            id: id,
+            skills: Object.fromEntries(skills!)
+        }
+        agent.Engineer.updateEngineerSkills(newSkills)
+            .then((reponse) => {
+                const transformedData = Array.from(skills!.entries())
+                setTableData(transformedData)
+            })
+            .catch((error) => console.log(error))
+    }
+
+    const updateSkills = () => {
+        if (newValue < 1 || newValue > 5)
+        {
+            toast.error('Value needs to be between 1 and 5!')
+            return
+        }
+
+        if (newName === ''){
+            toast.error('Name cannot be empty!')
+            return
+        }
+        skills!.set(newName, newValue)
+        let newSkills = {
+            id: id,
+            skills: Object.fromEntries(skills!)
+        }
+        setNewName('')
+        setNewValue(0)
+        agent.Engineer.updateEngineerSkills(newSkills)
+            .then((response) => {
+                const transformedData = Array.from(skills!.entries())
+                setTableData(transformedData)
+            })
+            .catch((error) => console.log(error))
     }
 
     return (
@@ -66,46 +93,62 @@ export default function EngineerSkills() {
             Skills
         </Typography>
         <Box sx={{ width: '100%' }}>
-            <Grid>
-                <DataGrid
-                    getRowId={(row) => row.name}
-                    rows={skills ? Array.from(skills!.skills, ([key, value]) => ({ key, value })) : []}
-                    columns={columns}
-                />
-                <table>
+            <Grid container sx={{mb: 4}}>
+                <table style={{width: '100%', textAlign: 'center'}}>
                     <thead>
                         <th>Name</th>
                         <th>Value</th>
-                        <th>Delete?</th>
+                        <th>Action</th>
                     </thead>
                     <tbody>
-                        {skills ? Array.from(skills!.skills.entries()).map(([key, value]) => (
+                        {skills ? tableData.map(([key, value]) => (
                             <tr key={key}>
                                 <td>{key}</td>
                                 <td>{value}</td>
-                                <td><Button variant="contained" color="error" onClick={() => handleDeleteSkill(key)}></Button></td>
+                                <td><Button variant="contained" color="error" onClick={() => handleDeleteSkill(key)}>Delete</Button></td>
                             </tr>
                         )) : <></>}
                     </tbody>
                 </table>
             </Grid>
-            <Grid container>
-                <Grid item xs={4}>
+            <hr/>
+            <Grid container sx={{ p: 4, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <Grid item xs={6} height={50}>
+                    <Typography variant="subtitle1">
+                        Name
+                    </Typography>
                     <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)}/>
                 </Grid>
-                <Grid item xs={4}>
-                    <input type="number" value={newValue} onChange={(e) => setNewValue(Number(e.target.value))}/>
+                <Grid item xs={6}>
+                    <Typography variant="subtitle1">
+                        Value
+                    </Typography>
+                    <input type="number" value={newValue} min={1} max={5} onChange={(e) => setNewValue(Number(e.target.value))}/>
                 </Grid>
-                <Grid item xs={4}>
-                    <Button
-                    variant="contained"
-                    color="success"
-                    sx = {{mt: 3, marginRight: '120px'}}
-                    onClick={handleAddSkill}
-                    >
-                        Add Skill
-                    </Button> 
-                </Grid>
+            </Grid>
+            <Grid container sx={{paddingX: 2}}>
+                <Button
+                sx={{mb: 4}}
+                variant="contained"
+                color="success"
+                onClick={handleAddSkill}
+                fullWidth
+                >
+                    Add Skill
+                </Button>
+            </Grid>
+                <hr/>
+            <Grid container sx={{paddingX: 2}}>
+                <Button
+                sx={{mt: 4}}
+                variant="contained"
+                color="error"
+                component={Link}
+                to="/profile-engineer"
+                fullWidth
+                >
+                    Back
+                </Button> 
             </Grid>
         </Box>
         </Container>

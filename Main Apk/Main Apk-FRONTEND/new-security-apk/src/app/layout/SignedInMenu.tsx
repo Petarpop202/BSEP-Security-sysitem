@@ -43,6 +43,7 @@ export default function SignedInMenu() {
     const handleProfile = () => {
         if (user?.userRole === 'ROLE_ENGINEER'){
             navigate('/profile-engineer')
+            setAnchorEl(null);
         }
     }
 

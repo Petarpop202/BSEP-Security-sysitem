@@ -21,10 +21,10 @@ insert into users (name, surname, gender, username, password, jmbg, enabled, mai
 insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Inzenjer1', 'Inzenjer1', 0, 'engineer1', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789111', true, 'engineer1@gmail.com', '065/123-111', 3, true);
 insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Inzenjer2', 'Inzenjer2', 0, 'engineer2', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789222', true, 'engineer2@gmail.com', '065/123-222', 4, true);
 insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Inzenjer3', 'Inzenjer3', 0, 'engineer3', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789333', true, 'engineer3@gmail.com', '065/123-333', 5, true);
-insert into engineers (id, skills) values (2, null);
-insert into engineers (id, skills) values (6, null);
-insert into engineers (id, skills) values (7, null);
-insert into engineers (id, skills) values (8, null);
+insert into engineers (id) values (2);
+insert into engineers (id) values (6);
+insert into engineers (id) values (7);
+insert into engineers (id) values (8);
 INSERT INTO user_role (user_id, role_id) VALUES (6, 2);
 INSERT INTO user_role (user_id, role_id) VALUES (7, 2);
 INSERT INTO user_role (user_id, role_id) VALUES (8, 2);
