@@ -117,9 +117,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    @PreAuthorize("hasAnyRole('ROLE_HUMAN_RESOURCE_MANAGER', 'ROLE_PROJECT_MANAGER', 'ROLE_ADMINISTRATOR', 'ROLE_ENGINEER')")
-    public ResponseEntity<?> refreshAccessToken(@RequestBody Jwt refreshTokenRequest) {
-        String refreshToken = refreshTokenRequest.getRefreshJwt();
+    //@PreAuthorize("hasAnyRole('ROLE_HUMAN_RESOURCE_MANAGER', 'ROLE_PROJECT_MANAGER', 'ROLE_ADMINISTRATOR', 'ROLE_ENGINEER')")
+    public ResponseEntity<?> refreshAccessToken(@RequestBody Jwt refreshJwt) {
+        String refreshToken = refreshJwt.getRefreshJwt();
         if (tokenUtils.validateRefreshToken(refreshToken)) {
             String username = tokenUtils.getUsernameFromToken(refreshToken);
             User user = userService.findByUsername(username);

@@ -1,18 +1,22 @@
 import { Button, Menu, Fade, MenuItem } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { signOut } from "../../features/account/accountSlice";
+import { refreshUser, signOut } from "../../features/account/accountSlice";
 import agent from "../api/agent";
-import { User } from "../models/User";
-import { router } from "../router/Router";
-import { useAppDispatch, useAppSelector } from "../apk/configureApk";
+import { store, useAppDispatch, useAppSelector } from "../apk/configureApk";
+import { Navigate, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 
 
 export default function SignedInMenu() {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const {user} = useAppSelector((state: { acount: any; }) => state.acount);
+    const Jwt = {
+        refreshJwt: user?.refreshJwt,
+        jwt: user?.jwt
+    }
     
     // const signOut = () => {
     //     localStorage.removeItem('user');
@@ -25,6 +29,17 @@ export default function SignedInMenu() {
     const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget);
     };
+    const handleRefresh = () => {
+        agent.Account.getString().then(()=>{
+            toast.info('Izvrseno');
+        }).catch((error) => {
+            if (error.response && error.response.status === 401) {
+                store.dispatch(refreshUser(user?.token));
+                toast.info('Your token has been refreshed');
+            }
+        }
+        )
+    };
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -35,7 +50,13 @@ export default function SignedInMenu() {
                 sx={{typography: 'h6'}}
                 color='inherit'
                  onClick={handleClick}>
-                {user?.email}
+                {user?.username}
+            </Button>
+            <Button
+                sx={{typography: 'h6'}}
+                color='inherit'
+                 onClick={handleRefresh}>
+                Refresh
             </Button>
             <Menu
                 anchorEl={anchorEl}

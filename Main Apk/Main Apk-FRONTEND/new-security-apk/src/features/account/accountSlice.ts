@@ -4,6 +4,9 @@ import agent from "../../app/api/agent";
 import { router } from "../../app/router/Router";
 import { toast } from "react-toastify";
 import { User } from "../../app/models/User";
+import { decodeToken } from "react-jwt";
+import { DecodedToken } from "../../app/models/DecodedToken";
+import { RootState } from "../../app/apk/configureApk";
 
 interface AccountState {
     user: User | null;
@@ -17,9 +20,17 @@ export const signInUser = createAsyncThunk<User,  FieldValues>(
     'account/signInUser',
     async (data, thunkAPI) => {
         try {
-            const user = await agent.Account.login(data);
+            const jwt = await agent.Account.login(data);
+            const decodedToken = decodeToken<DecodedToken>(jwt?.jwt);
+            const user : User = decodedToken?{
+                name: decodedToken.name,
+                username: decodedToken.sub,
+                surname: decodedToken.surname,
+                userRole: decodedToken.roles,
+                token : jwt
+            }:{} as User;
             localStorage.setItem('user', JSON.stringify(user));
-            localStorage.setItem('userRole', JSON.stringify(user.userRole));
+            localStorage.setItem('userRole', JSON.stringify(decodedToken?.roles));
             return user;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({error: error.data})
@@ -27,12 +38,38 @@ export const signInUser = createAsyncThunk<User,  FieldValues>(
     }
 )
 
+export const refreshUser = createAsyncThunk<User,  FieldValues>(
+    'account/refreshUser',
+    async (data, thunkAPI) => {
+        try {
+            const jwt = await agent.Account.refresh(data);
+            const decodedToken = decodeToken<DecodedToken>(jwt?.jwt);
+            localStorage.removeItem('user');
+            localStorage.removeItem('userRole');
+            const user : User = decodedToken?{
+                name: decodedToken.name,
+                username: decodedToken.sub,
+                surname: decodedToken.surname,
+                userRole: decodedToken.roles,
+                token : jwt
+            }:{} as User;
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('userRole', JSON.stringify(decodedToken?.roles));
+            
+            return user;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({error: error.data})
+        }
+    }
+)
+
+//const user = await agent.Account.currentUser();
 export const fetchCurrentUser = createAsyncThunk<User>(
     'account/fetchCurrentUser',
     async (_, thunkAPI) => {
         thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem('user')!)));
         try {
-            const user = await agent.Account.currentUser();
+            const user = await agent.Account.refresh("aasd");
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('userRole', JSON.stringify(user.userRole));
             return user;
@@ -69,6 +106,9 @@ export const accountSlice = createSlice({
             toast.error('Session expired - please login again');
             router.navigate('/');
         })
+        builder.addCase(refreshUser.fulfilled, (state, action) => {
+            state.user = action.payload;
+        });
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) =>{
             state.user = action.payload;
         });
