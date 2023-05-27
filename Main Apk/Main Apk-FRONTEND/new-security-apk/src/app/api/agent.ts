@@ -1,16 +1,16 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { toast } from "react-toastify";
-import { router } from "../router/Router";
+import axios, { AxiosResponse } from "axios";
 import { store } from "../apk/configureApk";
+import { isExpired } from "react-jwt";
 
 axios.defaults.baseURL = 'https://localhost:8080/';
 axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-axios.interceptors.request.use(config => {
-    const accessToken = store.getState().acount.user?.jwt;
-    //const refreshToken = store.getState().acount.user?.token.refreshToken;
+axios.interceptors.request.use(async config => {
+    const accessToken = store.getState().acount.user?.token?.jwt;
+    const refreshToken = store.getState().acount.user?.token?.refreshJwt;
+    const is = isExpired(accessToken as string);
     if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
 })
@@ -25,7 +25,8 @@ const requests = {
 const Account = {
     login: (values: any) => requests.post('auth/login', values),
     register: (values: any) => requests.post('auth/register', values),
-    refresh: (values: any) => requests.post('auth/refresh', values)
+    refresh: (values: any) => requests.post('auth/refresh', values),
+    getString: () => requests.get('auth/getString')
 }
 
 
