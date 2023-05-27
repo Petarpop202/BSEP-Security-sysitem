@@ -87,7 +87,11 @@ public class WebSecurityConfig {
 
     	http.authorizeRequests().antMatchers("/auth/**").permitAll()		// /auth/**
 			.antMatchers("/h2-console/**").permitAll()	// /h2-console/** ako se koristi H2 baza)
-			.antMatchers("/api/foo").permitAll()		// /api/foo
+			.antMatchers("/engineers/**").permitAll()		// /api/foo
+				.antMatchers("/system-administrators/**").permitAll()
+				.antMatchers("/projects/**").permitAll()
+				.antMatchers("/managers/**").permitAll()
+				.antMatchers("/employees/**").permitAll()
 				.antMatchers("/auth/login").permitAll()
 				.antMatchers("/auth/get").permitAll()
 			// ukoliko ne zelimo da koristimo @PreAuthorize anotacije nad metodama kontrolera, moze se iskoristiti hasRole() metoda da se ogranici
