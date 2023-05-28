@@ -38,8 +38,12 @@ export default function AdminAccept() {
           toast.info("Request accepted");
         })
         .catch((error) => {
-          // Obrada greške pri prihvatanju zahtjeva
-        });
+          if (error.response && error.response.status === 401) {
+              store.dispatch(refreshUser(user?.token));
+              toast.info('Your token has been refreshed');
+          }
+      }
+      );
   };
 
   const handleDecline = (reqquestId: string) => {
@@ -53,8 +57,12 @@ export default function AdminAccept() {
           toast.info("Request denied");
         })
         .catch((error) => {
-          // Obrada greške pri prihvatanju zahtjeva
-        });
+          if (error.response && error.response.status === 401) {
+              store.dispatch(refreshUser(user?.token));
+              toast.info('Your token has been refreshed');
+          }
+      }
+      );
   };
 
   return (

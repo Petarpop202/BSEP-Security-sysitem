@@ -19,12 +19,6 @@ export default function SignedInMenu() {
         jwt: user?.jwt
     }
     
-    // const signOut = () => {
-    //     localStorage.removeItem('user');
-    //     location.reload();        
-    //     router.navigate('/');        
-    // }
-    
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: any) => {
@@ -32,7 +26,7 @@ export default function SignedInMenu() {
     };
     const handleRefresh = () => {
         agent.Account.getString().then(()=>{
-            toast.info('Izvrseno');
+            //toast.info('Izvrseno');
         }).catch((error) => {
             if (error.response && error.response.status === 401) {
                 store.dispatch(refreshUser(user?.token));

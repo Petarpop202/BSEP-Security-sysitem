@@ -150,7 +150,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/getRequests")
-    //@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<?> getRequests(){
         List<RegistrationRequest> list = registrationRequestService.getAllUnresponded();
         return ResponseEntity.ok(list);
