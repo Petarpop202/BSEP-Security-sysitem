@@ -40,6 +40,15 @@ public class EngineerService implements IEngineerService {
     }
 
     @Override
+    public Engineer getEngineerByUsername(String username){
+        Optional<Engineer> engineer = Optional.ofNullable(engineerRepository.findByUsername(username));
+        if (!engineer.isPresent()){
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find engineer");
+        }
+        return engineer.get();
+    }
+
+    @Override
     public void deleteEngineerById(Long id) {
         engineerRepository.deleteById(id);
     }
@@ -51,7 +60,6 @@ public class EngineerService implements IEngineerService {
             engineer.setName(engineerUpdateDTO.getName());
             engineer.setSurname(engineerUpdateDTO.getSurname());
             engineer.setUsername(engineerUpdateDTO.getUsername());
-            engineer.setPassword(engineerUpdateDTO.getPassword());
             engineer.setPhoneNumber(engineerUpdateDTO.getPhoneNumber());
             engineer.setJmbg(engineerUpdateDTO.getJmbg());
             engineer.setGender(engineerUpdateDTO.getGender());

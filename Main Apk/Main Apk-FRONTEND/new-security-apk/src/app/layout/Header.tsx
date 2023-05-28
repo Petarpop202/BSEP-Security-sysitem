@@ -55,6 +55,23 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                                 <AirplaneTicket />
                             </Badge>
                     </IconButton>
+
+                    {/* {user?.userRole === "ROLE_ADMINISTRATOR" ? (
+                     <SignedInMenu />
+                    ) : (
+                         <List sx={{display: 'flex'}}>
+                          {rightLinks.map(({title, path}) => (
+                          <ListItem
+                            component={NavLink}
+                           to={path}
+                          key={path}
+                          sx={navStyles}
+                         >
+                       {title.toUpperCase()}
+                     </ListItem>
+                     ))}
+                    </List>
+                    )} */}
                     
                     {user ? (
                         <SignedInMenu />

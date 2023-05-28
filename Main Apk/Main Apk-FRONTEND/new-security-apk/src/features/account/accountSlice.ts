@@ -69,6 +69,27 @@ export const refreshUser = createAsyncThunk<User, FieldValues>(
   }
 )
 
+export const isLoggedUser = createAsyncThunk<User>(
+    'account/isLoggedUser',
+    async (_, thunkAPI) => {
+        try {
+            const userString = localStorage.getItem('user');
+            let user1 = null;
+            if (userString !== null) {
+             try {
+              user1 = JSON.parse(userString);
+            } catch (error) {
+                console.error('Greška pri parsiranju JSON-a:', error);
+            }
+            }
+            
+            return user1;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({error: error.data})
+        }
+    }
+)
+
 //const user = await agent.Account.currentUser();
 export const fetchCurrentUser = createAsyncThunk<User>(
   "account/fetchCurrentUser",
@@ -100,29 +121,23 @@ export const accountSlice = createSlice({
       localStorage.removeItem("userRole")
       router.navigate("/")
     },
-    setUser: (state, action) => {
-      state.user = action.payload
-    },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchCurrentUser.rejected, (state) => {
-      state.user = null
-      localStorage.removeItem("user")
-      localStorage.removeItem("userRole")
-      toast.error("Session expired - please login again")
-      router.navigate("/")
-    })
-    builder.addCase(refreshUser.fulfilled, (state, action) => {
-      state.user = action.payload
-    })
-    builder.addMatcher(
-      isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled),
-      (state, action) => {
-        state.user = action.payload
-      }
-    )
-    builder.addMatcher(isAnyOf(signInUser.rejected), (state, action) => {
-      console.log(action.payload)
+    extraReducers: (builder => {
+        builder.addCase(fetchCurrentUser.rejected, (state) => {
+            state.user = null;
+            localStorage.removeItem('user');
+            localStorage.removeItem('userRole');
+            toast.error('Session expired - please login again');
+            router.navigate('/');
+        })
+        builder.addCase(refreshUser.fulfilled, (state, action) => {
+            state.user = action.payload;
+        });
+        builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled, isLoggedUser.fulfilled), (state, action) =>{
+            state.user = action.payload;
+        });
+        builder.addMatcher(isAnyOf(signInUser.rejected), (state, action) => {
+            console.log(action.payload)
+        })
     })
   },
 })

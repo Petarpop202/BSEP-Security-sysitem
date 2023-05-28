@@ -1,13 +1,15 @@
-import CssBaseline from "@mui/material/CssBaseline"
-import Header from "./Header"
-import { Container, createTheme } from "@mui/material"
-import { ThemeProvider } from "@emotion/react"
-import { useEffect, useState } from "react"
-import { Outlet } from "react-router-dom"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import { useAppDispatch } from "../apk/configureApk"
-import { fetchCurrentUser } from "../../features/account/accountSlice"
+
+import CssBaseline from '@mui/material/CssBaseline';
+import Header from './Header';
+import { Container, createTheme } from '@mui/material';
+import { ThemeProvider } from '@emotion/react';
+import { useEffect, useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useAppDispatch, useAppSelector } from '../apk/configureApk';
+import { fetchCurrentUser, isLoggedUser, refreshUser } from '../../features/account/accountSlice';
+
 
 function App() {
   const dispatch = useAppDispatch()
@@ -22,9 +24,11 @@ function App() {
     },
   })
 
-  // useEffect(() => {
-  //   dispatch(fetchCurrentUser());
-  // }, [dispatch])
+  
+  useEffect(() => {
+    dispatch(isLoggedUser());
+  }, [dispatch])
+
 
   function handleThemeChange() {
     setDarkMode(!darkMode)
@@ -41,4 +45,6 @@ function App() {
   )
 }
 
+
 export default App
+

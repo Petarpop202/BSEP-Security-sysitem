@@ -23,10 +23,24 @@ const requests = {
 }
 
 const Account = {
-  login: (values: any) => requests.post("auth/login", values),
-  register: (values: any) => requests.post("auth/register", values),
-  refresh: (values: any) => requests.post("auth/refresh", values),
-  getString: () => requests.get("auth/getString"),
+    login: (values: any) => requests.post('auth/login', values),
+    register: (values: any) => requests.post('auth/signup', values),
+    refresh: (values: any) => requests.post('auth/refresh', values),
+    getString: () => requests.get('auth/getString'),
+    getRequests: () => requests.get('auth/getRequests'),
+    response: (values: any) => requests.put('auth/response', values)
+}
+
+const Engineer = {
+    getByUsername: (username: any) => requests.get(`engineers/username=${username}`),
+    updateEngineer: (values: any) => requests.put('engineers', values),
+    updateEngineerSkills: (values: any) => requests.put('engineers/skills-update', values),
+}
+
+const Employee = {
+    getProjectsByEmployeeId : (id: any) => requests.get(`employees/${id}/projects`),
+    getEmployeesByEngineerId : (id: any) => requests.get(`employees/engineer=${id}`),
+    updateEmployeeDescription : (id: any, body: any) => requests.put(`employees/${id}/description`, body), 
 }
 
 const Manager = {
@@ -37,8 +51,10 @@ const Manager = {
 }
 
 const agent = {
-  Account,
-  Manager,
+    Account,
+    Engineer,
+    Employee,
+    Manager
 }
 
 export default agent
