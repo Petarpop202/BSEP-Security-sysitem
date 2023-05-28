@@ -1,3 +1,4 @@
+
 import CssBaseline from '@mui/material/CssBaseline';
 import Header from './Header';
 import { Container, createTheme } from '@mui/material';
@@ -9,37 +10,41 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAppDispatch, useAppSelector } from '../apk/configureApk';
 import { fetchCurrentUser, isLoggedUser, refreshUser } from '../../features/account/accountSlice';
 
+
 function App() {
-  const dispatch = useAppDispatch();
-  const [darkMode, setDarkMode] = useState(false);
-  const palleteType = darkMode ? 'dark' : 'light';
+  const dispatch = useAppDispatch()
+  const [darkMode, setDarkMode] = useState(false)
+  const palleteType = darkMode ? "dark" : "light"
   const theme = createTheme({
     palette: {
       mode: palleteType,
       background: {
-        default: palleteType === 'light' ? '#eaeaea' : '#121212'
-      }
-    }
+        default: palleteType === "light" ? "#eaeaea" : "#121212",
+      },
+    },
   })
+
   
   useEffect(() => {
     dispatch(isLoggedUser());
   }, [dispatch])
 
+
   function handleThemeChange() {
-    setDarkMode(!darkMode);
+    setDarkMode(!darkMode)
   }
   return (
     <ThemeProvider theme={theme}>
       <ToastContainer position="bottom-right" hideProgressBar theme="colored" />
       <CssBaseline />
-      <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>
+      <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
       <Container>
         <Outlet />
       </Container>
     </ThemeProvider>
-  );
+  )
 }
 
-export default App;
+
+export default App
 

@@ -1,25 +1,25 @@
-import axios, { AxiosResponse } from "axios";
-import { store } from "../apk/configureApk";
-import { isExpired } from "react-jwt";
+import axios, { AxiosResponse } from "axios"
+import { store } from "../apk/configureApk"
+import { isExpired } from "react-jwt"
 
-axios.defaults.baseURL = 'https://localhost:8080/';
-axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "https://localhost:8080/"
+axios.defaults.withCredentials = true
 
-const responseBody = (response: AxiosResponse) => response.data;
+const responseBody = (response: AxiosResponse) => response.data
 
-axios.interceptors.request.use(async config => {
-    const accessToken = store.getState().acount.user?.token?.jwt;
-    const refreshToken = store.getState().acount.user?.token?.refreshJwt;
-    const is = isExpired(accessToken as string);
-    if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
-    return config;
+axios.interceptors.request.use(async (config) => {
+  const accessToken = store.getState().acount.user?.token?.jwt
+  const refreshToken = store.getState().acount.user?.token?.refreshJwt
+  const is = isExpired(accessToken as string)
+  if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`
+  return config
 })
 
 const requests = {
-    get: (url: string) => axios.get(url).then(responseBody),
-    post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
-    put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
-    delete: (url: string) => axios.delete(url).then(responseBody),
+  get: (url: string) => axios.get(url).then(responseBody),
+  post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
+  put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
+  delete: (url: string) => axios.delete(url).then(responseBody),
 }
 
 const Account = {
@@ -43,10 +43,18 @@ const Employee = {
     updateEmployeeDescription : (id: any, body: any) => requests.put(`employees/${id}/description`, body), 
 }
 
+const Manager = {
+  currentManager: (id: number) => requests.get(`managers/${id}`),
+  updateManager: (values: any) => requests.put("managers", values),
+  updatePassword: (id: number, values: any) =>
+    requests.put(`managers/${id}`, values),
+}
+
 const agent = {
     Account,
     Engineer,
-    Employee
+    Employee,
+    Manager
 }
 
-export default agent;
+export default agent

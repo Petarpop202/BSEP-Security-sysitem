@@ -1,3 +1,4 @@
+
 import { LockOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Container, Paper, Avatar, Typography, Box, TextField, Grid } from "@mui/material";
@@ -11,7 +12,18 @@ import { signInUser } from "./accountSlice";
 import { response } from "express";
 
 
+
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors, isValid },
+  } = useForm({
+    mode: "onTouched",
+  })
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
 
     const { register, handleSubmit, formState: { isSubmitting, errors, isValid } } = useForm({
         mode: 'onTouched'
@@ -83,3 +95,4 @@ export default function Login() {
         </Container>
     );
 }
+
