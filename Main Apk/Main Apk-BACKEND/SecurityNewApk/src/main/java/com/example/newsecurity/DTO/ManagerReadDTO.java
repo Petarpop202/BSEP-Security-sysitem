@@ -7,9 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ManagerUpdateDTO {
+@NoArgsConstructor
+public class ManagerReadDTO {
     private Long id;
     private String name;
     private String surname;

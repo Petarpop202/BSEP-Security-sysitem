@@ -1,5 +1,6 @@
 package com.example.newsecurity.Controller;
 
+import com.example.newsecurity.DTO.ManagerReadDTO;
 import com.example.newsecurity.DTO.ManagerUpdateDTO;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Manager;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/managers",produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin
+@CrossOrigin(origins = "https://localhost:3000")
 public class ManagerController {
     @Autowired
     private IManagerService managerService;
@@ -28,7 +29,7 @@ public class ManagerController {
     }
 
     @GetMapping("/{id}")
-    public Manager getManagerById(@PathVariable Long id){
+    public ManagerReadDTO getManagerById(@PathVariable Long id){
         return managerService.getManagerById(id);
     }
 
@@ -42,5 +43,10 @@ public class ManagerController {
     public Manager updateManager(@RequestBody ManagerUpdateDTO managerUpdateDTO){
         return managerService.updateManager(managerUpdateDTO);
 
+    }
+
+    @PutMapping("/{id}")
+    public Manager updatePassword(@PathVariable Long id, @RequestBody String newPassword){
+        return managerService.updatePassword(id, newPassword);
     }
 }
