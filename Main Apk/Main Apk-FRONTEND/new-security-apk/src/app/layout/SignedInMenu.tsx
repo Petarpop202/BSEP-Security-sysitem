@@ -5,6 +5,7 @@ import agent from "../api/agent";
 import { store, useAppDispatch, useAppSelector } from "../apk/configureApk";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { router } from "../router/Router";
 
 
 
@@ -18,12 +19,6 @@ export default function SignedInMenu() {
         jwt: user?.jwt
     }
     
-    // const signOut = () => {
-    //     localStorage.removeItem('user');
-    //     location.reload();        
-    //     router.navigate('/');        
-    // }
-    
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: any) => {
@@ -31,7 +26,7 @@ export default function SignedInMenu() {
     };
     const handleRefresh = () => {
         agent.Account.getString().then(()=>{
-            toast.info('Izvrseno');
+            //toast.info('Izvrseno');
         }).catch((error) => {
             if (error.response && error.response.status === 401) {
                 store.dispatch(refreshUser(user?.token));
@@ -39,6 +34,7 @@ export default function SignedInMenu() {
             }
         }
         )
+        router.navigate("/response");
     };
     const handleClose = () => {
         setAnchorEl(null);
@@ -52,12 +48,14 @@ export default function SignedInMenu() {
                  onClick={handleClick}>
                 {user?.username}
             </Button>
+            {user?.userRole === "ROLE_ADMINISTRATOR" && (               
             <Button
                 sx={{typography: 'h6'}}
                 color='inherit'
-                 onClick={handleRefresh}>
-                Refresh
-            </Button>
+                onClick={handleRefresh}>
+                Register request
+                </Button>
+            )}
             <Menu
                 anchorEl={anchorEl}
                 open={open}
