@@ -29,10 +29,11 @@ export default function PasswordlessLogin() {
             </Typography>
             <Box component="form"
                 noValidate sx={{ mt: 1 }}
-                onSubmit={handleSubmit(data => agent.Account.login(data)
+                onSubmit={handleSubmit(data => agent.Account.passwordlessLogin(data.mail)
                     .then(() => {                       
-                        dispatch(signInUser(data));
-                        navigate('/');
+                        //dispatch(signInUser(data));
+                        //navigate('/');
+                        toast.info("You will get e-mail for registration !")
                     })
                     .catch(() => {
                         toast.error('Invalid parameters!')

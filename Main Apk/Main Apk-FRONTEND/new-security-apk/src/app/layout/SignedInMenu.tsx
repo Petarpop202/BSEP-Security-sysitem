@@ -55,6 +55,11 @@ export default function SignedInMenu() {
     setAnchorEl(null)
   }
 
+  const handleRoles = () => {
+    navigate("/roles")
+    setAnchorEl(null)
+  }
+
   return (
     <>
       <Button sx={{ typography: "h6" }} color="inherit" onClick={handleClick}>
@@ -76,6 +81,9 @@ export default function SignedInMenu() {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={handleProfile}>Profile</MenuItem>
+        {user?.userRole === "ROLE_ADMINISTRATOR" && (
+          <MenuItem onClick={handleRoles}>Roles</MenuItem>
+        )}
         <MenuItem onClick={() => dispatch(signOut())}>Logout</MenuItem>
       </Menu>
     </>

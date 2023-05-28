@@ -28,12 +28,14 @@ const Account = {
     refresh: (values: any) => requests.post('auth/refresh', values),
     getString: () => requests.get('auth/getString'),
     getRequests: () => requests.get('auth/getRequests'),
-    response: (values: any) => requests.put('auth/response', values)
+    response: (values: any) => requests.put('auth/response', values),
+    passwordlessLogin: (values: any) => requests.post('auth/passwordlessLogin', { mail: values })
 }
 
 const Engineer = {
     getByUsername: (username: any) => requests.get(`engineers/username=${username}`),
     updateEngineer: (values: any) => requests.put('engineers', values),
+    updatePassword: (id: number, values: any) => requests.put(`engineers/${id}`, values),
     updateEngineerSkills: (values: any) => requests.put('engineers/skills-update', values),
 }
 
@@ -57,12 +59,21 @@ const Project = {
   getProjectById : (id: any) => requests.get(`projects/${id}`),
 }
 
+const Roles = {
+    getAllRoles: () => requests.get('roles'),
+    getAllPermissions: () => requests.get('roles/permissions'),
+    addPermissionToRole: (role : string, permission: string) => requests.post(`roles/${role}/permission=${permission}`, {}),
+    removePermissionFromRole: (role : string, permission: string) => requests.delete(`roles/${role}/permission=${permission}`),
+}
+
 const agent = {
     Account,
     Engineer,
     Employee,
     Manager,
-    Project
+    Project,
+    Roles
+
 }
 
 export default agent

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Container, Paper, Typography, Box, Grid, Button } from "@mui/material";
+import { Container, Paper, Typography, Box, Grid, Button, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from "@mui/material";
 import agent from "../../app/api/agent";
 import { useAppSelector } from "../../app/apk/configureApk";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function ProfileEngineer() {
     const {user} = useAppSelector((state: { acount: any; }) => state.acount);
@@ -20,6 +21,9 @@ export default function ProfileEngineer() {
     const [street, setStreet] = useState(user?.address?.street ?? '');
     const [city, setCity] = useState(user?.address?.city ?? '');
     const [country, setCountry] = useState(user?.address?.country ?? '');
+
+    const [isChangePassword, setIsChangePassword] = useState(false)
+    const [password, setPassword] = useState("")
 
     const navigate = useNavigate();
 
@@ -47,7 +51,46 @@ export default function ProfileEngineer() {
             })
     }, []);
 
+    const handleChangePassword = () => {
+        setIsChangePassword(true)
+    }
+
+    const handleUpdatePassword = (newPassword: string) => {
+        setPassword(newPassword)
+    }
+
+    const updatePassword = () => {
+        if (password === "") {
+          toast.error("Fields can not be empty!")
+          return
+        }
+        if (password.length < 7) {
+          toast.error("Password must contains at least 8 characters")
+          return
+        }
+        agent.Engineer.updatePassword(Number(id), password)
+          .then(() => {
+            toast.success("Successfully updated!")
+          })
+          .catch((error) => console.log(error))
+    }
+
     const handleUpdateProfile = () => {
+        if (
+            username === "" ||
+            name === "" ||
+            surname === "" ||
+            phoneNumber === "" ||
+            jmbg === "" ||
+            streetNum === "" ||
+            street === "" ||
+            city === "" ||
+            country === ""
+          ) {
+            toast.error("Fields can not be empty!")
+            return
+        }
+
         let updatedEngineer = {
             id: id,
             username: username,
@@ -176,29 +219,82 @@ export default function ProfileEngineer() {
                 <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
                 </Grid>
             </Grid>
-            <Button
-                variant="contained"
-                sx = {{mt: 3, marginRight: '50px'}}
-                onClick={handleUpdateProfile}
-                >
-                Edit Profile
-            </Button>
-            <Button
-                component= {Link}
-                variant="contained"
-                sx = {{mt: 3, marginRight: '50px'}}
-                to={'/skills'}
-                >
-                View Skills
-            </Button>
-            <Button
-                component= {Link}
-                variant="contained"
-                sx = {{mt: 3}}
-                to={'/engineer-projects'}
-                >
-                View Projects
-            </Button>
+           {!isChangePassword && (
+                <Box textAlign="center">
+                    <Button
+                        variant="contained"
+                        sx={{  mt: 2 }}
+                        onClick={handleChangePassword}
+                        >
+                        Change Password
+                    </Button>
+                </Box>
+            )}
+            {isChangePassword ? (
+                <>
+                    <TableContainer>
+                        <Table>
+                        <TableBody>
+                            <TableRow>
+                            <TableCell><Typography variant="subtitle1" sx={{ fontWeight: 'bold', textAlign: 'right' }}>New Password: </Typography></TableCell>
+                            <TextField
+                                variant="outlined"
+                                type="password"
+                                value={password}
+                                onChange={(e) => handleUpdatePassword(e.target.value)}
+                            />
+                            </TableRow>
+                        </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <Box textAlign="center">
+                        <Button
+                            variant="contained"
+                            color="success"
+                            sx={{ ml: 13, mt: 2 }}
+                            onClick={updatePassword}
+                            >
+                            Update
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="error"
+                            sx={{ mx: 4, mt: 2 }}
+                            onClick={() => {setIsChangePassword(false)}}
+                            >
+                            Cancel
+                        </Button>
+                    </Box>
+                </>
+            ): (
+                <></>
+            )}
+            <hr/>
+            <Grid container sx={{ px: 4, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <Button
+                    variant="contained"
+                    sx = {{mt: 3, mx: 2}}
+                    onClick={handleUpdateProfile}
+                    >
+                    Edit Profile
+                </Button>
+                <Button
+                    component= {Link}
+                    variant="contained"
+                    sx = {{mt: 3, mx: 2}}
+                    to={'/skills'}
+                    >
+                    View Skills
+                </Button>
+                <Button
+                    component= {Link}
+                    variant="contained"
+                    sx = {{mt: 3, mx: 2}}
+                    to={'/engineer-projects'}
+                    >
+                    View Projects
+                </Button>
+            </Grid>
         </Box>
         </Container>
     );

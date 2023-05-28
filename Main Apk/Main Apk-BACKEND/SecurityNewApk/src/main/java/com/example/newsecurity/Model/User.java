@@ -114,4 +114,15 @@ public class User implements UserDetails {
         this.setLastPasswordResetDate(now);
         this.password = password;
     }
+
+    public boolean hasPermission(String permissionName) {
+        for (Role role : getRoles()) {
+            for (Permission permission : role.getPermissions()) {
+                if (permission.getName().equals(permissionName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

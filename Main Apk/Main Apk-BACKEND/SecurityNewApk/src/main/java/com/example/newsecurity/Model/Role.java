@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="ROLE")
 public class Role implements GrantedAuthority {
@@ -17,6 +20,12 @@ public class Role implements GrantedAuthority {
 
     @Column(name="name")
     String name;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
+    private List<Permission> permissions;
 
     @JsonIgnore
     @Override
@@ -41,4 +50,17 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
+    public List<Permission> getPermissions() { return permissions; }
+
+    public void addPermission(Permission permission){
+        if(permissions == null){
+            permissions = new ArrayList<>();
+        }
+        permissions.add(permission);
+    }
+    public void removePermission(Permission permission){
+        if(permissions != null) {
+            permissions.removeIf(perm -> perm.getName().equals(permission.getName()));
+        }
+    }
 }
