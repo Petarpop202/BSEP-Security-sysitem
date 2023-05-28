@@ -1,5 +1,6 @@
 package com.example.newsecurity.Controller;
 
+import com.example.newsecurity.DTO.ManagerReadDTO;
 import com.example.newsecurity.DTO.ManagerUpdateDTO;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Manager;
@@ -47,7 +48,7 @@ public class ManagerController {
     }
 
     @GetMapping("/{id}")
-    public Manager getManagerById(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id){
+    public ManagerReadDTO getManagerById(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id){
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
@@ -78,5 +79,10 @@ public class ManagerController {
             return null;
         }
         return managerService.updateManager(managerUpdateDTO);
+    }
+
+    @PutMapping("/{id}")
+    public Manager updatePassword(@PathVariable Long id, @RequestBody String newPassword){
+        return managerService.updatePassword(id, newPassword);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.newsecurity.Service.ServiceImplementation;
 
+import com.example.newsecurity.DTO.ManagerReadDTO;
 import com.example.newsecurity.DTO.ManagerUpdateDTO;
 import com.example.newsecurity.Model.Manager;
 import com.example.newsecurity.Model.Project;
@@ -7,6 +8,7 @@ import com.example.newsecurity.Repository.IManagerRepository;
 import com.example.newsecurity.Service.IManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,6 +20,8 @@ import java.util.Optional;
 public class ManagerService implements IManagerService {
     @Autowired
     private IManagerRepository managerRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Manager newManager(Manager manager) {
@@ -30,12 +34,26 @@ public class ManagerService implements IManagerService {
     }
 
     @Override
-    public Manager getManagerById(Long id) {
-        Optional<Manager> manager = managerRepository.findById(id);
-        if (!manager.isPresent()) {
+    public ManagerReadDTO getManagerById(Long id) {
+        Optional<Manager> managerOptional = managerRepository.findById(id);
+        if (!managerOptional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find project");
         }
-        return manager.get();
+        Manager manager = managerOptional.get();
+        ManagerReadDTO managerReadDTO = new ManagerReadDTO();
+
+        managerReadDTO.setId(manager.getId());
+        managerReadDTO.setName(manager.getName());
+        managerReadDTO.setSurname(manager.getSurname());
+        managerReadDTO.setMail(manager.getMail());
+        managerReadDTO.setUsername(manager.getUsername());
+        managerReadDTO.setPhoneNumber(manager.getPhoneNumber());
+        managerReadDTO.setJmbg(manager.getJmbg());
+        managerReadDTO.setAddress(manager.getAddress());
+
+        return managerReadDTO;
+
+
     }
 
     @Override
@@ -50,11 +68,21 @@ public class ManagerService implements IManagerService {
         manager.setSurname(managerUpdateDTO.getSurname());
         manager.setMail(managerUpdateDTO.getMail());
         manager.setUsername(managerUpdateDTO.getUsername());
-        manager.setPassword(managerUpdateDTO.getPassword());
         manager.setPhoneNumber(managerUpdateDTO.getPhoneNumber());
         manager.setJmbg(managerUpdateDTO.getJmbg());
-        manager.setGender(managerUpdateDTO.getGender());
         manager.setAddress(managerUpdateDTO.getAddress());
+
+        return managerRepository.save(manager);
+    }
+
+    @Override
+    public Manager updatePassword(Long id, String newPassword) {
+        Optional<Manager> optionalManager = managerRepository.findById(id);
+        if(!optionalManager.isPresent()){
+            throw new NoSuchElementException("Manager not found!");
+        }
+        Manager manager = optionalManager.get();
+        manager.setPassword(passwordEncoder.encode(newPassword));
 
         return managerRepository.save(manager);
     }
