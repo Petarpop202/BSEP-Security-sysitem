@@ -37,7 +37,8 @@ const Engineer = {
     updateEngineer: (values: any) => requests.put('engineers', values),
     updatePassword: (id: number, values: any) => requests.put(`engineers/${id}`, values),
     updateEngineerSkills: (values: any) => requests.put('engineers/skills-update', values),
-}
+    getEngineers: () => requests.get('engineers'),
+  }
 
 const Employee = {
     getProjectsByEmployeeId : (id: any) => requests.get(`employees/${id}/projects`),
@@ -53,10 +54,14 @@ const Manager = {
   updatePassword: (id: number, values: any) =>
     requests.put(`managers/${id}`, values),
   getManagerProjects: (id: number) => requests.get(`projects/manager/${id}`),
+  getManagers: () => requests.get('managers'),
 }
 
 const Project = {
   getProjectById : (id: any) => requests.get(`projects/${id}`),
+  getProjects: () => requests.get('projects'),
+  createProject: (values: any) => requests.post('projects', values),
+  addEmployeeToProject: (projectId: any, employeeId: any) => requests.post(`projects/${projectId}/employee=${employeeId}`, {}),
 }
 
 const Roles = {

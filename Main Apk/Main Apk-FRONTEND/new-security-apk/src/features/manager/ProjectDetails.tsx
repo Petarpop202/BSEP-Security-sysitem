@@ -11,11 +11,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {Button, Typography, TextField} from '@mui/material';
+import {Button, Typography, TextField, Select} from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { toast } from "react-toastify";
 import { format, parseISO, toDate } from "date-fns";
+import { Manager } from "../../app/models/Manager";
 
 export default function ProjectDetails () {
     const { id } = useParams();
@@ -27,17 +28,21 @@ export default function ProjectDetails () {
     const [description, setDescription] = useState('')
     const [selectedEmployee, setSelectedEmployee] = useState<EmployeeReadDTO | null>(null)
     const [isUpdate, setIsUpdate] = useState(false)
+    const [engineers, setEngineers] = useState<Manager[] | null>([])
+    const [engineerId, setEngineerId] = useState<number>(0)
     
 
     const { user } = useAppSelector((state: { acount: any }) => state.acount)
 
   useEffect(() => {
-        if (user?.userRole !== "ROLE_PROJECT_MANAGER" || user == null){
-            navigate('/')
-            return
+        if (user?.userRole == "ROLE_PROJECT_MANAGER" || user?.userRole == "ROLE_ADMINISTRATOR"){
+            getProject()
+             getEmployees()
+             return
         }
-        getProject()
-        getEmployees()
+        navigate('/')
+        return
+        
     }, []);
 
   const getProject = () => {
@@ -58,6 +63,14 @@ export default function ProjectDetails () {
         .catch((error) => console.log(error))
   }
 
+  const getEngineers = () => {
+    agent.Engineer.getEngineers()
+      .then((response) => {
+        setEngineers(response)
+      })
+      .catch((error) => console.log(error))
+  }
+
   const handleStartDate = (value : any) => {
     setStartDate(value);
   }
@@ -68,12 +81,26 @@ export default function ProjectDetails () {
     setDescription(value);
   }
 
+  const handleEngineerId = (value: any) => {
+    setEngineerId(value);
+  }
+
   const formatDate = (dateArray: number[]) => {
     const [year, month, day] = dateArray;
     const formattedDate = `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month}.${year}.`;
     return formattedDate;
   };
 
+
+  const addEngineer = () => {
+    if(engineerId == null){
+      toast.error('invalid ID');
+      return;
+    }
+    agent.Project.addEmployeeToProject(id, engineerId)
+      .then(() => console.log('prosao'))
+      .catch(error => console.log(error))
+  }
   
 
   const updateEmployee = () =>{
@@ -102,6 +129,35 @@ export default function ProjectDetails () {
         <Typography variant="h2" sx={{justifyContent: 'center', alignItems: 'center', mt: 5, mb: 5, textAlign: 'center'}}>{project?.name}</Typography>
         <Typography variant="h4" sx={{justifyContent: 'center', alignItems: 'center', mb: 3}}>Employees:</Typography>
         
+        {user?.userRole == "ROLE_ADMINISTRATOR" &&
+          <>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">Engineer Id</TableCell>
+                  <TableCell align="left"></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>                
+                  <TableRow>
+                    <TableCell component="th" scope="row">    
+                      <TextField
+                        variant="outlined"
+                        value={engineerId}
+                        onChange={(e) => handleEngineerId(e.target.value)}
+                      />                 
+                    </TableCell>   
+                    <TableCell component="th" scope="row">    
+                        <Button onClick={addEngineer} variant="contained" sx={{ml: 5}}>Add Engineer</Button>               
+                    </TableCell>                  
+                  </TableRow>                
+              </TableBody>            
+            </Table>
+          </TableContainer>
+          </>
+        }
+
         {isUpdate &&
         <>
             <Typography variant="h4" sx={{justifyContent: 'center', alignItems: 'center', mt: 5, mb: 1, textAlign: 'left'}}>{selectedEmployee?.name} {selectedEmployee?.surname}</Typography>
@@ -158,7 +214,9 @@ export default function ProjectDetails () {
         </>
         }
         
-        
+        {user?.userRole == "ROLE_ADMINISTRATOR" &&
+            <></>
+        }
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -192,7 +250,10 @@ export default function ProjectDetails () {
                       {new Date(employee.endDate[0], employee.endDate[1] - 1, employee.endDate[2] + 1, employee.endDate[3], employee.endDate[4], 0).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
-                      <Button variant="contained" onClick={() => {handleDesription(employee.description); setSelectedEmployee(employee); setIsUpdate(true); console.log(employee.startDate.toString())}}>Update</Button>
+                      {user?.userRole == "ROLE_PROJECT_MANAGER" &&
+                        <Button variant="contained" onClick={() => {handleDesription(employee.description); setSelectedEmployee(employee); setIsUpdate(true); console.log(employee.startDate.toString())}}>Update</Button>
+                      }
+                      
                     </TableCell>
                   </TableRow>
                 ))}
