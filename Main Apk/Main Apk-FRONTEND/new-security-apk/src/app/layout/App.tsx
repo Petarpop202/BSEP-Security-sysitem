@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAppDispatch } from '../apk/configureApk';
-import { fetchCurrentUser } from '../../features/account/accountSlice';
+import { useAppDispatch, useAppSelector } from '../apk/configureApk';
+import { fetchCurrentUser, isLoggedUser, refreshUser } from '../../features/account/accountSlice';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -21,9 +21,9 @@ function App() {
       }
     }
   })
-
+  
   useEffect(() => {
-    dispatch(fetchCurrentUser());
+    dispatch(isLoggedUser());
   }, [dispatch])
 
   function handleThemeChange() {
@@ -42,3 +42,4 @@ function App() {
 }
 
 export default App;
+
