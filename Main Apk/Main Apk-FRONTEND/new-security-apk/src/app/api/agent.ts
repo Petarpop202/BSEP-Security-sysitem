@@ -35,9 +35,16 @@ const Engineer = {
     updateEngineerSkills: (values: any) => requests.put('engineers/skills-update', values),
 }
 
+const Employee = {
+    getProjectsByEmployeeId : (id: any) => requests.get(`employees/${id}/projects`),
+    getEmployeesByEngineerId : (id: any) => requests.get(`employees/engineer=${id}`),
+    updateEmployeeDescription : (id: any, body: any) => requests.put(`employees/${id}/description`, body), 
+}
+
 const agent = {
     Account,
-    Engineer
+    Engineer,
+    Employee
 }
 
 export default agent;

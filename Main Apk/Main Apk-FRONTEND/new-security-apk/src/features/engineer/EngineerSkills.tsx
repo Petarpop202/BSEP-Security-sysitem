@@ -3,7 +3,6 @@ import { Container, Paper, Typography, Box, Grid, Button } from "@mui/material";
 import agent from "../../app/api/agent";
 import { useAppSelector } from "../../app/apk/configureApk";
 import { useNavigate } from "react-router";
-import { Skills } from "../../app/models/Skills";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 

@@ -191,6 +191,14 @@ export default function ProfileEngineer() {
                 >
                 View Skills
             </Button>
+            <Button
+                component= {Link}
+                variant="contained"
+                sx = {{mt: 3, marginRight: '120px'}}
+                to={'/engineer-projects'}
+                >
+                View Projects
+            </Button>
         </Box>
         </Container>
     );

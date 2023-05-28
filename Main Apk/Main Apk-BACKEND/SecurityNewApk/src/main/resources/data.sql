@@ -47,3 +47,4 @@ insert into employees (description, end_date, start_date, engineer_id) values ('
 insert into employees (description, end_date, start_date, engineer_id) values ('java developer', '2023-10-22', '2022-10-22', 7);
 insert into employees (description, end_date, start_date, engineer_id) values ('dotnet developer', '2023-10-22', '2022-10-22', 8);
 
+insert into project_employee (project_id, employee_id) values (1, 1)
