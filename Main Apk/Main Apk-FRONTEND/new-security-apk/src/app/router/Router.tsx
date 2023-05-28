@@ -7,7 +7,9 @@ import PasswordlessLogin from "../../features/account/PasswordlessLogin"
 import ProfileEngineer from "../../features/engineer/ProfileEngineer"
 import Skills from "../../features/engineer/EngineerSkills"
 import EngineerProjects from "../../features/engineer/EngineerProjects"
-import ManagerPage from "../../features/manager/ManagerPage"
+import ManagerProfilePage from "../../features/manager/ManagerProfilePage"
+import ManagerProjects from "../../features/manager/ManagerProjects"
+import ProjectDetails from "../../features/manager/ProjectDetails"
 
 export const router = createBrowserRouter([
   {
@@ -21,7 +23,9 @@ export const router = createBrowserRouter([
       { path: "passwordless", element: <PasswordlessLogin /> },
       { path: "profile-engineer", element: <ProfileEngineer /> },
       { path: "skills", element: <Skills /> },
-      { path: "manager", element: <ManagerPage /> },
+      { path: "profile-manager", element: <ManagerProfilePage /> },
+      { path: "manager", element: <ManagerProjects />},
+      { path: "project-details/:id", element: <ProjectDetails />},
       { path: "engineer-projects", element: <EngineerProjects /> },
     ],
   },

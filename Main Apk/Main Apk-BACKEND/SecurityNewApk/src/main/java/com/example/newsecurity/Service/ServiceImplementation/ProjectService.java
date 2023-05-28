@@ -1,5 +1,6 @@
 package com.example.newsecurity.Service.ServiceImplementation;
 
+import com.example.newsecurity.DTO.ProjectReadDto;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Project;
 import com.example.newsecurity.Repository.IEmployeeRepository;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,8 +50,18 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public List<Project> getProjectsByManagerId(Long id) {
-        return projectRepository.findByManagerId(id);
+    public List<ProjectReadDto> getProjectsByManagerId(Long id) {
+        List<Project> projects = projectRepository.findByManagerId(id);
+        ProjectReadDto project = new ProjectReadDto();
+        List<ProjectReadDto> result = new ArrayList<>();
+        for(Project p : projects){
+            project.setId(p.getProjectId());
+            project.setName(p.getName());
+            project.setStartDate(p.getStartDate());
+            project.setEndDate(p.getEndDate());
+            result.add(project);
+        }
+        return result;
     }
 
     @Override

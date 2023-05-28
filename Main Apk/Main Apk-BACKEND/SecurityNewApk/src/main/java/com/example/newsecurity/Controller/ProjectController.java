@@ -1,5 +1,6 @@
 package com.example.newsecurity.Controller;
 
+import com.example.newsecurity.DTO.ProjectReadDto;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Engineer;
 import com.example.newsecurity.Model.Project;
@@ -38,7 +39,7 @@ public class ProjectController {
     }
 
     @GetMapping("/manager/{id}")
-    public List<Project> getProjectsByManagerId(@PathVariable("id") Long id){
+    public List<ProjectReadDto> getProjectsByManagerId(@PathVariable("id") Long id){
         return projectService.getProjectsByManagerId(id);
     }
 

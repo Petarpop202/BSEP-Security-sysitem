@@ -21,7 +21,7 @@ import { Address } from "../../app/models/Address"
 import { toast } from "react-toastify"
 import { signOut } from "../account/accountSlice"
 
-export default function ManagerPage() {
+export default function ManagerProfilePage() {
   const navigate = useNavigate()
   const { user } = useAppSelector((state: { acount: any }) => state.acount)
   const [manager, setManager] = useState<Manager | null>(null)
@@ -253,7 +253,7 @@ export default function ManagerPage() {
       agent.Manager.updateManager(newManager)
         .then(() => {
           toast.success("Successfully updated!")
-          navigate("/")
+          navigate("/profile-manager")
         })
         .catch((error) => console.log(error))
     } else {

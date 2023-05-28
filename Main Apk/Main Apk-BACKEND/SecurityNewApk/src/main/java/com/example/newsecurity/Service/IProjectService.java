@@ -1,5 +1,6 @@
 package com.example.newsecurity.Service;
 
+import com.example.newsecurity.DTO.ProjectReadDto;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Engineer;
 import com.example.newsecurity.Model.Project;
@@ -19,7 +20,7 @@ public interface IProjectService {
 
     List<Project> getProjectsByEmployeeId(Long id);
 
-    List<Project> getProjectsByManagerId(Long id);
+    List<ProjectReadDto> getProjectsByManagerId(Long id);
 
     void addEmployeeToProject(Long projectId, Long employeeId);
 

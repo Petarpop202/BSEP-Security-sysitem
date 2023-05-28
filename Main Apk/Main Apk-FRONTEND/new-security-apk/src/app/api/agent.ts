@@ -48,13 +48,19 @@ const Manager = {
   updateManager: (values: any) => requests.put("managers", values),
   updatePassword: (id: number, values: any) =>
     requests.put(`managers/${id}`, values),
+  getManagerProjects: (id: number) => requests.get(`projects/manager/${id}`),
+}
+
+const Project = {
+  getProjectById : (id: any) => requests.get(`projects/${id}`),
 }
 
 const agent = {
     Account,
     Engineer,
     Employee,
-    Manager
+    Manager,
+    Project
 }
 
 export default agent
