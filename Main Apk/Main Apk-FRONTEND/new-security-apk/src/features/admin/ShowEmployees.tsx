@@ -48,6 +48,7 @@ export default function ShowEmployees() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                  <TableCell align="left">Id</TableCell>
                   <TableCell align="left">Name</TableCell>
                   <TableCell align="left">Surname</TableCell>
                   <TableCell align="left">Mail</TableCell>
@@ -61,6 +62,9 @@ export default function ShowEmployees() {
                   <TableRow
                     key={manager.id}
                   >
+                    <TableCell>
+                      {manager.id}
+                    </TableCell>
                     <TableCell component="th" scope="row">
                       {manager.name}
                     </TableCell>

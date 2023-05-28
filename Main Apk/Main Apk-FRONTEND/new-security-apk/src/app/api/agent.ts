@@ -61,6 +61,7 @@ const Project = {
   getProjectById : (id: any) => requests.get(`projects/${id}`),
   getProjects: () => requests.get('projects'),
   createProject: (values: any) => requests.post('projects', values),
+  addEmployeeToProject: (projectId: any, employeeId: any) => requests.post(`projects/${projectId}/employee=${employeeId}`, {}),
 }
 
 const Roles = {
