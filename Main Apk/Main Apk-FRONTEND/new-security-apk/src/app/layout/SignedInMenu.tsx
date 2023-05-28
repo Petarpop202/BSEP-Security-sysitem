@@ -49,6 +49,10 @@ export default function SignedInMenu() {
       navigate("/manager")
       setAnchorEl(null)
     }
+    if (user?.userRole === "ROLE_ADMINISTRATOR") {
+      navigate("/profile-admin")
+      setAnchorEl(null)
+    }
   }
 
   const handleClose = () => {

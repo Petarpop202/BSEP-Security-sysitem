@@ -12,6 +12,7 @@ import ManagerProjects from "../../features/manager/ManagerProjects"
 import ProjectDetails from "../../features/manager/ProjectDetails"
 import GuestLogged from "../../features/account/GuestLogged"
 import AdminPermissions from "../../features/admin/AdminPermissions"
+import ProfileAdmin from "../../features/admin/ProfileAdmin"
 
 
 export const router = createBrowserRouter([
@@ -31,7 +32,8 @@ export const router = createBrowserRouter([
       { path: "project-details/:id", element: <ProjectDetails />},
       { path: "engineer-projects", element: <EngineerProjects /> },
       { path: "guestlogin", element : <GuestLogged/> },
-      { path: "roles", element: <AdminPermissions/> }
+      { path: "roles", element: <AdminPermissions/> },
+      { path: "profile-admin", element: <ProfileAdmin/> },
     ],
   },
 ])
