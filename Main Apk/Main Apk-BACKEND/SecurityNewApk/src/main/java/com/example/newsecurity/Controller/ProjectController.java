@@ -1,5 +1,6 @@
 package com.example.newsecurity.Controller;
 
+import com.example.newsecurity.DTO.ProjectReadDto;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Engineer;
 import com.example.newsecurity.Model.Project;
@@ -69,7 +70,7 @@ public class ProjectController {
     }
 
     @GetMapping("/manager/{id}")
-    public List<Project> getProjectsByManagerId(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("id") Long id){
+    public List<ProjectReadDto> getProjectsByManagerId(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("id") Long id){
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);

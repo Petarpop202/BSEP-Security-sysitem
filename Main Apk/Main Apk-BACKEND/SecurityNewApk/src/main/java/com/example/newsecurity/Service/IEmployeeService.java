@@ -1,5 +1,6 @@
 package com.example.newsecurity.Service;
 
+import com.example.newsecurity.DTO.EmployeeReadDTO;
 import com.example.newsecurity.DTO.EmployeeUpdateDTO;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Engineer;
@@ -21,7 +22,7 @@ public interface IEmployeeService {
 
     Employee updateEmployeeDescription(Long id, String newDesctiption);
 
-    List<Employee> getEmployeesByProjectId(Long id);
+    List<EmployeeReadDTO> getEmployeesByProjectId(Long id);
 
     Employee updateEmployee(EmployeeUpdateDTO employeeUpdateDTO);
 }

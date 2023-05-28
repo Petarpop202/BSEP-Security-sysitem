@@ -1,5 +1,6 @@
 package com.example.newsecurity.Controller;
 
+import com.example.newsecurity.DTO.EmployeeReadDTO;
 import com.example.newsecurity.DTO.EmployeeUpdateDTO;
 import com.example.newsecurity.DTO.Jwt;
 import com.example.newsecurity.DTO.ManagerUpdateDTO;
@@ -114,8 +115,10 @@ public class EmployeeController {
         return employeeService.updateEmployee(employeeUpdateDTO);
     }
 
+    
+
     @GetMapping("/project-id/{id}")
-    public List<Employee> getEmployeesByProjectId(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("id") Long id){
+    public List<EmployeeReadDTO> getEmployeesByProjectId(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("id") Long id){
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);

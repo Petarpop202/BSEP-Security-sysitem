@@ -43,6 +43,8 @@ const Employee = {
     getProjectsByEmployeeId : (id: any) => requests.get(`employees/${id}/projects`),
     getEmployeesByEngineerId : (id: any) => requests.get(`employees/engineer=${id}`),
     updateEmployeeDescription : (id: any, body: any) => requests.put(`employees/${id}/description`, body), 
+    getEmployeesByProjectId : (id: any) => requests.get(`employees/project-id/${id}`),
+    updateEmployee : (value: any) => requests.put('employees', value),
 }
 
 const Manager = {
@@ -50,6 +52,11 @@ const Manager = {
   updateManager: (values: any) => requests.put("managers", values),
   updatePassword: (id: number, values: any) =>
     requests.put(`managers/${id}`, values),
+  getManagerProjects: (id: number) => requests.get(`projects/manager/${id}`),
+}
+
+const Project = {
+  getProjectById : (id: any) => requests.get(`projects/${id}`),
 }
 
 const Roles = {
@@ -64,7 +71,9 @@ const agent = {
     Engineer,
     Employee,
     Manager,
+    Project,
     Roles
+
 }
 
 export default agent
