@@ -194,7 +194,10 @@ export default function ProjectDetails () {
                       {new Date(employee.endDate[0], employee.endDate[1] - 1, employee.endDate[2] + 1, employee.endDate[3], employee.endDate[4], 0).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
-                      <Button variant="contained" onClick={() => {handleDesription(employee.description); setSelectedEmployee(employee); setIsUpdate(true); console.log(employee.startDate.toString())}}>Update</Button>
+                      {user?.userRole == "ROLE_PROJECT_MANAGER" &&
+                        <Button variant="contained" onClick={() => {handleDesription(employee.description); setSelectedEmployee(employee); setIsUpdate(true); console.log(employee.startDate.toString())}}>Update</Button>
+                      }
+                      
                     </TableCell>
                   </TableRow>
                 ))}
