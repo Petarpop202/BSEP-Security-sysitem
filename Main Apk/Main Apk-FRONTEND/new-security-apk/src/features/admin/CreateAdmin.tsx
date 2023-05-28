@@ -230,6 +230,9 @@ export default function CreateAdmin() {
                     margin="normal"
                     value="ROLE_ADMINISTRATOR"
                     fullWidth
+                    InputProps={{
+                        readOnly: true,
+                      }}
                     label="Role"
                     autoFocus
                     {...register('role', { required: 'Role is required' })}
