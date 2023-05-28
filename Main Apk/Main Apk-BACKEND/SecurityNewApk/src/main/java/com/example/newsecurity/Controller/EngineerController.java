@@ -3,11 +3,9 @@ package com.example.newsecurity.Controller;
 import com.example.newsecurity.DTO.EngineerUpdateDTO;
 import com.example.newsecurity.DTO.EngineerUpdateSkillsDTO;
 import com.example.newsecurity.Model.Engineer;
-import com.example.newsecurity.Model.Project;
 import com.example.newsecurity.Model.User;
 import com.example.newsecurity.Service.IEngineerService;
 import com.example.newsecurity.Service.IUserService;
-import com.example.newsecurity.Service.ServiceImplementation.EngineerService;
 import com.example.newsecurity.Util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -99,5 +97,10 @@ public class EngineerController {
             return;
         }
         engineerService.updateEngineerSkills(engineerUpdateSkillsDTO);
+    }
+
+    @PutMapping("/{id}")
+    public Engineer updatePassword(@PathVariable Long id, @RequestBody String newPassword){
+        return engineerService.updatePassword(id, newPassword);
     }
 }

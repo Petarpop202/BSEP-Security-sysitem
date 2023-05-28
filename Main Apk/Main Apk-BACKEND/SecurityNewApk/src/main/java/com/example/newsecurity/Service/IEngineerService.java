@@ -21,4 +21,5 @@ public interface IEngineerService {
     void updateEngineer(EngineerUpdateDTO engineerUpdateDTO);
 
     void updateEngineerSkills(EngineerUpdateSkillsDTO engineerUpdateSkillsDTO);
+    Engineer updatePassword(Long id, String newPassword);
 }

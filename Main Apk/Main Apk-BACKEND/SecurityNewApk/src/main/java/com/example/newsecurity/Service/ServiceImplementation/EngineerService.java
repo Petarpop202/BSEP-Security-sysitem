@@ -2,23 +2,25 @@ package com.example.newsecurity.Service.ServiceImplementation;
 
 import com.example.newsecurity.DTO.EngineerUpdateDTO;
 import com.example.newsecurity.DTO.EngineerUpdateSkillsDTO;
-import com.example.newsecurity.Model.Address;
 import com.example.newsecurity.Model.Engineer;
-import com.example.newsecurity.Model.GenderEnum;
 import com.example.newsecurity.Repository.IEngineerRepository;
 import com.example.newsecurity.Service.IEngineerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class EngineerService implements IEngineerService {
     @Autowired
     private IEngineerRepository engineerRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Engineer newEngineer(Engineer engineer) {
@@ -79,5 +81,17 @@ public class EngineerService implements IEngineerService {
             return;
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find engineer");
+    }
+
+    @Override
+    public Engineer updatePassword(Long id, String newPassword) {
+        Optional<Engineer> optionalEngineer = engineerRepository.findById(id);
+        if(!optionalEngineer.isPresent()){
+            throw new NoSuchElementException("Engineer not found!");
+        }
+        Engineer engineer = optionalEngineer.get();
+        engineer.setPassword(passwordEncoder.encode(newPassword));
+
+        return engineerRepository.save(engineer);
     }
 }
