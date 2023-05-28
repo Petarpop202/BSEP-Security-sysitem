@@ -37,7 +37,8 @@ const Engineer = {
     updateEngineer: (values: any) => requests.put('engineers', values),
     updatePassword: (id: number, values: any) => requests.put(`engineers/${id}`, values),
     updateEngineerSkills: (values: any) => requests.put('engineers/skills-update', values),
-}
+    getEngineers: () => requests.get('engineers'),
+  }
 
 const Employee = {
     getProjectsByEmployeeId : (id: any) => requests.get(`employees/${id}/projects`),

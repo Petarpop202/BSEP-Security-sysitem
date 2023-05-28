@@ -17,6 +17,7 @@ import CreateAdmin from "../../features/admin/CreateAdmin"
 import AdminProjects from "../../features/admin/AdminProjects"
 import NewProject from "../../features/admin/NewProject"
 import ShowManagers from "../../features/admin/ShowManagers"
+import ShowEmployees from "../../features/admin/ShowEmployees"
 
 
 export const router = createBrowserRouter([
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
       { path: "admin-projects", element: <AdminProjects/> },
       { path: "new-project", element: <NewProject/> },
       { path: "show-managers", element: <ShowManagers/> },
+      { path: "show-engineers", element: <ShowEmployees/> },
       { path: "create-admin", element: <CreateAdmin/> },
     ],
   },

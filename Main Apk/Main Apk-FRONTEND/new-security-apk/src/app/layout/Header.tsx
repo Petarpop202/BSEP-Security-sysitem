@@ -68,6 +68,10 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                     <Typography variant="h6" component={NavLink} to="/show-managers" sx={navStyles}>
                         MANAGERS
                     </Typography>
+                    <Typography variant="h6" component={NavLink} to="/show-engineers" sx={navStyles}>
+                        ENGINEERS
+                    </Typography>
+                    
                 </Box>
                 }
                 
