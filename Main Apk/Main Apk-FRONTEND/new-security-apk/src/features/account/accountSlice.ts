@@ -41,6 +41,34 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
   }
 )
 
+export const signInGuestUser = createAsyncThunk<User, FieldValues>(
+  "account/signInGuestUser",
+  async (data, thunkAPI) => {
+    try {
+      const jwt = {
+        jwt: data.jwt,
+        refreshJwt: data.refreshJwt
+      }
+      const decodedToken = decodeToken<DecodedToken>(jwt?.jwt)
+      const user: User = decodedToken
+        ? {
+            id: decodedToken.id,
+            name: decodedToken.name,
+            username: decodedToken.sub,
+            surname: decodedToken.surname,
+            userRole: decodedToken.roles,
+            token: jwt,
+          }
+        : ({} as User)
+      localStorage.setItem("user", JSON.stringify(user))
+      localStorage.setItem("userRole", JSON.stringify(decodedToken?.roles))
+      return user
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.data })
+    }
+  }
+)
+
 export const refreshUser = createAsyncThunk<User, FieldValues>(
   "account/refreshUser",
   async (data, thunkAPI) => {
@@ -140,7 +168,8 @@ export const accountSlice = createSlice({
       isAnyOf(
         signInUser.fulfilled,
         fetchCurrentUser.fulfilled,
-        isLoggedUser.fulfilled
+        isLoggedUser.fulfilled,
+        signInGuestUser.fulfilled
       ),
       (state, action) => {
         state.user = action.payload

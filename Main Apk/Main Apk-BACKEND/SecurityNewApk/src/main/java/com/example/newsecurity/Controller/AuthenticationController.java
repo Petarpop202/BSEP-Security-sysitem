@@ -20,6 +20,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.mail.MessagingException;
@@ -78,22 +79,26 @@ public class AuthenticationController {
     }
 
 
-    @GetMapping("/passwordlessLogin")
-    public ResponseEntity<Jwt> passwordlessLogin(@RequestParam String mail) {
-        String token = tokenUtils.generatePasswordlessToken(mail);
-        userService.passwordlessLogin(token,mail);
+    @PostMapping("/passwordlessLogin")
+    public ResponseEntity<Jwt> passwordlessLogin(@RequestBody MailDTO mail) {
+        String token = tokenUtils.generatePasswordlessToken(mail.getMail());
+        userService.passwordlessLogin(token,mail.getMail());
         return null;
     }
 
     @GetMapping("/passwordlessLoginActivate")
-    public ResponseEntity<Jwt> activatePasswordless(@RequestParam String code) {
+    public RedirectView activatePasswordless(@RequestParam String code) {
         String token = code;
         if (tokenUtils.validatePasswordlessToken(token))
         {
             String mail = tokenUtils.getUsernameFromToken(token);
             String jwt = tokenUtils.generatePasswordlessToken(mail);
             String refreshJwt = tokenUtils.generatePasswordlessRefreshToken(mail);
-            return ResponseEntity.ok(new Jwt(jwt,refreshJwt, tokenUtils.getExpiredIn()));
+            // Definišite URL adresu na koju želite da se korisnik preusmeri na frontendu
+            String redirectUrl = "https://localhost:3000/guestlogin/?token=" + jwt + "&refreshToken=" + refreshJwt;
+
+            return new RedirectView(redirectUrl);
+            //return ResponseEntity.ok(new Jwt(jwt,refreshJwt, tokenUtils.getExpiredIn()));
         }
         return null;
     }

@@ -28,7 +28,10 @@ const Account = {
     refresh: (values: any) => requests.post('auth/refresh', values),
     getString: () => requests.get('auth/getString'),
     getRequests: () => requests.get('auth/getRequests'),
-    response: (values: any) => requests.put('auth/response', values)
+    response: (values: any) => requests.put('auth/response', values),
+    passwordlessLogin: (values: any) => requests.post('auth/passwordlessLogin', { mail: values })
+
+
 }
 
 const Engineer = {
