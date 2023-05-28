@@ -38,7 +38,7 @@ export default function ProjectDetails () {
         }
         getProject()
         getEmployees()
-    }, [id]);
+    }, []);
 
   const getProject = () => {
     user?.id &&
@@ -54,7 +54,6 @@ export default function ProjectDetails () {
       agent.Employee.getEmployeesByProjectId(id)
         .then((response) => {
           setEmployees(response)
-          console.log(response)
         })
         .catch((error) => console.log(error))
   }
@@ -90,11 +89,11 @@ export default function ProjectDetails () {
         endDate: endDate
     }
     agent.Employee.updateEmployee(updateEmployeeDto)
-        .then(() => console.log('uppp'))
+        .then(() => toast.success('updated'))
         .catch(error => console.log(error))
 
     agent.Employee.updateEmployeeDescription(selectedEmployee?.id, description)
-        .then(() => toast.success('updated'))
+        .then(() => navigate('/manager'))
         .catch(error => console.log(error))
   }
 

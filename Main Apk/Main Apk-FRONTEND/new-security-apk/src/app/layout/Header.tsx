@@ -48,6 +48,15 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                     </Typography>
                     <Switch checked={darkMode} onChange={handleThemeChange}/>
                 </Box>
+                {user?.userRole === "ROLE_PROJECT_MANAGER" && 
+                    <Box display="flex" alignItems="center">
+                    <Typography variant="h6" component={NavLink} to="/manager" sx={navStyles}>
+                        PROJECTS
+                    </Typography>
+                </Box>
+                }
+                
+
 
                 <Box display='flex' alignItems='center'>
                     <IconButton component={NavLink} to='/myTickets' size='large' edge='start' color='inherit' sx={{mr: 2}}>
