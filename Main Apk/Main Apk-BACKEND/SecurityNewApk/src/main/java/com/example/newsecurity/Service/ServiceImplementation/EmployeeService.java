@@ -69,9 +69,8 @@ public class EmployeeService implements IEmployeeService {
             throw new NoSuchElementException("Project not found!");
         }
         Project project = pr.get();
-        List<Employee> employees = project.getEmployees();
 
-//        if(employees == null) return null;
+        List<Employee> employees = project.getEmployees();
 
         List<EmployeeReadDTO> result = new ArrayList<>();
         EmployeeReadDTO employeeReadDTO = new EmployeeReadDTO();
@@ -84,7 +83,9 @@ public class EmployeeService implements IEmployeeService {
             employeeReadDTO.setEndDate(emp.getEndDate());
             employeeReadDTO.setStartDate(emp.getStartDate());
 
-            result.add(employeeReadDTO);
+            if(!result.contains(employeeReadDTO)){
+                result.add(employeeReadDTO);
+            }
         }
 
         return result;

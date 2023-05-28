@@ -46,7 +46,7 @@ export default function SignedInMenu() {
       setAnchorEl(null)
     }
     if (user?.userRole === "ROLE_PROJECT_MANAGER") {
-      navigate("/manager")
+      navigate("/profile-manager")
       setAnchorEl(null)
     }
   }

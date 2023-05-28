@@ -80,7 +80,14 @@ insert into role_permission (role_id, permission_id) values (2, 24); -- UPDATE_E
 
 -- ROLE_PROJECT_MANAGER (id: 3)
 insert into role_permission (role_id, permission_id) values (3, 7);  -- REFRESH_ACCESS_TOKEN
-
+insert into role_permission (role_id, permission_id) values (3, 27);
+insert into role_permission (role_id, permission_id) values (3, 29);    -- UPDATE_MANAGER
+insert into role_permission (role_id, permission_id) values (3, 30);
+insert into role_permission (role_id, permission_id) values (3, 35);
+insert into role_permission (role_id, permission_id) values (3, 33);  -- GET_PROJECT_ONE
+insert into role_permission (role_id, permission_id) values (3, 16);  -- GET_EMPLOYEES_BY_PROJECT
+insert into role_permission (role_id, permission_id) values (3, 13);
+insert into role_permission (role_id, permission_id) values (3, 14);
 
 -- ROLE_ADMINISTRATOR (id: 4)
 insert into role_permission (role_id, permission_id) values (4, 1);  -- LOGIN
