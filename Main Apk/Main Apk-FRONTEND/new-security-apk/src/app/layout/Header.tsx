@@ -17,6 +17,7 @@ const navStyles = {
     color: 'inherit',
     textDecoration: 'none', 
     typography: 'h6',
+    marginRight: '10px',
     '&:hover': {
         color: 'grey.500'
     },
@@ -52,6 +53,17 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                     <Box display="flex" alignItems="center">
                     <Typography variant="h6" component={NavLink} to="/manager" sx={navStyles}>
                         PROJECTS
+                    </Typography>
+                </Box>
+                }
+
+                {user?.userRole === "ROLE_ADMINISTRATOR" && 
+                    <Box display="flex" alignItems="center">
+                    <Typography variant="h6" component={NavLink} to="/admin-projects" sx={navStyles}>
+                        PROJECTS
+                    </Typography>
+                    <Typography variant="h6" component={NavLink} to="/new-project" sx={navStyles}>
+                        NEW PROJECT
                     </Typography>
                 </Box>
                 }

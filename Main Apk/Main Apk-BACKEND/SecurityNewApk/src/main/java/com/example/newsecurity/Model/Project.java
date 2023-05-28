@@ -18,7 +18,7 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "projectId", nullable = false)
-    private Long projectId;
+    private Long id;
     private String name;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

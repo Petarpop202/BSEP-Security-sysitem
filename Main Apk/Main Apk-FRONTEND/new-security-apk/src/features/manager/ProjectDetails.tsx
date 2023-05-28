@@ -32,12 +32,14 @@ export default function ProjectDetails () {
     const { user } = useAppSelector((state: { acount: any }) => state.acount)
 
   useEffect(() => {
-        if (user?.userRole !== "ROLE_PROJECT_MANAGER" || user == null){
-            navigate('/')
-            return
+        if (user?.userRole == "ROLE_PROJECT_MANAGER" || user?.userRole == "ROLE_ADMINISTRATOR"){
+            getProject()
+             getEmployees()
+             return
         }
-        getProject()
-        getEmployees()
+        navigate('/')
+        return
+        
     }, []);
 
   const getProject = () => {

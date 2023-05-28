@@ -57,6 +57,8 @@ const Manager = {
 
 const Project = {
   getProjectById : (id: any) => requests.get(`projects/${id}`),
+  getProjects: () => requests.get('projects'),
+  createProject: (values: any) => requests.post('projects', values),
 }
 
 const Roles = {

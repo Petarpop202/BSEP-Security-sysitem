@@ -55,7 +55,7 @@ public class ProjectService implements IProjectService {
         ProjectReadDto project = new ProjectReadDto();
         List<ProjectReadDto> result = new ArrayList<>();
         for(Project p : projects){
-            project.setId(p.getProjectId());
+            project.setId(p.getId());
             project.setName(p.getName());
             project.setStartDate(p.getStartDate());
             project.setEndDate(p.getEndDate());
