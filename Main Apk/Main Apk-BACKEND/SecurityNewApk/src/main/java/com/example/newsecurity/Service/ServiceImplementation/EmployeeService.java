@@ -1,5 +1,6 @@
 package com.example.newsecurity.Service.ServiceImplementation;
 
+import com.example.newsecurity.DTO.EmployeeReadDTO;
 import com.example.newsecurity.DTO.EmployeeUpdateDTO;
 import com.example.newsecurity.Model.Employee;
 import com.example.newsecurity.Model.Engineer;
@@ -7,6 +8,7 @@ import com.example.newsecurity.Model.Project;
 import com.example.newsecurity.Repository.IEmployeeRepository;
 import com.example.newsecurity.Repository.IProjectRepository;
 import com.example.newsecurity.Service.IEmployeeService;
+import com.example.newsecurity.Service.IEngineerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ public class EmployeeService implements IEmployeeService {
     private IEmployeeRepository employeeRepository;
     @Autowired
     private IProjectRepository projectRepository;
+    @Autowired
+    private IEngineerService engineerService;
     @Override
     public Employee newEmployee(Employee employee) {
         return employeeRepository.save(employee);
@@ -59,13 +63,31 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public List<Employee> getEmployeesByProjectId(Long id) {
+    public List<EmployeeReadDTO> getEmployeesByProjectId(Long id) {
         Optional<Project> pr = projectRepository.findById(id);
         if(!pr.isPresent()){
             throw new NoSuchElementException("Project not found!");
         }
         Project project = pr.get();
-        return project.getEmployees();
+        List<Employee> employees = project.getEmployees();
+
+//        if(employees == null) return null;
+
+        List<EmployeeReadDTO> result = new ArrayList<>();
+        EmployeeReadDTO employeeReadDTO = new EmployeeReadDTO();
+
+        for(Employee emp : employees){
+            employeeReadDTO.setId(emp.getId());
+            employeeReadDTO.setName(emp.getEngineer().getName());
+            employeeReadDTO.setSurname(emp.getEngineer().getSurname());
+            employeeReadDTO.setDescription(emp.getDescription());
+            employeeReadDTO.setEndDate(emp.getEndDate());
+            employeeReadDTO.setStartDate(emp.getStartDate());
+
+            result.add(employeeReadDTO);
+        }
+
+        return result;
     }
 
     @Override

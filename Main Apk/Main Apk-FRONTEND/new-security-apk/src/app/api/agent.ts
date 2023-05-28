@@ -41,6 +41,8 @@ const Employee = {
     getProjectsByEmployeeId : (id: any) => requests.get(`employees/${id}/projects`),
     getEmployeesByEngineerId : (id: any) => requests.get(`employees/engineer=${id}`),
     updateEmployeeDescription : (id: any, body: any) => requests.put(`employees/${id}/description`, body), 
+    getEmployeesByProjectId : (id: any) => requests.get(`employees/project-id/${id}`),
+    updateEmployee : (value: any) => requests.put('employees', value),
 }
 
 const Manager = {
