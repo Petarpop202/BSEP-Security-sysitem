@@ -144,7 +144,7 @@ export default function Register() {
                     label="Confirm Password"
                     type="password"
                     name="passwordConfirm"
-                    onInput={handlePassword}
+                    //onInput={handlePassword}
                     error={!!errors.passwordConfirm}
                     helperText={errors?.passwordConfirm?.message as string}
                 />
@@ -213,7 +213,7 @@ export default function Register() {
                     id = "select1"
                     label="Gender"
                     placeholder="Gender"
-                    value={"Gender"}
+                    //value={"Gender"}
                     fullWidth
                     {...register('gender', { required: 'Title is required' })}
                 >
@@ -226,7 +226,7 @@ export default function Register() {
                     id= "select2"
                     label="Role"
                     placeholder="Role"
-                    value={"Role"}
+                    //value={"Role"}
                     fullWidth
                     {...register('role', { required: 'Title is required' })}
                 >

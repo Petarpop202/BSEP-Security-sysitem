@@ -148,4 +148,11 @@ public class AuthenticationController {
         String Jej = "JEEEEJ";
         return ResponseEntity.ok(Jej);
     }
+
+    @GetMapping("/getRequests")
+    //@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    public ResponseEntity<?> getRequests(){
+        List<RegistrationRequest> list = registrationRequestService.getAllUnresponded();
+        return ResponseEntity.ok(list);
+    }
 }

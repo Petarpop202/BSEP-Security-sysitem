@@ -5,6 +5,7 @@ import agent from "../api/agent";
 import { store, useAppDispatch, useAppSelector } from "../apk/configureApk";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { router } from "../router/Router";
 
 
 
@@ -39,6 +40,7 @@ export default function SignedInMenu() {
             }
         }
         )
+        router.navigate("/response");
     };
     const handleClose = () => {
         setAnchorEl(null);
@@ -52,12 +54,14 @@ export default function SignedInMenu() {
                  onClick={handleClick}>
                 {user?.username}
             </Button>
+            {user?.userRole === "ROLE_ADMINISTRATOR" && (               
             <Button
                 sx={{typography: 'h6'}}
                 color='inherit'
-                 onClick={handleRefresh}>
-                Refresh
-            </Button>
+                onClick={handleRefresh}>
+                Register request
+                </Button>
+            )}
             <Menu
                 anchorEl={anchorEl}
                 open={open}
