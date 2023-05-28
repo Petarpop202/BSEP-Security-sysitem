@@ -1,13 +1,12 @@
 import { LockOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Container, Paper, Avatar, Typography, Box, TextField, Grid, Select, MenuItem, InputLabel } from "@mui/material";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FieldValues } from "react-hook-form/dist/types";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import agent from "../../app/api/agent";
-import { User } from "../../app/models/User";
+
+
 
 
 export default function Register() {
@@ -16,7 +15,6 @@ export default function Register() {
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid } } = useForm({
         mode: 'onTouched'
     })
-    
     
     function handleApiErrors(errors: any) {
         console.log(errors);
@@ -32,6 +30,22 @@ export default function Register() {
             });
         }
     }
+
+    function handlePassword(event: React.ChangeEvent<HTMLInputElement>) {
+        const { name, value } = event.target;
+        const form = event.target.form;
+
+        if (form) {
+          const passwordConfirmField = form.password.value; // Accessing the value of the password confirmation field
+      
+          if (value !== passwordConfirmField) {
+            setError('passwordConfirm', {
+              type: 'validate',
+              message: 'Passwords do not match',
+            });
+          }else setError('passwordConfirm', {}, {shouldFocus:false});
+        }
+      }
     
     const options = [
         { 
@@ -54,14 +68,15 @@ export default function Register() {
             </Typography>
             <Box component="form"
                 noValidate sx={{ mt: 1 }}
-                onSubmit={handleSubmit(data => agent.Account.register(data)
+                onSubmit={handleSubmit(data => {
+                    agent.Account.register(data)
                     .then(() => {
                         toast.success('Registration successful - you can now login');
                         navigate('/login');
                     })
                     .catch(() => {
                         toast.error('Invalid parameters!')
-                    }))}
+                    })})}
             >
                 <TextField
                     margin="normal"
@@ -70,8 +85,8 @@ export default function Register() {
                     label="Name"
                     autoFocus
                     {...register('name', { required: 'Name is required' })}
-                    error={!!errors.username}
-                    helperText={errors?.username?.message as string}
+                    error={!!errors.name}
+                    helperText={errors?.name?.message as string}
                 />
                 <TextField
                     margin="normal"
@@ -80,8 +95,8 @@ export default function Register() {
                     label="Surname"
                     autoFocus
                     {...register('surname', { required: 'Surname is required' })}
-                    error={!!errors.username}
-                    helperText={errors?.username?.message as string}
+                    error={!!errors.surname}
+                    helperText={errors?.surname?.message as string}
                 />
                 <TextField
                     margin="normal"
@@ -90,8 +105,8 @@ export default function Register() {
                     label="Jmbg"
                     autoFocus
                     {...register('jmbg', { required: 'Surname is required' })}
-                    error={!!errors.username}
-                    helperText={errors?.username?.message as string}
+                    error={!!errors.jmbg}
+                    helperText={errors?.jmbg?.message as string}
                 />           
                 <TextField
                     margin="normal"
@@ -126,6 +141,17 @@ export default function Register() {
                     margin="normal"
                     required
                     fullWidth
+                    label="Confirm Password"
+                    type="password"
+                    name="passwordConfirm"
+                    onInput={handlePassword}
+                    error={!!errors.passwordConfirm}
+                    helperText={errors?.passwordConfirm?.message as string}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
                     label="Country"
                     autoFocus
                     {...register('address.country', { required: 'Country is required' })}
@@ -139,8 +165,8 @@ export default function Register() {
                     label="City"
                     autoFocus
                     {...register('address.city', { required: 'City is required' })}
-                    // error={!!errors.username}
-                    // helperText={errors?.username?.message as string}
+                    //error={!!errors?.address?.city}
+                    //helperText={errors?.address?.city?.message || ''}
                 />
                 <TextField
                     margin="normal"
