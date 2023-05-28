@@ -178,7 +178,7 @@ export default function ProfileEngineer() {
             </Grid>
             <Button
                 variant="contained"
-                sx = {{mt: 3, marginRight: '120px'}}
+                sx = {{mt: 3, marginRight: '50px'}}
                 onClick={handleUpdateProfile}
                 >
                 Edit Profile
@@ -186,7 +186,7 @@ export default function ProfileEngineer() {
             <Button
                 component= {Link}
                 variant="contained"
-                sx = {{mt: 3, marginRight: '120px'}}
+                sx = {{mt: 3, marginRight: '50px'}}
                 to={'/skills'}
                 >
                 View Skills
@@ -194,7 +194,7 @@ export default function ProfileEngineer() {
             <Button
                 component= {Link}
                 variant="contained"
-                sx = {{mt: 3, marginRight: '120px'}}
+                sx = {{mt: 3}}
                 to={'/engineer-projects'}
                 >
                 View Projects
