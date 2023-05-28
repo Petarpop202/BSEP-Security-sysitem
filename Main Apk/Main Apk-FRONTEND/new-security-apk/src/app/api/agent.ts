@@ -53,6 +53,7 @@ const Manager = {
   updatePassword: (id: number, values: any) =>
     requests.put(`managers/${id}`, values),
   getManagerProjects: (id: number) => requests.get(`projects/manager/${id}`),
+  getManagers: () => requests.get('managers'),
 }
 
 const Project = {
