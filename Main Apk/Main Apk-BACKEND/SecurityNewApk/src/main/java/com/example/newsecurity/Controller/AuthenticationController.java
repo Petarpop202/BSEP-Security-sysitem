@@ -117,7 +117,13 @@ public class AuthenticationController {
 
     @PutMapping ("/response")
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<RequestResponse> RequestResponse(@RequestBody RequestResponse response, UriComponentsBuilder ucBuilder) throws NoSuchAlgorithmException, InvalidKeyException {
+    public ResponseEntity<RequestResponse> RequestResponse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody RequestResponse response, UriComponentsBuilder ucBuilder) throws NoSuchAlgorithmException, InvalidKeyException {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        String token_username = tokenUtils.getUsernameFromToken(jwtToken);
+        User user = userService.findByUsername(token_username);
+        if (!user.hasPermission("RESPONSE")){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         RegistrationRequest request = registrationRequestService.setResponse(response);
         if(request.isAccepted())
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -132,7 +138,14 @@ public class AuthenticationController {
 
     @PostMapping("/refresh")
     //@PreAuthorize("hasAnyRole('ROLE_HUMAN_RESOURCE_MANAGER', 'ROLE_PROJECT_MANAGER', 'ROLE_ADMINISTRATOR', 'ROLE_ENGINEER')")
-    public ResponseEntity<?> refreshAccessToken(@RequestBody Jwt refreshJwt) {
+    public ResponseEntity<?> refreshAccessToken(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Jwt refreshJwt) {
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        String token_username = tokenUtils.getUsernameFromToken(jwtToken);
+        User token_user = userService.findByUsername(token_username);
+        if (!token_user.hasPermission("REFRESH_ACCESS_TOKEN")){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         String refreshToken = refreshJwt.getRefreshJwt();
         if (tokenUtils.validateRefreshToken(refreshToken)) {
             String username = tokenUtils.getUsernameFromToken(refreshToken);
@@ -156,7 +169,14 @@ public class AuthenticationController {
 
     @GetMapping("/getRequests")
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<?> getRequests(){
+    public ResponseEntity<?> getRequests(@RequestHeader("Authorization") String authorizationHeader){
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        String token_username = tokenUtils.getUsernameFromToken(jwtToken);
+        User token_user = userService.findByUsername(token_username);
+        if (!token_user.hasPermission("GET_REQUESTS")){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         List<RegistrationRequest> list = registrationRequestService.getAllUnresponded();
         return ResponseEntity.ok(list);
     }

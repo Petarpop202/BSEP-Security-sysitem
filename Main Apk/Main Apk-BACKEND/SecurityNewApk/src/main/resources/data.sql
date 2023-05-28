@@ -65,10 +65,11 @@ insert into permission (name) values ('UPDATE_ADMIN'); -- 45
 insert into permission (name) values ('DELETE_ADMIN'); -- 46
 
 -- ROLE_HUMAN_RESOURCE_MANAGER (id: 1)
-
+insert into role_permission (role_id, permission_id) values (1, 7);  -- REFRESH_ACCESS_TOKEN
 
 
 -- ROLE_ENGINEER (id: 2)
+insert into role_permission (role_id, permission_id) values (2, 7);  -- REFRESH_ACCESS_TOKEN
 insert into role_permission (role_id, permission_id) values (2, 11); -- GET_EMPLOYEE_BY_ENGINEER
 insert into role_permission (role_id, permission_id) values (2, 14); -- UPDATE_EMPLOYEE_DESC
 insert into role_permission (role_id, permission_id) values (2, 17); -- GET_PROJECTS_BY_EMPLOYEE
@@ -78,7 +79,7 @@ insert into role_permission (role_id, permission_id) values (2, 23); -- UPDATE_E
 insert into role_permission (role_id, permission_id) values (2, 24); -- UPDATE_ENGINEER_PASSWORD
 
 -- ROLE_PROJECT_MANAGER (id: 3)
-
+insert into role_permission (role_id, permission_id) values (3, 7);  -- REFRESH_ACCESS_TOKEN
 
 
 -- ROLE_ADMINISTRATOR (id: 4)
@@ -130,7 +131,7 @@ insert into role_permission (role_id, permission_id) values (4, 45); -- UPDATE_A
 insert into role_permission (role_id, permission_id) values (4, 46); -- DELETE_ADMIN
 
 -- ROLE_GUEST (id: 5)
-
+insert into role_permission (role_id, permission_id) values (5, 7);  -- REFRESH_ACCESS_TOKEN
 
 
 insert into addresses (city, country, street, street_num) values ('Novi Sad', 'Srbija', 'Ulica 1', '11');
