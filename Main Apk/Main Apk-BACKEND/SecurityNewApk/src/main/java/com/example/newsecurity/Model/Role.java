@@ -23,7 +23,7 @@ public class Role implements GrantedAuthority {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_permission",
-            joinColumns = @JoinColumn(name = "rode_id", referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
     private List<Permission> permissions;
 
@@ -49,6 +49,8 @@ public class Role implements GrantedAuthority {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public List<Permission> getPermissions() { return permissions; }
 
     public void addPermission(Permission permission){
         if(permissions == null){
