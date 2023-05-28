@@ -31,9 +31,22 @@ const Account = {
     response: (values: any) => requests.put('auth/response', values)
 }
 
+const Engineer = {
+    getByUsername: (username: any) => requests.get(`engineers/username=${username}`),
+    updateEngineer: (values: any) => requests.put('engineers', values),
+    updateEngineerSkills: (values: any) => requests.put('engineers/skills-update', values),
+}
+
+const Employee = {
+    getProjectsByEmployeeId : (id: any) => requests.get(`employees/${id}/projects`),
+    getEmployeesByEngineerId : (id: any) => requests.get(`employees/engineer=${id}`),
+    updateEmployeeDescription : (id: any, body: any) => requests.put(`employees/${id}/description`, body), 
+}
 
 const agent = {
-    Account
+    Account,
+    Engineer,
+    Employee
 }
 
 export default agent;

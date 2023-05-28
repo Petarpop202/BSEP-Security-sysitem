@@ -4,8 +4,9 @@ import App from "../layout/App";
 import Register from "../../features/account/Register";
 import AdminAccept from "../../features/account/AdminAccept";
 import PasswordlessLogin from "../../features/account/PasswordlessLogin";
-//import Register from "../../features/account/Register";
-//import App from "../layout/App";
+import ProfileEngineer from "../../features/engineer/ProfileEngineer";
+import Skills from "../../features/engineer/EngineerSkills";
+import EngineerProjects from "../../features/engineer/EngineerProjects";
 
 export const router = createBrowserRouter([
     {
@@ -16,8 +17,10 @@ export const router = createBrowserRouter([
             {path: 'login', element: <Login />},
             {path: 'register', element: <Register />},
             {path: 'response', element: <AdminAccept />},
-            {path: 'passwordless', element: <PasswordlessLogin/>}
+            {path: 'passwordless', element: <PasswordlessLogin/>},
+            {path: 'profile-engineer', element: <ProfileEngineer />},
+            {path: 'skills', element: <Skills />},
+            {path: 'engineer-projects', element: <EngineerProjects/>}
         ]
-
     }
 ])

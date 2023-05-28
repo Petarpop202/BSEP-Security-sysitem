@@ -15,6 +15,8 @@ public interface IEngineerService {
 
     Engineer getEngineerById(Long id);
 
+    Engineer getEngineerByUsername(String username);
+
     void deleteEngineerById(Long id);
     void updateEngineer(EngineerUpdateDTO engineerUpdateDTO);
 

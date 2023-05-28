@@ -22,5 +22,5 @@ public class Employee {
     private LocalDateTime endDate;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "engineer_id", referencedColumnName = "id")
-    private Engineer engineer;
+    private Engineer engineer;  
 }

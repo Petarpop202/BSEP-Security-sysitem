@@ -5,11 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.List;
+import javax.persistence.*;
+import java.util.Map;
 
 @Entity
 @Data
@@ -18,7 +15,9 @@ import java.util.List;
 @Builder
 @Table(name = "Engineers")
 public class Engineer extends User{
-    private HashMap<String, Integer> skills;
-
-
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "engineer_skills", joinColumns = @JoinColumn(name = "engineer_id"))
+    @MapKeyColumn(name = "name")
+    @Column(name = "value")
+    private Map<String, Integer> skills;
 }

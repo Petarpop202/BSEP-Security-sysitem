@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/managers",produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin
+@CrossOrigin(origins = "https://localhost:3000")
 public class ManagerController {
     @Autowired
     private IManagerService managerService;

@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/projects",produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "https://localhost:3000")
 public class ProjectController {
     @Autowired
     private IProjectService projectService;

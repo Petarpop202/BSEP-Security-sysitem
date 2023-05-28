@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping(value = "/employees",produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin
+@CrossOrigin(origins = "https://localhost:3000")
 public class EmployeeController {
     @Autowired
     private IEmployeeService employeeService;
@@ -35,6 +35,11 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public Employee getEmployeeById(@PathVariable Long id){
         return employeeService.getEmployeeById(id);
+    }
+
+    @GetMapping("/engineer={id}")
+    public List<Employee> getEmployeesByEngineerId(@PathVariable Long id){
+        return employeeService.getEmployeesByEngineerId(id);
     }
 
     @DeleteMapping("/{id}")
