@@ -22,7 +22,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -37,7 +39,7 @@ public class RegistrationRequestService implements IRegistrationRequestService {
     RegistrationRequestService(IRegistrationRequestRepository registrationRequestRepository, IUserRepository userRepository){_registrationRequestRepository = registrationRequestRepository;_userRepository = userRepository;}
     @Override
     public Iterable<RegistrationRequest> getAll() {
-        return null;
+        return _registrationRequestRepository.findAll();
     }
 
     @Override
@@ -77,6 +79,18 @@ public class RegistrationRequestService implements IRegistrationRequestService {
             user.setEnabled(true);
             enable(user);
         }
+    }
+
+    @Override
+    public List<RegistrationRequest> getAllUnresponded() {
+        List<RegistrationRequest> list = _registrationRequestRepository.findAll();
+        List<RegistrationRequest> returnList = new ArrayList<RegistrationRequest>();
+        for (RegistrationRequest request : list)
+        {
+            if(request.getResponseDate() == null)
+                returnList.add(request);
+        }
+        return returnList;
     }
 
     public boolean MailSender(RegistrationRequest registrationRequest) throws NoSuchAlgorithmException, InvalidKeyException {

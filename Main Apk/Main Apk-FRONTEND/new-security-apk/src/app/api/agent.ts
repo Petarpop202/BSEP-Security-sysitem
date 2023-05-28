@@ -24,9 +24,11 @@ const requests = {
 
 const Account = {
     login: (values: any) => requests.post('auth/login', values),
-    register: (values: any) => requests.post('auth/register', values),
+    register: (values: any) => requests.post('auth/signup', values),
     refresh: (values: any) => requests.post('auth/refresh', values),
-    getString: () => requests.get('auth/getString')
+    getString: () => requests.get('auth/getString'),
+    getRequests: () => requests.get('auth/getRequests'),
+    response: (values: any) => requests.put('auth/response', values)
 }
 
 const Engineer = {

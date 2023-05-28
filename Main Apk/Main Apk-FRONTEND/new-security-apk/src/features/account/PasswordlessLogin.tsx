@@ -1,4 +1,3 @@
-import { LockOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Container, Paper, Avatar, Typography, Box, TextField, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -9,9 +8,10 @@ import agent from "../../app/api/agent";
 import { useAppDispatch } from "../../app/apk/configureApk";
 import { signInUser } from "./accountSlice";
 import { response } from "express";
+import { LockOutlined } from "@mui/icons-material";
 
 
-export default function Login() {
+export default function PasswordlessLogin() {
 
     const { register, handleSubmit, formState: { isSubmitting, errors, isValid } } = useForm({
         mode: 'onTouched'
@@ -42,21 +42,11 @@ export default function Login() {
                     margin="normal"
                     required
                     fullWidth
-                    label="Username"
+                    label="Email"
                     autoFocus
-                    {...register('username', { required: 'Username is required' })}
-                    error={!!errors.username}
-                    helperText={errors?.username?.message as string}
-                />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    label="Password"
-                    type="password"
-                    {...register('password', { required: 'Username is required' })}
-                    error={!!errors.password}
-                    helperText={errors?.password?.message as string}
+                    {...register('mail', { required: 'Username is required' })}
+                    error={!!errors.mail}
+                    helperText={errors?.mail?.message as string}
                 />
                 <LoadingButton loading={isSubmitting} type="submit"
                     disabled={!isValid}
@@ -74,8 +64,8 @@ export default function Login() {
                 </Grid>
                 <Grid container>
                     <Grid item>
-                        <Link to='/passwordless' style={{ textDecoration: 'none' }}>
-                            {"Passwordless login"}
+                        <Link to='/login' style={{ textDecoration: 'none' }}>
+                            {"Standard login"}
                         </Link>
                     </Grid>
                 </Grid>
