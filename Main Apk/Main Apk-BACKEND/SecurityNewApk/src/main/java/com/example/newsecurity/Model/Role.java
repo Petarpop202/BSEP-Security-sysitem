@@ -60,7 +60,7 @@ public class Role implements GrantedAuthority {
     }
     public void removePermission(Permission permission){
         if(permissions != null) {
-            permissions.remove(permission);
+            permissions.removeIf(perm -> perm.getName().equals(permission.getName()));
         }
     }
 }

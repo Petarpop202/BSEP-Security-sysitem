@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/roles",produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "https://localhost:3000")
 public class RoleControlller {
     @Autowired
     private IRoleService roleService;

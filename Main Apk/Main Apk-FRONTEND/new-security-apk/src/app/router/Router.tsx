@@ -9,6 +9,7 @@ import Skills from "../../features/engineer/EngineerSkills"
 import EngineerProjects from "../../features/engineer/EngineerProjects"
 import ManagerPage from "../../features/manager/ManagerPage"
 import GuestLogged from "../../features/account/GuestLogged"
+import AdminPermissions from "../../features/admin/AdminPermissions"
 
 export const router = createBrowserRouter([
   {
@@ -24,7 +25,8 @@ export const router = createBrowserRouter([
       { path: "skills", element: <Skills /> },
       { path: "manager", element: <ManagerPage /> },
       { path: "engineer-projects", element: <EngineerProjects /> },
-      { path: "guestlogin", element : <GuestLogged/>}
+      { path: "guestlogin", element : <GuestLogged/> },
+      { path: "roles", element: <AdminPermissions/> }
     ],
   },
 ])

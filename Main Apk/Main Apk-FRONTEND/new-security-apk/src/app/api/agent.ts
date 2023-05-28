@@ -30,8 +30,6 @@ const Account = {
     getRequests: () => requests.get('auth/getRequests'),
     response: (values: any) => requests.put('auth/response', values),
     passwordlessLogin: (values: any) => requests.post('auth/passwordlessLogin', { mail: values })
-
-
 }
 
 const Engineer = {
@@ -54,11 +52,19 @@ const Manager = {
     requests.put(`managers/${id}`, values),
 }
 
+const Roles = {
+    getAllRoles: () => requests.get('roles'),
+    getAllPermissions: () => requests.get('roles/permissions'),
+    addPermissionToRole: (role : string, permission: string) => requests.post(`roles/${role}/permission=${permission}`, {}),
+    removePermissionFromRole: (role : string, permission: string) => requests.delete(`roles/${role}/permission=${permission}`),
+}
+
 const agent = {
     Account,
     Engineer,
     Employee,
-    Manager
+    Manager,
+    Roles
 }
 
 export default agent
