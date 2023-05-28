@@ -4,6 +4,7 @@ import agent from "../../app/api/agent";
 import { useAppSelector } from "../../app/apk/configureApk";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export default function ProfileAdmin() {
     const {user} = useAppSelector((state: { acount: any; }) => state.acount);
@@ -287,6 +288,14 @@ export default function ProfileAdmin() {
                     onClick={handleUpdateProfile}
                     >
                     Edit Profile
+                </Button>
+                <Button
+                    component= {Link}
+                    variant="contained"
+                    sx = {{mt: 3, mx: 2}}
+                    to={'/create-admin'}
+                    >
+                    Create Admin
                 </Button>
             </Grid>
         </Box>
