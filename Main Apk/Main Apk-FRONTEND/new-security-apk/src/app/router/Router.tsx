@@ -14,6 +14,7 @@ import GuestLogged from "../../features/account/GuestLogged"
 import AdminPermissions from "../../features/admin/AdminPermissions"
 import ProfileAdmin from "../../features/admin/ProfileAdmin"
 import CreateAdmin from "../../features/admin/CreateAdmin"
+import ChangePassword from "../../features/admin/ChangePassword"
 
 
 export const router = createBrowserRouter([
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
       { path: "roles", element: <AdminPermissions/> },
       { path: "profile-admin", element: <ProfileAdmin/> },
       { path: "create-admin", element: <CreateAdmin/> },
+      { path: "change-password-admin", element: <ChangePassword/> },
     ],
   },
 ])

@@ -2,11 +2,12 @@ import { AirplaneTicket, ShoppingCart } from "@mui/icons-material";
 import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import agent from "../api/agent";
 import { User } from "../models/User";
 import { useAppSelector } from "../apk/configureApk";
 import SignedInMenu from "./SignedInMenu";
+import { toast } from "react-toastify";
 
 const rightLinks = [
     {title: 'login', path: '/login'},
@@ -33,7 +34,20 @@ interface Props {
 export default function Header({darkMode, handleThemeChange}: Props) {
 
     const [isLogged, setIsLogged] = useState<boolean>(false);
-    const {user} = useAppSelector(state => state.acount);       
+    const {user} = useAppSelector(state => state.acount);  
+    const navigate = useNavigate()     
+
+    useEffect(() => {
+        if (user?.userRole === 'ROLE_ADMINISTRATOR')
+            agent.Administrator.getById(user.id)
+                .then((response) => {
+                    if (response.lastPasswordResetDate === null){
+                        navigate('/change-password-admin')
+                        toast.error('You have to change your password on first login!')
+                    }
+                })
+                .catch((error) => console.log(error))
+    }, [user])
 
     return (
         <AppBar position='static' sx={{mb: 4}}>
