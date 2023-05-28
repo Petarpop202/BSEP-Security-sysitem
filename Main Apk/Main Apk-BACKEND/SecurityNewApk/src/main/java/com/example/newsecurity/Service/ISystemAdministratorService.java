@@ -1,7 +1,6 @@
 package com.example.newsecurity.Service;
 
 import com.example.newsecurity.DTO.SystemAdministratorUpdateDTO;
-import com.example.newsecurity.Model.Manager;
 import com.example.newsecurity.Model.SystemAdministrator;
 import com.example.newsecurity.Model.User;
 import org.springframework.stereotype.Service;
@@ -20,4 +19,6 @@ public interface ISystemAdministratorService {
     void deleteAdministratorById(Long id);
 
     SystemAdministrator updateAdministrator(SystemAdministratorUpdateDTO adminDTO);
+
+    SystemAdministrator updatePassword(Long id, String newPassword);
 }

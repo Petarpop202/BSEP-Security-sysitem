@@ -63,6 +63,7 @@ insert into permission (name) values ('GET_ADMIN_ALL'); -- 43
 insert into permission (name) values ('GET_ADMIN_ONE'); -- 44
 insert into permission (name) values ('UPDATE_ADMIN'); -- 45
 insert into permission (name) values ('DELETE_ADMIN'); -- 46
+insert into permission (name) values ('UPDATE_ADMIN_PASSWORD'); -- 47
 
 -- ROLE_HUMAN_RESOURCE_MANAGER (id: 1)
 insert into role_permission (role_id, permission_id) values (1, 7);  -- REFRESH_ACCESS_TOKEN
@@ -136,6 +137,7 @@ insert into role_permission (role_id, permission_id) values (4, 43); -- GET_ADMI
 insert into role_permission (role_id, permission_id) values (4, 44); -- GET_ADMIN_ONE
 insert into role_permission (role_id, permission_id) values (4, 45); -- UPDATE_ADMIN
 insert into role_permission (role_id, permission_id) values (4, 46); -- DELETE_ADMIN
+insert into role_permission (role_id, permission_id) values (4, 47); -- UPDATE_ADMIN_PASSWORD
 
 -- ROLE_GUEST (id: 5)
 insert into role_permission (role_id, permission_id) values (5, 7);  -- REFRESH_ACCESS_TOKEN

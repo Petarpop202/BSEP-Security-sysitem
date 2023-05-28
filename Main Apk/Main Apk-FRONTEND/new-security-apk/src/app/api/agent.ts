@@ -66,14 +66,20 @@ const Roles = {
     removePermissionFromRole: (role : string, permission: string) => requests.delete(`roles/${role}/permission=${permission}`),
 }
 
+const Administrator = {
+    getById: (id: any) => requests.get(`system-administrators/${id}`),
+    updateAdministrator: (values : any) => requests.put('system-administrators', values),
+    updatePassword: (id: number, values: any) => requests.put(`system-administrators/${id}`, values),
+}
+
 const agent = {
     Account,
     Engineer,
     Employee,
     Manager,
     Project,
-    Roles
-
+    Roles,
+    Administrator
 }
 
 export default agent

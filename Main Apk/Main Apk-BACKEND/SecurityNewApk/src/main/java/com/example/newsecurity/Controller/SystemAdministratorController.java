@@ -1,6 +1,7 @@
 package com.example.newsecurity.Controller;
 
 import com.example.newsecurity.DTO.SystemAdministratorUpdateDTO;
+import com.example.newsecurity.Model.Engineer;
 import com.example.newsecurity.Model.SystemAdministrator;
 import com.example.newsecurity.Model.User;
 import com.example.newsecurity.Repository.ISystemAdministratorRepository;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/system-administrators",produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin
+@CrossOrigin(origins = "https://localhost:3000")
 public class SystemAdministratorController {
     @Autowired
     private ISystemAdministratorService systemAdministratorService;
@@ -69,5 +70,16 @@ public class SystemAdministratorController {
             return null;
         }
         return systemAdministratorService.updateAdministrator(adminDTO);
+    }
+
+    @PutMapping("/{id}")
+    public SystemAdministrator updatePassword(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id, @RequestBody String newPassword){
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        String username = tokenUtils.getUsernameFromToken(jwtToken);
+        User user = userService.findByUsername(username);
+        if (!user.hasPermission("UPDATE_ADMIN_PASSWORD")){
+            return null;
+        }
+        return systemAdministratorService.updatePassword(id, newPassword);
     }
 }

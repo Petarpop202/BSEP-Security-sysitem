@@ -1,12 +1,14 @@
 package com.example.newsecurity.Service.ServiceImplementation;
 
 import com.example.newsecurity.DTO.SystemAdministratorUpdateDTO;
+import com.example.newsecurity.Model.Engineer;
 import com.example.newsecurity.Model.SystemAdministrator;
 import com.example.newsecurity.Model.User;
 import com.example.newsecurity.Repository.ISystemAdministratorRepository;
 import com.example.newsecurity.Service.ISystemAdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,9 +18,9 @@ import java.util.Optional;
 @Service
 public class SystemAdministratorService implements ISystemAdministratorService {
     @Autowired
-
     private ISystemAdministratorRepository systemAdministratorRepository;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public SystemAdministrator changePassword(Long id, String password) {
         return null;
@@ -55,12 +57,23 @@ public class SystemAdministratorService implements ISystemAdministratorService {
         administrator.setSurname(adminDTO.getSurname());
         administrator.setMail(adminDTO.getMail());
         administrator.setUsername(adminDTO.getUsername());
-        administrator.setPassword(adminDTO.getPassword());
         administrator.setPhoneNumber(adminDTO.getPhoneNumber());
         administrator.setJmbg(adminDTO.getJmbg());
         administrator.setGender(adminDTO.getGender());
         administrator.setAddress(adminDTO.getAddress());
 
         return systemAdministratorRepository.save(administrator);
+    }
+
+    @Override
+    public SystemAdministrator updatePassword(Long id, String newPassword) {
+        Optional<SystemAdministrator> optionalAdmin = systemAdministratorRepository.findById(id);
+        if(!optionalAdmin.isPresent()){
+            throw new NoSuchElementException("System Administrator not found!");
+        }
+        SystemAdministrator admin = optionalAdmin.get();
+        admin.setPassword(passwordEncoder.encode(newPassword));
+
+        return systemAdministratorRepository.save(admin);
     }
 }
