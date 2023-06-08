@@ -9,14 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class EngineerService implements IEngineerService {
+    private static final String path = "src/main/resources/cv";
     @Autowired
     private IEngineerRepository engineerRepository;
     @Autowired
@@ -81,6 +87,20 @@ public class EngineerService implements IEngineerService {
             return;
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find engineer");
+    }
+
+    public String uploadCV(Long id, MultipartFile file) throws Exception {
+        Engineer engineer = getEngineerById(id);
+        if (!file.getOriginalFilename().isEmpty()){
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(path, engineer.getUsername() + "_CV.pdf")));
+            outputStream.write(file.getBytes());
+            outputStream.flush();
+            outputStream.close();
+        } else {
+            throw new Exception();
+        }
+        File files = new File(path);
+        return Arrays.stream(files.list()).filter(cv -> cv.contains(engineer.getUsername())).toList().get(0);
     }
 
     @Override
