@@ -6,6 +6,7 @@ import com.example.newsecurity.Model.Engineer;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.PrivateKey;
 import java.util.List;
 
 @Service
@@ -22,6 +23,8 @@ public interface IEngineerService {
     void updateEngineer(EngineerUpdateDTO engineerUpdateDTO);
 
     void updateEngineerSkills(EngineerUpdateSkillsDTO engineerUpdateSkillsDTO);
-    String uploadCV(Long id, MultipartFile file) throws Exception;
     Engineer updatePassword(Long id, String newPassword);
+    String uploadCV(Long id, MultipartFile file) throws Exception;
+    PrivateKey readPrivateKeyFromKeystore(String username) throws Exception;
+    byte[] readEncryptedAESKeyFromKeystore(String username) throws Exception;
 }

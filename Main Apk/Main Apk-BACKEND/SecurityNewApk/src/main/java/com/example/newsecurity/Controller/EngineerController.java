@@ -18,6 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -142,27 +145,42 @@ public class EngineerController {
         //if (!user.hasPermission("GET_CV")){
         //    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         //}
-        return GetOrDownloadCV(username + "_CV.pdf", false);
+        try{
+            return GetOrDownloadCV(username, false);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<Resource>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @GetMapping("/download-cv/{username}")
-    public ResponseEntity<Resource> downloadCV(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("username") String username) throws IOException {
+    public ResponseEntity<Resource> downloadCV(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("username") String username) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String usernameFromToken = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(usernameFromToken);
         //if (!user.hasPermission("DOWNLOAD_CV")){
         //    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         //}
-        return GetOrDownloadCV(username + "_CV.pdf", true);
+        return GetOrDownloadCV(username, true);
     }
 
-    private ResponseEntity<Resource> GetOrDownloadCV(String filename, boolean isDownload) throws IOException{
-        File file = new File(path + filename);
+    private ResponseEntity<Resource> GetOrDownloadCV(String username, boolean isDownload) throws Exception{
+        File file = new File(path + username + "_CV.pdf");
         Path path = Paths.get(file.getAbsolutePath());
-        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+        Cipher rsaCipherDecrypt = Cipher.getInstance("RSA");
+        rsaCipherDecrypt.init(Cipher.DECRYPT_MODE, engineerService.readPrivateKeyFromKeystore(username));
+        byte[] decryptedAESKey = rsaCipherDecrypt.doFinal(engineerService.readEncryptedAESKeyFromKeystore(username));
+        SecretKey secretKeyDecrypt = new SecretKeySpec(decryptedAESKey, 0, decryptedAESKey.length, "AES");
+
+        Cipher aesCipherDecrypt = Cipher.getInstance("AES");
+        aesCipherDecrypt.init(Cipher.DECRYPT_MODE, secretKeyDecrypt);
+        byte[] decryptedData = aesCipherDecrypt.doFinal(Files.readAllBytes(path));
+        ByteArrayResource resource = new ByteArrayResource(decryptedData);
 
         return ResponseEntity.ok()
-                .headers(this.headers(filename))
-                .contentLength(file.length())
+                .headers(this.headers(username + "_CV.pdf"))
+                .contentLength(resource.contentLength())
                 .contentType(isDownload ? MediaType.parseMediaType("application/octet-stream") : MediaType.APPLICATION_PDF)
                 .body(resource);
     }
