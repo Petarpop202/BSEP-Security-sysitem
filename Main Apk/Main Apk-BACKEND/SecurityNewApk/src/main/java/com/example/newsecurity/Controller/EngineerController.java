@@ -10,6 +10,7 @@ import com.example.newsecurity.Service.IEngineerService;
 import com.example.newsecurity.Service.IUserService;
 import com.example.newsecurity.Util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.crypto.Cipher;
@@ -30,10 +32,13 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
+@ControllerAdvice
 @RequestMapping(value = "/engineers",produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "https://localhost:3000")
 public class EngineerController {
     private static final String path = "src/main/resources/cv/";
+    @Value("${spring.servlet.multipart.max-file-size}")
+    private String maxFileSize;
     @Autowired
     private IEngineerService engineerService;
     @Autowired
@@ -144,6 +149,11 @@ public class EngineerController {
             return ResponseEntity.badRequest().body("File is not a PDF file!");
         }
         return new ResponseEntity<>(engineerService.uploadCV(user.getId(), file), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<String> handleMaxSizeException(){
+        return ResponseEntity.badRequest().body("File is too large! Max size is: " + maxFileSize);
     }
 
     @GetMapping("/get-cv/{username}")

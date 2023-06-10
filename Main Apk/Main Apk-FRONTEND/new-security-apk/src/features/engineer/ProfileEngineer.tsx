@@ -281,36 +281,6 @@ export default function ProfileEngineer() {
                     Edit Profile
                 </Button>
             </Grid>
-            <hr/>
-            <Grid container sx={{ px: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Button
-                    component= {Link}
-                    variant="contained"
-                    sx = {{mt: 3}}
-                    to={'/skills'}
-                    fullWidth
-                    >
-                    View Skills
-                </Button>
-                <Button
-                    component= {Link}
-                    variant="contained"
-                    sx = {{mt: 3}}
-                    to={'/engineer-projects'}
-                    fullWidth
-                    >
-                    View Projects
-                </Button>
-                <Button
-                    component= {Link}
-                    variant="contained"
-                    sx = {{mt: 3}}
-                    to={'/upload-cv'}
-                    fullWidth
-                    >
-                    Upload CV
-                </Button>
-            </Grid>
         </Box>
         </Container>
     );

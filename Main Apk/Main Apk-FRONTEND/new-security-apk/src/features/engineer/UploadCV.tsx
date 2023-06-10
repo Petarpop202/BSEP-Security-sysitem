@@ -101,11 +101,11 @@ export default function UploadCV() {
 
         agent.Engineer.uploadCV(newFile)
             .then((response) => {
-                toast.success(`Successfully uploaded the file: ${response}`);
+                toast.success(`Successfully uploaded the file!`);
              })
             .catch((error) => {
                 console.log(error)
-                toast.error(`Failed to upload file! ${error.response?.status === 400 ? error.response?.data : ""}`);
+                toast.error(`${error.response?.status === 400 ? error.response?.data : "Failed to upload file!" }`);
                 if (error.response && error.response.status === 401) {
                     store.dispatch(refreshUser(user?.token));
                     toast.info("Your token has been refreshed");
@@ -114,11 +114,11 @@ export default function UploadCV() {
     }
 
     return (
-        <Container component={Paper} maxWidth='md' sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Container component={Paper} maxWidth="sm" sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Typography component="h1" variant="h4" sx={{ mb: 3 }}>
                 My CV
             </Typography>
-            <Box sx={{ width: '100%', textAlign: 'center' }}>
+            <Box sx={{ textAlign: 'center' }}>
                 <Grid>
                     <input type="file" accept="application/pdf" onChange={selectFile}/>
                 </Grid>
@@ -150,7 +150,7 @@ export default function UploadCV() {
                     <Typography variant="h6">
                         No CV was uploaded
                     </Typography>}
-                    <Button component={Link} variant="contained" color="error" to="/profile-engineer" sx={{mt: 4}}>Back</Button>
+                    <Button component={Link} variant="contained" color="error" to="/" sx={{mt: 4}}>Back</Button>
                 </Grid>
             </Box>
         </Container>

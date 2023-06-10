@@ -18,7 +18,7 @@ const navStyles = {
     color: 'inherit',
     textDecoration: 'none', 
     typography: 'h6',
-    marginRight: '10px',
+    marginRight: '20px',
     '&:hover': {
         color: 'grey.500'
     },
@@ -79,6 +79,20 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                     </Box>
                 }
 
+                {user?.userRole === "ROLE_ENGINEER" && 
+                    <Box display="flex" alignItems="center">
+                        <Typography variant="h6" component={NavLink} to="/engineer-projects" sx={navStyles}>
+                            PROJECTS
+                        </Typography>
+                        <Typography variant="h6" component={NavLink} to="/skills" sx={navStyles}>
+                            SKILLS
+                        </Typography>
+                        <Typography variant="h6" component={NavLink} to="/upload-cv" sx={navStyles}>
+                            CV
+                        </Typography>
+                    </Box>
+                }
+
                 {user?.userRole === "ROLE_ADMINISTRATOR" && 
                     <Box display="flex" alignItems="center">
                     <Typography variant="h6" component={NavLink} to="/admin-projects" sx={navStyles}>
@@ -96,8 +110,6 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                     
                 </Box>
                 }
-                
-
 
                 <Box display='flex' alignItems='center'>
                     <IconButton component={NavLink} to='/myTickets' size='large' edge='start' color='inherit' sx={{mr: 2}}>
