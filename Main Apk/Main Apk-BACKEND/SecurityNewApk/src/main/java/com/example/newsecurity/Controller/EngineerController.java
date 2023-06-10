@@ -118,7 +118,13 @@ public class EngineerController {
         engineerService.updateEngineerSkills(engineerUpdateSkillsDTO);
     }
     @PutMapping("/{id}")
-    public Engineer updatePassword(@PathVariable Long id, @RequestBody String newPassword){
+    public Engineer updatePassword(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id, @RequestBody String newPassword){
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        String username = tokenUtils.getUsernameFromToken(jwtToken);
+        User user = userService.findByUsername(username);
+        if (!user.hasPermission("UPDATE_ENGINEER_PASSWORD")){
+            return null;
+        }
         return engineerService.updatePassword(id, newPassword);
     }
 
@@ -127,9 +133,9 @@ public class EngineerController {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
-        //if (!user.hasPermission("UPLOAD_CV")){
-        //    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        //}
+        if (!user.hasPermission("UPLOAD_CV")){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
         byte[] fileBytes = file.getBytes();
         Tika tika = new Tika();
@@ -145,9 +151,9 @@ public class EngineerController {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String usernameFromToken = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(usernameFromToken);
-        //if (!user.hasPermission("GET_CV")){
-        //    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        //}
+        if (!user.hasPermission("GET_CV")){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try{
             return GetOrDownloadCV(username, false);
         }
@@ -161,9 +167,9 @@ public class EngineerController {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String usernameFromToken = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(usernameFromToken);
-        //if (!user.hasPermission("DOWNLOAD_CV")){
-        //    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        //}
+        if (!user.hasPermission("DOWNLOAD_CV")){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         return GetOrDownloadCV(username, true);
     }
 

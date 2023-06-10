@@ -59,12 +59,16 @@ export default function UploadCV() {
 
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
+                toast.success("Download started!")
             })
             .catch((error) => {
                 console.log(error)
                 if (error.response && error.response.status === 401) {
                     store.dispatch(refreshUser(user?.token));
                     toast.info("Your token has been refreshed");
+                }
+                else if (error.response && error.response.status === 403){
+                    toast.error("You don't have the permission to download that file!")
                 }
             })
     }
