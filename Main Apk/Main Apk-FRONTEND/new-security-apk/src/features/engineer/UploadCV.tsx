@@ -4,11 +4,10 @@ import { toast } from "react-toastify";
 import agent from "../../app/api/agent";
 import { store, useAppSelector } from "../../app/apk/configureApk";
 import { refreshUser } from "../account/accountSlice";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Document, Page, pdfjs } from "react-pdf/dist/esm";
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
-import { Label } from "@mui/icons-material";
 
 export default function UploadCV() {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;

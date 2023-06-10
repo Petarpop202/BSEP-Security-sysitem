@@ -67,7 +67,7 @@ insert into permission (name) values ('UPDATE_ADMIN_PASSWORD'); -- 47
 
 -- ROLE_HUMAN_RESOURCE_MANAGER (id: 1)
 insert into role_permission (role_id, permission_id) values (1, 7);  -- REFRESH_ACCESS_TOKEN
-
+insert into role_permission (role_id, permission_id) values (1, 18); -- GET_ENGINEER_ALL
 
 -- ROLE_ENGINEER (id: 2)
 insert into role_permission (role_id, permission_id) values (2, 7);  -- REFRESH_ACCESS_TOKEN

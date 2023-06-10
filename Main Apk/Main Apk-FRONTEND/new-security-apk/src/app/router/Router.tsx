@@ -20,8 +20,7 @@ import ShowManagers from "../../features/admin/ShowManagers"
 import ChangePassword from "../../features/admin/ChangePassword"
 import ShowEmployees from "../../features/admin/ShowEmployees"
 import UploadCV from "../../features/engineer/UploadCV"
-
-
+import ManagerCVs from "../../features/hr-manager/ManagerCVs"
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +47,7 @@ export const router = createBrowserRouter([
       { path: "show-engineers", element: <ShowEmployees/> },
       { path: "create-admin", element: <CreateAdmin/> },
       { path: "change-password-admin", element: <ChangePassword/> },
+      { path: "manager-cvs", element: <ManagerCVs/> },
     ],
   },
 ])

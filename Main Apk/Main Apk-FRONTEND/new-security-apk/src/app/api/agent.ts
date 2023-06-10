@@ -34,6 +34,7 @@ const Account = {
 
 const Engineer = {
     getByUsername: (username: any) => requests.get(`engineers/username=${username}`),
+    getById: (id: any) => requests.get(`engineers/${id}`),
     updateEngineer: (values: any) => requests.put('engineers', values),
     updatePassword: (id: number, values: any) => requests.put(`engineers/${id}`, values),
     updateEngineerSkills: (values: any) => requests.put('engineers/skills-update', values),

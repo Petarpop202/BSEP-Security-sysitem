@@ -65,10 +65,18 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                 </Box>
                 {user?.userRole === "ROLE_PROJECT_MANAGER" && 
                     <Box display="flex" alignItems="center">
-                    <Typography variant="h6" component={NavLink} to="/manager" sx={navStyles}>
-                        PROJECTS
-                    </Typography>
-                </Box>
+                        <Typography variant="h6" component={NavLink} to="/manager" sx={navStyles}>
+                            PROJECTS
+                        </Typography>
+                    </Box>
+                }
+
+                {user?.userRole === "ROLE_HUMAN_RESOURCE_MANAGER" && 
+                    <Box display="flex" alignItems="center">
+                        <Typography variant="h6" component={NavLink} to="/manager-cvs" sx={navStyles}>
+                            ENGINEER CVS
+                        </Typography>
+                    </Box>
                 }
 
                 {user?.userRole === "ROLE_ADMINISTRATOR" && 

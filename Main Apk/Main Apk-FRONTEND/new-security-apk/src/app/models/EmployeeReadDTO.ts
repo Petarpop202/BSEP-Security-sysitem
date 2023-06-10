@@ -5,4 +5,5 @@ export interface EmployeeReadDTO {
   endDate: any
   name: string
   surname: string
+  username: string
 }
