@@ -79,6 +79,7 @@ public class EmployeeService implements IEmployeeService {
             employeeReadDTO.setId(emp.getId());
             employeeReadDTO.setName(emp.getEngineer().getName());
             employeeReadDTO.setSurname(emp.getEngineer().getSurname());
+            employeeReadDTO.setUsername(emp.getEngineer().getUsername());
             employeeReadDTO.setDescription(emp.getDescription());
             employeeReadDTO.setEndDate(emp.getEndDate());
             employeeReadDTO.setStartDate(emp.getStartDate());

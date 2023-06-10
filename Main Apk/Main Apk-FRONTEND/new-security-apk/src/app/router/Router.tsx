@@ -19,21 +19,21 @@ import NewProject from "../../features/admin/NewProject"
 import ShowManagers from "../../features/admin/ShowManagers"
 import ChangePassword from "../../features/admin/ChangePassword"
 import ShowEmployees from "../../features/admin/ShowEmployees"
-
-
+import UploadCV from "../../features/engineer/UploadCV"
+import ManagerCVs from "../../features/hr-manager/ManagerCVs"
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      // {path: '', element: <Catalog />},
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
       { path: "response", element: <AdminAccept /> },
       { path: "passwordless", element: <PasswordlessLogin /> },
       { path: "profile-engineer", element: <ProfileEngineer /> },
       { path: "skills", element: <Skills /> },
+      { path: "upload-cv", element: <UploadCV />},
       { path: "profile-manager", element: <ManagerProfilePage /> },
       { path: "manager", element: <ManagerProjects />},
       { path: "project-details/:id", element: <ProjectDetails />},
@@ -47,6 +47,7 @@ export const router = createBrowserRouter([
       { path: "show-engineers", element: <ShowEmployees/> },
       { path: "create-admin", element: <CreateAdmin/> },
       { path: "change-password-admin", element: <ChangePassword/> },
+      { path: "manager-cvs", element: <ManagerCVs/> },
     ],
   },
 ])

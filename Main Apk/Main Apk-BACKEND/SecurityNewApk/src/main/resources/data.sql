@@ -34,40 +34,44 @@ insert into permission (name) values ('UPDATE_ENGINEER'); -- 22
 insert into permission (name) values ('UPDATE_ENGINEER_SKILLS'); -- 23
 insert into permission (name) values ('UPDATE_ENGINEER_PASSWORD'); -- 24
 insert into permission (name) values ('DELETE_ENGINEER'); -- 25
+insert into permission (name) values ('UPLOAD_CV'); -- 26
+insert into permission (name) values ('GET_CV'); -- 27
+insert into permission (name) values ('DOWNLOAD_CV'); -- 28
 
 -- ManagerController
-insert into permission (name) values ('GET_MANAGER_ALL'); -- 26
-insert into permission (name) values ('GET_MANAGER_ONE'); -- 27
-insert into permission (name) values ('CREATE_MANAGER'); -- 28
-insert into permission (name) values ('UPDATE_MANAGER'); -- 29
-insert into permission (name) values ('UPDATE_MANAGER_PASSWORD'); -- 30
-insert into permission (name) values ('DELETE_MANAGER'); -- 31
+insert into permission (name) values ('GET_MANAGER_ALL'); -- 29
+insert into permission (name) values ('GET_MANAGER_ONE'); -- 30
+insert into permission (name) values ('CREATE_MANAGER'); -- 31
+insert into permission (name) values ('UPDATE_MANAGER'); -- 32
+insert into permission (name) values ('UPDATE_MANAGER_PASSWORD'); -- 33
+insert into permission (name) values ('DELETE_MANAGER'); -- 34
 
 -- ProjectController
-insert into permission (name) values ('GET_PROJECT_ALL'); -- 32
-insert into permission (name) values ('GET_PROJECT_ONE'); -- 33
-insert into permission (name) values ('CREATE_PROJECT'); -- 34
-insert into permission (name) values ('GET_PROJECTS_BY_MANAGER'); -- 35
-insert into permission (name) values ('ADD_EMPLOYEE_TO_PROJECT'); -- 36
-insert into permission (name) values ('REMOVE_EMPLOYEE_FROM_PROJECT'); -- 37
-insert into permission (name) values ('DELETE_PROJECT'); -- 38
+insert into permission (name) values ('GET_PROJECT_ALL'); -- 35
+insert into permission (name) values ('GET_PROJECT_ONE'); -- 36
+insert into permission (name) values ('CREATE_PROJECT'); -- 37
+insert into permission (name) values ('GET_PROJECTS_BY_MANAGER'); -- 38
+insert into permission (name) values ('ADD_EMPLOYEE_TO_PROJECT'); -- 39
+insert into permission (name) values ('REMOVE_EMPLOYEE_FROM_PROJECT'); -- 40
+insert into permission (name) values ('DELETE_PROJECT'); -- 41
 
 -- RoleController
-insert into permission (name) values ('GET_ROLE_ALL'); -- 39
-insert into permission (name) values ('GET_PERMISSION_ALL'); -- 40
-insert into permission (name) values ('ADD_PERMISSION_TO_ROLE'); -- 41
-insert into permission (name) values ('REMOVE_PERMISSION_FROM_ROLE'); -- 42
+insert into permission (name) values ('GET_ROLE_ALL'); -- 42
+insert into permission (name) values ('GET_PERMISSION_ALL'); -- 43
+insert into permission (name) values ('ADD_PERMISSION_TO_ROLE'); -- 44
+insert into permission (name) values ('REMOVE_PERMISSION_FROM_ROLE'); -- 45
 
 -- SystemAdministratorController
-insert into permission (name) values ('GET_ADMIN_ALL'); -- 43
-insert into permission (name) values ('GET_ADMIN_ONE'); -- 44
-insert into permission (name) values ('UPDATE_ADMIN'); -- 45
-insert into permission (name) values ('DELETE_ADMIN'); -- 46
-insert into permission (name) values ('UPDATE_ADMIN_PASSWORD'); -- 47
+insert into permission (name) values ('GET_ADMIN_ALL'); -- 46
+insert into permission (name) values ('GET_ADMIN_ONE'); -- 47
+insert into permission (name) values ('UPDATE_ADMIN'); -- 48
+insert into permission (name) values ('DELETE_ADMIN'); -- 49
+insert into permission (name) values ('UPDATE_ADMIN_PASSWORD'); -- 50
 
 -- ROLE_HUMAN_RESOURCE_MANAGER (id: 1)
 insert into role_permission (role_id, permission_id) values (1, 7);  -- REFRESH_ACCESS_TOKEN
-
+insert into role_permission (role_id, permission_id) values (1, 18); -- GET_ENGINEER_ALL
+insert into role_permission (role_id, permission_id) values (1, 27); -- GET_CV
 
 -- ROLE_ENGINEER (id: 2)
 insert into role_permission (role_id, permission_id) values (2, 7);  -- REFRESH_ACCESS_TOKEN
@@ -78,17 +82,21 @@ insert into role_permission (role_id, permission_id) values (2, 20); -- GET_ENGI
 insert into role_permission (role_id, permission_id) values (2, 22); -- UPDATE_ENGINEER
 insert into role_permission (role_id, permission_id) values (2, 23); -- UPDATE_ENGINEER_SKILLS
 insert into role_permission (role_id, permission_id) values (2, 24); -- UPDATE_ENGINEER_PASSWORD
+insert into role_permission (role_id, permission_id) values (2, 26); -- UPLOAD_CV
+insert into role_permission (role_id, permission_id) values (2, 27); -- GET_CV
+insert into role_permission (role_id, permission_id) values (2, 28); -- DOWNLOAD_CV
 
 -- ROLE_PROJECT_MANAGER (id: 3)
 insert into role_permission (role_id, permission_id) values (3, 7);  -- REFRESH_ACCESS_TOKEN
-insert into role_permission (role_id, permission_id) values (3, 27);
-insert into role_permission (role_id, permission_id) values (3, 29);    -- UPDATE_MANAGER
-insert into role_permission (role_id, permission_id) values (3, 30);
-insert into role_permission (role_id, permission_id) values (3, 35);
-insert into role_permission (role_id, permission_id) values (3, 33);  -- GET_PROJECT_ONE
-insert into role_permission (role_id, permission_id) values (3, 16);  -- GET_EMPLOYEES_BY_PROJECT
-insert into role_permission (role_id, permission_id) values (3, 13);
-insert into role_permission (role_id, permission_id) values (3, 14);
+insert into role_permission (role_id, permission_id) values (3, 13); -- UPDATE_EMPLOYEE
+insert into role_permission (role_id, permission_id) values (3, 14); -- UPDATE_EMPLOYEE_DESC
+insert into role_permission (role_id, permission_id) values (3, 16); -- GET_EMPLOYEES_BY_PROJECT
+insert into role_permission (role_id, permission_id) values (3, 27); -- GET_CV
+insert into role_permission (role_id, permission_id) values (3, 30); -- GET_MANAGER_ONE
+insert into role_permission (role_id, permission_id) values (3, 32); -- UPDATE_MANAGER
+insert into role_permission (role_id, permission_id) values (3, 33); -- UPDATE_MANAGER_PASSWORD
+insert into role_permission (role_id, permission_id) values (3, 36); -- GET_PROJECT_ONE
+insert into role_permission (role_id, permission_id) values (3, 38); -- GET_PROJECTS_BY_MANAGER
 
 -- ROLE_ADMINISTRATOR (id: 4)
 insert into role_permission (role_id, permission_id) values (4, 1);  -- LOGIN
@@ -116,28 +124,31 @@ insert into role_permission (role_id, permission_id) values (4, 22); -- UPDATE_E
 insert into role_permission (role_id, permission_id) values (4, 23); -- UPDATE_ENGINEER_SKILLS
 insert into role_permission (role_id, permission_id) values (4, 24); -- UPDATE_ENGINEER_PASSWORD
 insert into role_permission (role_id, permission_id) values (4, 25); -- DELETE_ENGINEER
-insert into role_permission (role_id, permission_id) values (4, 26); -- GET_MANAGER_ALL
-insert into role_permission (role_id, permission_id) values (4, 27); -- GET_MANAGER_ONE
-insert into role_permission (role_id, permission_id) values (4, 28); -- CREATE_MANAGER
-insert into role_permission (role_id, permission_id) values (4, 29); -- UPDATE_MANAGER
-insert into role_permission (role_id, permission_id) values (4, 30); -- UPDATE_MANAGER_PASSWORD
-insert into role_permission (role_id, permission_id) values (4, 31); -- DELETE_MANAGER
-insert into role_permission (role_id, permission_id) values (4, 32); -- GET_PROJECT_ALL
-insert into role_permission (role_id, permission_id) values (4, 33); -- GET_PROJECT_ONE
-insert into role_permission (role_id, permission_id) values (4, 34); -- CREATE_PROJECT
-insert into role_permission (role_id, permission_id) values (4, 35); -- GET_PROJECTS_BY_MANAGER
-insert into role_permission (role_id, permission_id) values (4, 36); -- ADD_EMPLOYEE_TO_PROJECT
-insert into role_permission (role_id, permission_id) values (4, 37); -- REMOVE_EMPLOYEE_FROM_PROJECT
-insert into role_permission (role_id, permission_id) values (4, 38); -- DELETE_PROJECT
-insert into role_permission (role_id, permission_id) values (4, 39); -- GET_ROLE_ALL
-insert into role_permission (role_id, permission_id) values (4, 40); -- GET_PERMISSION_ALL
-insert into role_permission (role_id, permission_id) values (4, 41); -- ADD_PERMISSION_TO_ROLE
-insert into role_permission (role_id, permission_id) values (4, 42); -- REMOVE_PERMISSION_FROM_ROLE
-insert into role_permission (role_id, permission_id) values (4, 43); -- GET_ADMIN_ALL
-insert into role_permission (role_id, permission_id) values (4, 44); -- GET_ADMIN_ONE
-insert into role_permission (role_id, permission_id) values (4, 45); -- UPDATE_ADMIN
-insert into role_permission (role_id, permission_id) values (4, 46); -- DELETE_ADMIN
-insert into role_permission (role_id, permission_id) values (4, 47); -- UPDATE_ADMIN_PASSWORD
+insert into role_permission (role_id, permission_id) values (4, 26); -- UPLOAD_CV
+insert into role_permission (role_id, permission_id) values (4, 27); -- GET_CV
+insert into role_permission (role_id, permission_id) values (4, 28); -- DOWNLOAD_CV
+insert into role_permission (role_id, permission_id) values (4, 29); -- GET_MANAGER_ALL
+insert into role_permission (role_id, permission_id) values (4, 30); -- GET_MANAGER_ONE
+insert into role_permission (role_id, permission_id) values (4, 31); -- CREATE_MANAGER
+insert into role_permission (role_id, permission_id) values (4, 32); -- UPDATE_MANAGER
+insert into role_permission (role_id, permission_id) values (4, 33); -- UPDATE_MANAGER_PASSWORD
+insert into role_permission (role_id, permission_id) values (4, 34); -- DELETE_MANAGER
+insert into role_permission (role_id, permission_id) values (4, 35); -- GET_PROJECT_ALL
+insert into role_permission (role_id, permission_id) values (4, 36); -- GET_PROJECT_ONE
+insert into role_permission (role_id, permission_id) values (4, 37); -- CREATE_PROJECT
+insert into role_permission (role_id, permission_id) values (4, 38); -- GET_PROJECTS_BY_MANAGER
+insert into role_permission (role_id, permission_id) values (4, 39); -- ADD_EMPLOYEE_TO_PROJECT
+insert into role_permission (role_id, permission_id) values (4, 40); -- REMOVE_EMPLOYEE_FROM_PROJECT
+insert into role_permission (role_id, permission_id) values (4, 41); -- DELETE_PROJECT
+insert into role_permission (role_id, permission_id) values (4, 42); -- GET_ROLE_ALL
+insert into role_permission (role_id, permission_id) values (4, 43); -- GET_PERMISSION_ALL
+insert into role_permission (role_id, permission_id) values (4, 44); -- ADD_PERMISSION_TO_ROLE
+insert into role_permission (role_id, permission_id) values (4, 45); -- REMOVE_PERMISSION_FROM_ROLE
+insert into role_permission (role_id, permission_id) values (4, 46); -- GET_ADMIN_ALL
+insert into role_permission (role_id, permission_id) values (4, 47); -- GET_ADMIN_ONE
+insert into role_permission (role_id, permission_id) values (4, 48); -- UPDATE_ADMIN
+insert into role_permission (role_id, permission_id) values (4, 49); -- DELETE_ADMIN
+insert into role_permission (role_id, permission_id) values (4, 50); -- UPDATE_ADMIN_PASSWORD
 
 -- ROLE_GUEST (id: 5)
 insert into role_permission (role_id, permission_id) values (5, 7);  -- REFRESH_ACCESS_TOKEN

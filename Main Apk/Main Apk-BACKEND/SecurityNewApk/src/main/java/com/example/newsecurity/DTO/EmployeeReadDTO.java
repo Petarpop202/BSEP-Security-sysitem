@@ -15,4 +15,5 @@ public class EmployeeReadDTO {
     private LocalDateTime endDate;
     private String name;
     private String surname;
+    private String username;
 }

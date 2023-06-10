@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Project } from "../../app/models/Project"
-import { useAppSelector } from "../../app/apk/configureApk";
-import { useNavigate, useParams } from "react-router-dom";
+import { store, useAppSelector } from "../../app/apk/configureApk";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import agent from "../../app/api/agent";
 import { EmployeeReadDTO } from "../../app/models/EmployeeReadDTO";
 import Table from '@mui/material/Table';
@@ -11,14 +11,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {Button, Typography, TextField, Select} from '@mui/material';
+import {Button, Typography, TextField, Select, Grid} from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { toast } from "react-toastify";
 import { format, parseISO, toDate } from "date-fns";
 import { Manager } from "../../app/models/Manager";
+import { refreshUser } from "../account/accountSlice";
+import { Document, Page, pdfjs } from "react-pdf/dist/esm";
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 export default function ProjectDetails () {
+    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
     const { id } = useParams();
     const navigate = useNavigate();
     const [project, setProject] = useState<Project | null>(null)
@@ -31,6 +37,9 @@ export default function ProjectDetails () {
     const [engineers, setEngineers] = useState<Manager[] | null>([])
     const [engineerId, setEngineerId] = useState<number>(0)
     
+    const [pdfData, setPdfData] = useState("");
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [totalPageCount, setTotalPageCount] = useState<number>(0);
 
     const { user } = useAppSelector((state: { acount: any }) => state.acount)
 
@@ -83,6 +92,45 @@ export default function ProjectDetails () {
 
   const handleEngineerId = (value: any) => {
     setEngineerId(value);
+  }
+
+  const getCV = (username: string) => {
+    agent.Engineer.getCV(username)
+      .then((response) => {
+        const pdfBlob = new Blob([response], {type: 'application/pdf'});
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        setPdfData(pdfUrl);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+            store.dispatch(refreshUser(user?.token));
+            toast.info("Your token has been refreshed");
+        }
+        else if (error.response && error.response.status === 404){
+            toast.info("No CV found");
+        }
+        else {
+            console.log(error)
+        }
+    })
+  }
+
+  const prevPage = () => {
+      if (currentPage == 1)
+          return
+      else
+          setCurrentPage(currentPage - 1)
+  }
+
+  const nextPage = () => {
+      if (currentPage == totalPageCount)
+          return
+      else
+      setCurrentPage(currentPage + 1)
+  }
+
+  const onDocumentLoad = ({numPages} : {numPages: number}) => {
+      setTotalPageCount(numPages);
   }
 
   const formatDate = (dateArray: number[]) => {
@@ -251,7 +299,10 @@ export default function ProjectDetails () {
                     </TableCell>
                     <TableCell>
                       {user?.userRole == "ROLE_PROJECT_MANAGER" &&
-                        <Button variant="contained" onClick={() => {handleDesription(employee.description); setSelectedEmployee(employee); setIsUpdate(true); console.log(employee.startDate.toString())}}>Update</Button>
+                        <>
+                          <Button variant="contained" onClick={() => {handleDesription(employee.description); setSelectedEmployee(employee); setIsUpdate(true); console.log(employee.startDate.toString())}}>Update</Button>
+                          <Button variant="contained" sx={{mx: 1}} onClick={() => {getCV(employee.username);}}>View CV</Button>
+                        </>
                       }
                       
                     </TableCell>
@@ -261,6 +312,27 @@ export default function ProjectDetails () {
               
             </Table>
           </TableContainer>
+          <Grid sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+            {pdfData !== ""
+            ?
+                <>
+                    <Grid>
+                        <Typography variant="h6">CV</Typography> 
+                        <Document file={pdfData} onLoadSuccess={onDocumentLoad}>
+                                <Page pageNumber={currentPage}/>
+                        </Document>
+                        <Typography variant="h6" sx={{mb: 2}}>
+                            {`Page: ${currentPage}/${totalPageCount}`}
+                        </Typography>
+                        <Grid sx={{mb: 2}}>
+                          {currentPage > 1 ? <Button variant="outlined" onClick={prevPage} sx={{mr: 1}}>Previous</Button> : <></>}
+                          {currentPage < totalPageCount ? <Button variant="outlined" onClick={nextPage} sx={{ml: 1}}>Next</Button> : <></>}
+                        </Grid>
+                        <Button variant="contained" color="error" onClick={() => setPdfData("")}>Close CV</Button>
+                    </Grid>
+                </>
+            :<></>}
+          </Grid>
         </>
         
     )

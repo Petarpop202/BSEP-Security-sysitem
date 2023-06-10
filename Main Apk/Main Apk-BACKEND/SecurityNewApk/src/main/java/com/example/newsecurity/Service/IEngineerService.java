@@ -4,7 +4,9 @@ import com.example.newsecurity.DTO.EngineerUpdateDTO;
 import com.example.newsecurity.DTO.EngineerUpdateSkillsDTO;
 import com.example.newsecurity.Model.Engineer;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.security.PrivateKey;
 import java.util.List;
 
 @Service
@@ -22,4 +24,5 @@ public interface IEngineerService {
 
     void updateEngineerSkills(EngineerUpdateSkillsDTO engineerUpdateSkillsDTO);
     Engineer updatePassword(Long id, String newPassword);
+    String uploadCV(Long id, MultipartFile file) throws Exception;
 }

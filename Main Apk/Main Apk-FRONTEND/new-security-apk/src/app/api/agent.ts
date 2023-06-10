@@ -34,10 +34,14 @@ const Account = {
 
 const Engineer = {
     getByUsername: (username: any) => requests.get(`engineers/username=${username}`),
+    getById: (id: any) => requests.get(`engineers/${id}`),
     updateEngineer: (values: any) => requests.put('engineers', values),
     updatePassword: (id: number, values: any) => requests.put(`engineers/${id}`, values),
     updateEngineerSkills: (values: any) => requests.put('engineers/skills-update', values),
     getEngineers: () => requests.get('engineers'),
+    uploadCV: (file: FormData) => axios.post(`engineers/upload-cv`, file, { headers:{"Content-Type": "multipart/form-data"}}).then(responseBody),
+    getCV: (username: string) => axios({url: `engineers/get-cv/${username}`, method: 'GET', responseType: 'arraybuffer'}).then(responseBody),
+    downloadCV: (username: string) => axios({url: `engineers/download-cv/${username}`, method: 'GET', responseType: 'blob'}).then(responseBody),
   }
 
 const Employee = {
