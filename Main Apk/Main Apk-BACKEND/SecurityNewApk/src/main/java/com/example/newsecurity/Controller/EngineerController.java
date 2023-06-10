@@ -1,5 +1,6 @@
 package com.example.newsecurity.Controller;
 
+import com.example.newsecurity.Service.IFileService;
 import org.apache.tika.Tika;
 import com.example.newsecurity.DTO.EngineerUpdateDTO;
 import com.example.newsecurity.DTO.EngineerUpdateSkillsDTO;
@@ -39,6 +40,8 @@ public class EngineerController {
     private TokenUtils tokenUtils;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IFileService fileService;
 
     @PostMapping
     public Engineer newEngineer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Engineer engineer) {
@@ -166,16 +169,10 @@ public class EngineerController {
 
     private ResponseEntity<Resource> GetOrDownloadCV(String username, boolean isDownload) throws Exception{
         File file = new File(path + username + "_CV.pdf");
-        Path path = Paths.get(file.getAbsolutePath());
-
-        Cipher rsaCipherDecrypt = Cipher.getInstance("RSA");
-        rsaCipherDecrypt.init(Cipher.DECRYPT_MODE, engineerService.readPrivateKeyFromKeystore(username));
-        byte[] decryptedAESKey = rsaCipherDecrypt.doFinal(engineerService.readEncryptedAESKeyFromKeystore(username));
-        SecretKey secretKeyDecrypt = new SecretKeySpec(decryptedAESKey, 0, decryptedAESKey.length, "AES");
-
-        Cipher aesCipherDecrypt = Cipher.getInstance("AES");
-        aesCipherDecrypt.init(Cipher.DECRYPT_MODE, secretKeyDecrypt);
-        byte[] decryptedData = aesCipherDecrypt.doFinal(Files.readAllBytes(path));
+        byte[] decryptedData = fileService.decryptFile(file, username);
+        if (decryptedData == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         ByteArrayResource resource = new ByteArrayResource(decryptedData);
 
         return ResponseEntity.ok()

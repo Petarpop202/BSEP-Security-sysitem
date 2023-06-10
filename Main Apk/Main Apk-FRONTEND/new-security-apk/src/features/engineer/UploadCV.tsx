@@ -33,13 +33,17 @@ export default function UploadCV() {
                 const pdfBlob = new Blob([response], {type: 'application/pdf'});
                 const pdfUrl = URL.createObjectURL(pdfBlob);
                 setPdfData(pdfUrl);
-                console.log(pdfUrl);
             })
             .catch((error) => {
-                console.log(error)
                 if (error.response && error.response.status === 401) {
                     store.dispatch(refreshUser(user?.token));
                     toast.info("Your token has been refreshed");
+                }
+                else if (error.response && error.response.status === 404){
+                    toast.info("No CV found");
+                }
+                else {
+                    console.log(error)
                 }
             })
     }, [])
@@ -62,7 +66,7 @@ export default function UploadCV() {
                 if (error.response && error.response.status === 401) {
                     store.dispatch(refreshUser(user?.token));
                     toast.info("Your token has been refreshed");
-                  }
+                }
             })
     }
 

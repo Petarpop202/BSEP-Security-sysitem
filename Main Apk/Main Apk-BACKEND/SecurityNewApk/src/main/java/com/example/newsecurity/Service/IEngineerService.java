@@ -25,6 +25,4 @@ public interface IEngineerService {
     void updateEngineerSkills(EngineerUpdateSkillsDTO engineerUpdateSkillsDTO);
     Engineer updatePassword(Long id, String newPassword);
     String uploadCV(Long id, MultipartFile file) throws Exception;
-    PrivateKey readPrivateKeyFromKeystore(String username) throws Exception;
-    byte[] readEncryptedAESKeyFromKeystore(String username) throws Exception;
 }
