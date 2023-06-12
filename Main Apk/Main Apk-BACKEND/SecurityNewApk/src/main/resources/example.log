@@ -1,0 +1,100 @@
+2023-06-11 20:55:26.051  INFO 17032 --- [main] c.e.newsecurity.BloodBankApplication     : Starting BloodBankApplication using Java 19.0.1 on DESKTOP-7VQL5BL with PID 17032 (C:\Users\petar\Desktop\BSEP\BSEP-Security-sysitem\Main Apk\Main Apk-BACKEND\SecurityNewApk\target\classes started by petar in C:\Users\petar\Desktop\BSEP\BSEP-Security-sysitem\Main Apk\Main Apk-BACKEND\SecurityNewApk)
+2023-06-11 20:55:26.060  INFO 17032 --- [main] c.e.newsecurity.BloodBankApplication     : No active profile set, falling back to 1 default profile: "default"
+2023-06-11 20:55:27.815  INFO 17032 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-06-11 20:55:28.077  INFO 17032 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 242 ms. Found 11 JPA repository interfaces.
+2023-06-11 20:55:29.250  INFO 17032 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (https)
+2023-06-11 20:55:29.272  INFO 17032 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-06-11 20:55:29.273  INFO 17032 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.68]
+2023-06-11 20:55:29.498  INFO 17032 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-06-11 20:55:29.499  INFO 17032 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3314 ms
+2023-06-11 20:55:29.862  INFO 17032 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-06-11 20:55:29.960  INFO 17032 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.12.Final
+2023-06-11 20:55:30.472  INFO 17032 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-06-11 20:55:30.718  INFO 17032 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-06-11 20:55:31.093  INFO 17032 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-06-11 20:55:31.128  INFO 17032 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+2023-06-11 20:55:32.756  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.757  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "employees" does not exist, skipping
+2023-06-11 20:55:32.760  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.760  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "engineer_skills" does not exist, skipping
+2023-06-11 20:55:32.761  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.761  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "engineers" does not exist, skipping
+2023-06-11 20:55:32.762  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.763  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "managers" does not exist, skipping
+2023-06-11 20:55:32.764  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.764  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "project_employee" does not exist, skipping
+2023-06-11 20:55:32.765  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.766  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "project_employee" does not exist, skipping
+2023-06-11 20:55:32.767  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.767  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "projects" does not exist, skipping
+2023-06-11 20:55:32.768  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.768  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "role_permission" does not exist, skipping
+2023-06-11 20:55:32.770  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.771  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "role_permission" does not exist, skipping
+2023-06-11 20:55:32.772  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.773  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "system_administrators" does not exist, skipping
+2023-06-11 20:55:32.774  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.774  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "user_role" does not exist, skipping
+2023-06-11 20:55:32.775  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.776  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "user_role" does not exist, skipping
+2023-06-11 20:55:32.777  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.777  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "users" does not exist, skipping
+2023-06-11 20:55:32.778  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.779  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "addresses" does not exist, skipping
+2023-06-11 20:55:32.780  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.780  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "employees" does not exist, skipping
+2023-06-11 20:55:32.781  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.782  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "engineer_skills" does not exist, skipping
+2023-06-11 20:55:32.783  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.783  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "engineers" does not exist, skipping
+2023-06-11 20:55:32.784  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.785  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "managers" does not exist, skipping
+2023-06-11 20:55:32.787  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.787  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "permission" does not exist, skipping
+2023-06-11 20:55:32.788  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.788  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "project_employee" does not exist, skipping
+2023-06-11 20:55:32.790  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.790  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "projects" does not exist, skipping
+2023-06-11 20:55:32.791  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.792  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "registration_requests" does not exist, skipping
+2023-06-11 20:55:32.793  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.793  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "role" does not exist, skipping
+2023-06-11 20:55:32.794  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.795  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "role_permission" does not exist, skipping
+2023-06-11 20:55:32.796  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.797  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "system_administrators" does not exist, skipping
+2023-06-11 20:55:32.798  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.798  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "tests" does not exist, skipping
+2023-06-11 20:55:32.799  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.799  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "user_role" does not exist, skipping
+2023-06-11 20:55:32.800  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-06-11 20:55:32.800  WARN 17032 --- [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "users" does not exist, skipping
+2023-06-11 20:55:33.002  INFO 17032 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-06-11 20:55:33.022  INFO 17032 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-06-11 20:55:35.371  INFO 17032 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@21251e43, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@677274e7, org.springframework.security.web.context.SecurityContextPersistenceFilter@64836643, org.springframework.security.web.header.HeaderWriterFilter@16e0afab, org.springframework.web.filter.CorsFilter@54c17a2b, org.springframework.security.web.authentication.logout.LogoutFilter@41935a9d, com.example.newsecurity.Security.TokenAuthenticationFilter@16279a5d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@ad6448e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3da6950f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1f7949dc, org.springframework.security.web.session.SessionManagementFilter@4db45d, org.springframework.security.web.access.ExceptionTranslationFilter@659e003e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1718de70]
+2023-06-11 20:55:35.384  WARN 17032 --- [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/auth/login', POST]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-11 20:55:35.385  INFO 17032 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/auth/login', POST]
+2023-06-11 20:55:35.385  WARN 17032 --- [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/', GET]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-11 20:55:35.385  INFO 17032 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/', GET]
+2023-06-11 20:55:35.386  WARN 17032 --- [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/webjars/**', GET]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-11 20:55:35.386  INFO 17032 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/webjars/**', GET]
+2023-06-11 20:55:35.386  WARN 17032 --- [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/*.html', GET]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-11 20:55:35.386  INFO 17032 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/*.html', GET]
+2023-06-11 20:55:35.386  WARN 17032 --- [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='favicon.ico', GET]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-11 20:55:35.387  INFO 17032 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='favicon.ico', GET]
+2023-06-11 20:55:35.387  WARN 17032 --- [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/**/*.html', GET]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-11 20:55:35.387  INFO 17032 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/**/*.html', GET]
+2023-06-11 20:55:35.387  WARN 17032 --- [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/**/*.css', GET]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-11 20:55:35.387  INFO 17032 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/**/*.css', GET]
+2023-06-11 20:55:35.387  WARN 17032 --- [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/**/*.js', GET]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2023-06-11 20:55:35.387  INFO 17032 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Ant [pattern='/**/*.js', GET]
+2023-06-11 20:55:36.698  INFO 17032 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (https) with context path ''
+2023-06-11 20:55:36.720  INFO 17032 --- [main] c.e.newsecurity.BloodBankApplication     : Started BloodBankApplication in 11.88 seconds (JVM running for 13.605)
+2023-06-11 20:57:33.985  INFO 17032 --- [https-jsse-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-06-11 20:57:33.986  INFO 17032 --- [https-jsse-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-06-11 20:57:33.989  INFO 17032 --- [https-jsse-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2023-06-11 20:57:35.252 ERROR 17032 --- [https-jsse-nio-8080-exec-10] c.e.n.C.AuthenticationController         : Failed to authenticate user: Bad credentials
+2023-06-11 21:05:48.018  INFO 17032 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-06-11 21:05:48.021  INFO 17032 --- [SpringApplicationShutdownHook] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2023-06-11 21:05:48.212  INFO 17032 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-06-11 21:05:48.228  INFO 17032 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
