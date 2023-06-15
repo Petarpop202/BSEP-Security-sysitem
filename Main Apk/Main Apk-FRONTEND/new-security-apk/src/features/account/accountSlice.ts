@@ -20,7 +20,11 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
   "account/signInUser",
   async (data, thunkAPI) => {
     try {
-      const jwt = await agent.Account.login(data)
+      //const jwt = await agent.Account.login(data)
+      const jwt = {
+        jwt: data?.jwt,
+        refreshJwt: data?.refreshJwt
+      }
       const decodedToken = decodeToken<DecodedToken>(jwt?.jwt)
       const user: User = decodedToken
         ? {

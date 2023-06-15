@@ -4,10 +4,13 @@ import com.example.newsecurity.DTO.*;
 import com.example.newsecurity.Model.RegistrationRequest;
 import com.example.newsecurity.Model.Test;
 import com.example.newsecurity.Model.User;
+import com.example.newsecurity.Service.IAlarmService;
 import com.example.newsecurity.Service.IRegistrationRequestService;
 import com.example.newsecurity.Service.IUserService;
 import com.example.newsecurity.Util.TokenUtils;
 import net.bytebuddy.utility.RandomString;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -54,8 +58,13 @@ public class AuthenticationController {
     @Autowired
     private IRegistrationRequestService registrationRequestService;
 
+    @Autowired
+    private IAlarmService alarmService;
+
+    private static final Logger logger = LogManager.getLogger(AuthenticationController.class);
+
     @PostMapping("/login")
-    public ResponseEntity<Jwt> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
+    public ResponseEntity<Jwt> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletRequest request) {
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
         // AuthenticationException
         try {
@@ -69,11 +78,14 @@ public class AuthenticationController {
             String refreshJwt = tokenUtils.generateRefreshToken(user);
 
             int expiresIn = tokenUtils.getExpiredIn();
+            //logger.info("HTTPS request successfully passed!");
+            logger.info("User {} is logged.", user.getUsername());
             return ResponseEntity.ok(new Jwt(jwt, refreshJwt, expiresIn));
         }
         catch (AuthenticationException e) {
             // Greška pri autentifikaciji
             // Ovde možete dodati odgovarajuću logiku za obradu greške
+            logger.error("Failed to authenticate user: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
@@ -83,6 +95,7 @@ public class AuthenticationController {
     public ResponseEntity<Jwt> passwordlessLogin(@RequestBody MailDTO mail) {
         String token = tokenUtils.generatePasswordlessToken(mail.getMail());
         userService.passwordlessLogin(token,mail.getMail());
+        logger.info("Passwordless login token generated for email: {}", mail.getMail());
         return null;
     }
 
@@ -97,8 +110,8 @@ public class AuthenticationController {
             // Definišite URL adresu na koju želite da se korisnik preusmeri na frontendu
             String redirectUrl = "https://localhost:3000/guestlogin/?token=" + jwt + "&refreshToken=" + refreshJwt;
 
+            logger.info("Passwordless login activated for email: {}", mail);
             return new RedirectView(redirectUrl);
-            //return ResponseEntity.ok(new Jwt(jwt,refreshJwt, tokenUtils.getExpiredIn()));
         }
         return null;
     }
@@ -108,10 +121,12 @@ public class AuthenticationController {
         User existUser = this.userService.findByUsername(userRequest.getUsername());
 
         if (existUser != null) {
+            logger.error("Failed to add user. Username {} already exists.", userRequest.getUsername());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         User user = this.userService.save(userRequest);
 
+        logger.info("User {} successfully registered.", user.getUsername());
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
@@ -122,17 +137,24 @@ public class AuthenticationController {
         String token_username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(token_username);
         if (!user.hasPermission("RESPONSE")){
+            logger.warn("User {} does not have permission to respond to requests.", user.getUsername());
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         RegistrationRequest request = registrationRequestService.setResponse(response);
-        if(request.isAccepted())
+        if(request.isAccepted()) {
+            logger.info("Request {} successfully accepted.", request.getId());
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        else return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        else{
+            logger.info("Request {} rejected.", request.getId());
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
     }
 
     @GetMapping("/activate")
     public ResponseEntity<User> activateUser(@RequestParam String code) throws NoSuchAlgorithmException, InvalidKeyException {
         registrationRequestService.Activate(code);
+        logger.info("User successfully activated.");
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -176,7 +198,6 @@ public class AuthenticationController {
         if (!token_user.hasPermission("GET_REQUESTS")){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
         List<RegistrationRequest> list = registrationRequestService.getAllUnresponded();
         return ResponseEntity.ok(list);
     }

@@ -78,6 +78,7 @@ export default function SignedInMenu() {
           Register request
         </Button>
       )}
+
       <Menu
         anchorEl={anchorEl}
         open={open}

@@ -38,8 +38,14 @@ export default function Header({darkMode, handleThemeChange}: Props) {
     const {user} = useAppSelector(state => state.acount);  
     const navigate = useNavigate()     
 
+    const handleAlarm = () => {
+        agent.Administrator.alarmSystem()
+        .then(response => {
+          })
+      }
+
     useEffect(() => {
-        if (user?.userRole === 'ROLE_ADMINISTRATOR')
+        if (user?.userRole === 'ROLE_ADMINISTRATOR'){
             agent.Administrator.getById(user.id)
                 .then((response) => {
                     if (response.lastPasswordResetDate === null){
@@ -48,6 +54,12 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                     }
                 })
                 .catch((error) => console.log(error))
+            agent.Administrator.isAlarmedAdmin()
+                .then((response) =>{
+                    if(!response)
+                        toast.error('SYSTEM ALARM ! check alarms')
+                })
+            }
     }, [user])
 
     return (
@@ -107,33 +119,21 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                     <Typography variant="h6" component={NavLink} to="/show-engineers" sx={navStyles}>
                         ENGINEERS
                     </Typography>
-                    
+                    <Typography variant="h6" component={NavLink} to="/logs" sx={navStyles}>
+                        LOGS
+                    </Typography>
+                    <Typography variant="h6" component={NavLink} to="/alarms" sx={navStyles}>
+                        ALARMS
+                    </Typography>
                 </Box>
                 }
 
                 <Box display='flex' alignItems='center'>
-                    <IconButton component={NavLink} to='/myTickets' size='large' edge='start' color='inherit' sx={{mr: 2}}>
+                    <IconButton component={NavLink} to='/' onClick={handleAlarm} size='large' edge='start' color='inherit' sx={{mr: 2}}>
                             <Badge badgeContent='4' color="secondary">
                                 <AirplaneTicket />
                             </Badge>
                     </IconButton>
-
-                    {/* {user?.userRole === "ROLE_ADMINISTRATOR" ? (
-                     <SignedInMenu />
-                    ) : (
-                         <List sx={{display: 'flex'}}>
-                          {rightLinks.map(({title, path}) => (
-                          <ListItem
-                            component={NavLink}
-                           to={path}
-                          key={path}
-                          sx={navStyles}
-                         >
-                       {title.toUpperCase()}
-                     </ListItem>
-                     ))}
-                    </List>
-                    )} */}
                     
                     {user ? (
                         <SignedInMenu />
