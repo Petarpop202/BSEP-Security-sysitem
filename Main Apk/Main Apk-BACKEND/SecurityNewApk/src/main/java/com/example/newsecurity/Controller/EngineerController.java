@@ -1,6 +1,8 @@
 package com.example.newsecurity.Controller;
 
 import com.example.newsecurity.Service.IFileService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.tika.Tika;
 import com.example.newsecurity.DTO.EngineerUpdateDTO;
 import com.example.newsecurity.DTO.EngineerUpdateSkillsDTO;
@@ -48,6 +50,7 @@ public class EngineerController {
     @Autowired
     private IFileService fileService;
 
+    private static final Logger logger = LogManager.getLogger(EngineerController.class);
     @PostMapping
     public Engineer newEngineer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Engineer engineer) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");

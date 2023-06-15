@@ -9,6 +9,8 @@ import com.example.newsecurity.Service.IEmployeeService;
 import com.example.newsecurity.Service.IManagerService;
 import com.example.newsecurity.Service.IUserService;
 import com.example.newsecurity.Util.TokenUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,7 @@ public class ManagerController {
     @Autowired
     private IUserService userService;
 
+    private static final Logger logger = LogManager.getLogger(ManagerController.class);
     @PostMapping
     public Manager newManager(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Manager employee) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");

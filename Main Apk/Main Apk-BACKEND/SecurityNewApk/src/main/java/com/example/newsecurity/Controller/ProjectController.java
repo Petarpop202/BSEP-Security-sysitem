@@ -8,6 +8,8 @@ import com.example.newsecurity.Model.User;
 import com.example.newsecurity.Service.IProjectService;
 import com.example.newsecurity.Service.IUserService;
 import com.example.newsecurity.Util.TokenUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,7 @@ public class ProjectController {
     @Autowired
     private IUserService userService;
 
+    private static final Logger logger = LogManager.getLogger(ProjectController.class);
     @PostMapping
     public Project newProject(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Project project) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
@@ -33,6 +36,7 @@ public class ProjectController {
         if (!user.hasPermission("CREATE_PROJECT")){
             return null;
         }
+        logger.info("User {} created new project.", username);
         return projectService.newProject(project);
     }
     @GetMapping
@@ -66,6 +70,7 @@ public class ProjectController {
             return null;
         }
         projectService.deleteProjectById(id);
+        logger.info("User {} deleted project with id {}.", username,id);
         return "Project deleted successfully!";
     }
 
@@ -88,6 +93,7 @@ public class ProjectController {
         if (!user.hasPermission("ADD_EMPLOYEE_TO_PROJECT")){
             return;
         }
+        logger.info("User {} added employee {} to project {}.", username,employeeId,projectId);
         projectService.addEmployeeToProject(projectId, employeeId);
     }
 
@@ -99,6 +105,7 @@ public class ProjectController {
         if (!user.hasPermission("REMOVE_EMPLOYEE_FROM_PROJECT")){
             return;
         }
+        logger.info("User {} removed employee {} from project {}.", username,employeeId,projectId);
         projectService.removeEmployeeFromProject(projectId, employeeId);
     }
 }

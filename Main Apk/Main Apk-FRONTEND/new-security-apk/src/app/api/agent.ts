@@ -79,6 +79,10 @@ const Administrator = {
     getById: (id: any) => requests.get(`system-administrators/${id}`),
     updateAdministrator: (values : any) => requests.put('system-administrators', values),
     updatePassword: (id: number, values: any) => requests.put(`system-administrators/${id}`, values),
+    getAllLogs: () => requests.get('system-administrators/logs'),
+    getAllAlarms: () => requests.get('system-administrators/alarms'),
+    isAlarmedAdmin: () => requests.get('system-administrators/isAlarmed'),
+    alarmSystem: () => requests.get('system-administrators/setAlarm')
 }
 
 const agent = {

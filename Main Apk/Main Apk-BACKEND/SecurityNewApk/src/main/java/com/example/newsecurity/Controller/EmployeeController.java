@@ -10,6 +10,8 @@ import com.example.newsecurity.Service.IProjectService;
 import com.example.newsecurity.Service.IUserService;
 import com.example.newsecurity.Service.ServiceImplementation.EngineerService;
 import com.example.newsecurity.Util.TokenUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,7 @@ public class EmployeeController {
     @Autowired
     private IUserService userService;
 
+    private static final Logger logger = LogManager.getLogger(EmployeeController.class);
     @PostMapping
     public Employee newEmployee(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Employee employee) {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
@@ -37,6 +40,7 @@ public class EmployeeController {
         if (!user.hasPermission("CREATE_EMPLOYEE")){
             return null;
         }
+        logger.info("User {} is logged.", employee.getEngineer().getUsername());
         return employeeService.newEmployee(employee);
     }
     @GetMapping

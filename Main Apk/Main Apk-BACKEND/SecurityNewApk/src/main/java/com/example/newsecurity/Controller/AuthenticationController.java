@@ -4,6 +4,7 @@ import com.example.newsecurity.DTO.*;
 import com.example.newsecurity.Model.RegistrationRequest;
 import com.example.newsecurity.Model.Test;
 import com.example.newsecurity.Model.User;
+import com.example.newsecurity.Service.IAlarmService;
 import com.example.newsecurity.Service.IRegistrationRequestService;
 import com.example.newsecurity.Service.IUserService;
 import com.example.newsecurity.Util.TokenUtils;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -56,10 +58,13 @@ public class AuthenticationController {
     @Autowired
     private IRegistrationRequestService registrationRequestService;
 
+    @Autowired
+    private IAlarmService alarmService;
+
     private static final Logger logger = LogManager.getLogger(AuthenticationController.class);
 
     @PostMapping("/login")
-    public ResponseEntity<Jwt> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
+    public ResponseEntity<Jwt> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletRequest request) {
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
         // AuthenticationException
         try {
@@ -107,7 +112,6 @@ public class AuthenticationController {
 
             logger.info("Passwordless login activated for email: {}", mail);
             return new RedirectView(redirectUrl);
-            //return ResponseEntity.ok(new Jwt(jwt,refreshJwt, tokenUtils.getExpiredIn()));
         }
         return null;
     }
@@ -117,7 +121,7 @@ public class AuthenticationController {
         User existUser = this.userService.findByUsername(userRequest.getUsername());
 
         if (existUser != null) {
-            logger.warn("Failed to add user. Username {} already exists.", userRequest.getUsername());
+            logger.error("Failed to add user. Username {} already exists.", userRequest.getUsername());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         User user = this.userService.save(userRequest);
@@ -194,7 +198,6 @@ public class AuthenticationController {
         if (!token_user.hasPermission("GET_REQUESTS")){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
         List<RegistrationRequest> list = registrationRequestService.getAllUnresponded();
         return ResponseEntity.ok(list);
     }

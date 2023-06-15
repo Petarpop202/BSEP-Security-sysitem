@@ -52,8 +52,8 @@ export default function Login() {
         sx={{ mt: 1 }}
         onSubmit={handleSubmit((data) =>
           agent.Account.login(data)
-            .then(() => {
-              dispatch(signInUser(data))
+            .then((response) => {
+              dispatch(signInUser(response))
               navigate("/")
             })
             .catch(() => {

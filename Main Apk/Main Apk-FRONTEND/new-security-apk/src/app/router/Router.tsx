@@ -21,6 +21,8 @@ import ChangePassword from "../../features/admin/ChangePassword"
 import ShowEmployees from "../../features/admin/ShowEmployees"
 import UploadCV from "../../features/engineer/UploadCV"
 import ManagerCVs from "../../features/hr-manager/ManagerCVs"
+import LogsMonitoring from "../../features/admin/LogsMonitoring"
+import AlarmsMonitoring from "../../features/admin/AlarmsMonitoring"
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +50,8 @@ export const router = createBrowserRouter([
       { path: "create-admin", element: <CreateAdmin/> },
       { path: "change-password-admin", element: <ChangePassword/> },
       { path: "manager-cvs", element: <ManagerCVs/> },
+      { path: "logs", element: <LogsMonitoring/> },
+      { path: "alarms", element: <AlarmsMonitoring/>}
     ],
   },
 ])
