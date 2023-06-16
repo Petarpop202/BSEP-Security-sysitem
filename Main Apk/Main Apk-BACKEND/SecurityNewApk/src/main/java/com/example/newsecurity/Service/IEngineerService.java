@@ -11,18 +11,18 @@ import java.util.List;
 
 @Service
 public interface IEngineerService {
-    Engineer newEngineer(Engineer engineer);
+    Engineer newEngineer(Engineer engineer) throws Exception;
 
     List<Engineer> getAllEngineers();
 
-    Engineer getEngineerById(Long id);
+    Engineer getEngineerById(Long id) throws Exception;
 
-    Engineer getEngineerByUsername(String username);
+    Engineer getEngineerByUsername(String username) throws Exception;
 
     void deleteEngineerById(Long id);
-    void updateEngineer(EngineerUpdateDTO engineerUpdateDTO);
+    void updateEngineer(EngineerUpdateDTO engineerUpdateDTO) throws Exception;
 
-    void updateEngineerSkills(EngineerUpdateSkillsDTO engineerUpdateSkillsDTO);
+    void updateEngineerSkills(EngineerUpdateSkillsDTO engineerUpdateSkillsDTO) throws Exception;
     Engineer updatePassword(Long id, String newPassword);
     String uploadCV(Long id, MultipartFile file) throws Exception;
 }

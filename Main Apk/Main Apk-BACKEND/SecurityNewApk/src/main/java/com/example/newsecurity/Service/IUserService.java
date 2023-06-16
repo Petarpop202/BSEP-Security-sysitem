@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IUserService extends ICRUDService<User>{
     User findByUsername(String username);
-    User save(UserRequest userRequest);
+    User save(UserRequest userRequest) throws Exception;
     User activate(User u);
     void passwordlessLogin(String token, String mail);
 }

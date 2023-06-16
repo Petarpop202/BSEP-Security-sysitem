@@ -6,10 +6,7 @@ import com.example.newsecurity.Repository.IEngineerRepository;
 import com.example.newsecurity.Repository.IManagerRepository;
 import com.example.newsecurity.Repository.ISystemAdministratorRepository;
 import com.example.newsecurity.Repository.IUserRepository;
-import com.example.newsecurity.Service.IRegistrationRequestService;
-import com.example.newsecurity.Service.IRoleService;
-import com.example.newsecurity.Service.ISystemAdministratorService;
-import com.example.newsecurity.Service.IUserService;
+import com.example.newsecurity.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +30,8 @@ public class UserService implements IUserService {
     private IManagerRepository _managerRepository;
     @Autowired
     private ISystemAdministratorRepository _systemAdministratorRepository;
+    @Autowired
+    private IEncryptService encryptService;
 
     UserService(IUserRepository userRepository,IRoleService roleService,IRegistrationRequestService registrationRequestService){_userRepository = userRepository;_roleService = roleService;_registrationRequestService=registrationRequestService;}
     @Autowired
@@ -70,7 +69,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User save(UserRequest userRequest) {
+    public User save(UserRequest userRequest) throws Exception {
         RegistrationRequest registrationRequest = new RegistrationRequest();
         registrationRequest.setUserUsername(userRequest.getUsername());
         _registrationRequestService.create(registrationRequest);
@@ -104,10 +103,10 @@ public class UserService implements IUserService {
             engineer.setEnabled(false);
             engineer.setRequestApproved(false);
             engineer.setAddress(userRequest.getAddress());
-            engineer.setJmbg(userRequest.getJmbg());
+            engineer.setJmbg(encryptService.encryptFile(userRequest.getJmbg(), userRequest.getUsername()));
             engineer.setGender(userRequest.getGender());
-            engineer.setMail(userRequest.getMail());
-            engineer.setPhoneNumber(userRequest.getPhoneNumber());
+            engineer.setMail(encryptService.encryptFile(userRequest.getMail(), userRequest.getUsername()));
+            engineer.setPhoneNumber(encryptService.encryptFile(userRequest.getPhoneNumber(), userRequest.getUsername()));
             engineer.setTitle(userRequest.getTitle());
             engineer.setSkills(null);
             engineer.setRoles(r);
