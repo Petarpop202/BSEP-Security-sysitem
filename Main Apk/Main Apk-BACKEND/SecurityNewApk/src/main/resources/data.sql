@@ -161,16 +161,16 @@ insert into addresses (city, country, street, street_num) values ('Novi Sad', 'S
 insert into addresses (city, country, street, street_num) values ('Novi Sad', 'Srbija', 'Ulica 5', '22');
 
 insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Danilo', 'Bulatović', 0, 'humanResourceManager', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789123', true, 'bsepNoReply@gmail.com', '065/123-456', 1, true);
-insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Stefan', 'Lepsanovic', 0, 'engineer', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789123', true, 'pls@gmail.com', '065/123-456', 2, true);
+insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Stefan', 'Inzenjer', 0, 'engineer', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789123', true, 'pls@gmail.com', '065/123-456', 2, true);
 insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Petar', 'Popovic', 0, 'projectManager', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789123', true, 'pls1@gmail.com', '065/123-456', 2, true);
 insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Admin', 'Adminovic', 0, 'admin', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789123', true, 'bsepNoReplasdy@gmail.com', '065/123-456', 1, true);
 insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('guest', 'guest', 0, 'guest', '', '', true, '', '', 1, true);
 
 
 -- DODAVANJE INZENJERA
-insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Inzenjer1', 'Inzenjer1', 0, 'engineer1', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789111', true, 'engineer1@gmail.com', '065/123-111', 3, true);
-insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Inzenjer2', 'Inzenjer2', 0, 'engineer2', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789222', true, 'engineer2@gmail.com', '065/123-222', 4, true);
-insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Inzenjer3', 'Inzenjer3', 0, 'engineer3', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789333', true, 'engineer3@gmail.com', '065/123-333', 5, true);
+insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Inzenjer1', 'Inzenjer', 0, 'engineer1', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789111', true, 'engineer1@gmail.com', '065/123-111', 3, true);
+insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Inzenjer2', 'Inzenjer', 0, 'engineer2', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789222', true, 'engineer2@gmail.com', '065/123-222', 4, true);
+insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved) values ('Inzenjer3', 'Inzenjer', 0, 'engineer3', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789333', true, 'engineer3@gmail.com', '065/123-333', 5, true);
 insert into engineers (id) values (2);
 insert into engineers (id) values (6);
 insert into engineers (id) values (7);

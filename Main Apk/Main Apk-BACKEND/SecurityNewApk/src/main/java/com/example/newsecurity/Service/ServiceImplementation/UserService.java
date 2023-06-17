@@ -103,10 +103,10 @@ public class UserService implements IUserService {
             engineer.setEnabled(false);
             engineer.setRequestApproved(false);
             engineer.setAddress(userRequest.getAddress());
-            engineer.setJmbg(encryptService.encryptFile(userRequest.getJmbg(), userRequest.getUsername()));
+            engineer.setJmbg(encryptService.encryptFile(userRequest.getJmbg(), userRequest.getUsername(), "jmbg"));
             engineer.setGender(userRequest.getGender());
-            engineer.setMail(encryptService.encryptFile(userRequest.getMail(), userRequest.getUsername()));
-            engineer.setPhoneNumber(encryptService.encryptFile(userRequest.getPhoneNumber(), userRequest.getUsername()));
+            engineer.setMail(encryptService.encryptFile(userRequest.getMail(), userRequest.getUsername(), "mail"));
+            engineer.setPhoneNumber(encryptService.encryptFile(userRequest.getPhoneNumber(), userRequest.getUsername(), "phoneNumber"));
             engineer.setTitle(userRequest.getTitle());
             engineer.setSkills(null);
             engineer.setRoles(r);

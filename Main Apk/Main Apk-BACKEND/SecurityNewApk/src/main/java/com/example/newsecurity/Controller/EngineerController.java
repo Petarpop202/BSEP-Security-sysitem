@@ -62,7 +62,7 @@ public class EngineerController {
         return engineerService.newEngineer(engineer);
     }
     @GetMapping
-    public List<Engineer> getAllEngineers(@RequestHeader("Authorization") String authorizationHeader){
+    public List<Engineer> getAllEngineers(@RequestHeader("Authorization") String authorizationHeader) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);

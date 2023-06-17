@@ -13,7 +13,7 @@ import java.util.List;
 public interface IEngineerService {
     Engineer newEngineer(Engineer engineer) throws Exception;
 
-    List<Engineer> getAllEngineers();
+    List<Engineer> getAllEngineers() throws Exception;
 
     Engineer getEngineerById(Long id) throws Exception;
 
