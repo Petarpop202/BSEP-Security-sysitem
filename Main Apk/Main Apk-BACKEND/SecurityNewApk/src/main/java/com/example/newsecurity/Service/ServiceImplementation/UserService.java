@@ -122,10 +122,10 @@ public class UserService implements IUserService {
             manager.setEnabled(false);
             manager.setRequestApproved(false);
             manager.setAddress(userRequest.getAddress());
-            manager.setJmbg(userRequest.getJmbg());
+            manager.setJmbg(encryptService.encryptFile(userRequest.getJmbg(), userRequest.getUsername(), "jmbg"));
             manager.setGender(userRequest.getGender());
-            manager.setMail(userRequest.getMail());
-            manager.setPhoneNumber(userRequest.getPhoneNumber());
+            manager.setMail(encryptService.encryptFile(userRequest.getMail(), userRequest.getUsername(), "mail"));
+            manager.setPhoneNumber(encryptService.encryptFile(userRequest.getPhoneNumber(), userRequest.getUsername(), "phoneNumber"));
             manager.setTitle(userRequest.getTitle());
             manager.setRoles(r);
             manager.setProjects(null);

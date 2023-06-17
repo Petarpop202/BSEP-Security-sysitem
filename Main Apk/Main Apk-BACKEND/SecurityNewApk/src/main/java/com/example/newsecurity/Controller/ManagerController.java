@@ -40,7 +40,7 @@ public class ManagerController {
         return managerService.newManager(employee);
     }
     @GetMapping
-    public List<Manager> getAllEManagers(@RequestHeader("Authorization") String authorizationHeader){
+    public List<Manager> getAllEManagers(@RequestHeader("Authorization") String authorizationHeader) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
@@ -51,7 +51,7 @@ public class ManagerController {
     }
 
     @GetMapping("/{id}")
-    public ManagerReadDTO getManagerById(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id){
+    public ManagerReadDTO getManagerById(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
@@ -74,7 +74,7 @@ public class ManagerController {
     }
 
     @PutMapping
-    public Manager updateManager(@RequestHeader("Authorization") String authorizationHeader, @RequestBody ManagerUpdateDTO managerUpdateDTO){
+    public Manager updateManager(@RequestHeader("Authorization") String authorizationHeader, @RequestBody ManagerUpdateDTO managerUpdateDTO) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
