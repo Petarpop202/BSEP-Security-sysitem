@@ -98,6 +98,11 @@ export default function ShowEmployees() {
           />
         </Grid>
         <Grid item>
+          <TextField
+          label="Date"
+          />
+        </Grid>
+        <Grid item>
           <Button variant="contained" onClick={handleSearch}>
             Search
           </Button>

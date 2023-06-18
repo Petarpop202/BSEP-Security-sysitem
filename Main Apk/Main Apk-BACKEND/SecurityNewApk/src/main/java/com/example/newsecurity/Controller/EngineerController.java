@@ -216,7 +216,7 @@ public class EngineerController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String surname
     ) {
-ad        List<Engineer> engineers = engineerService.searchEngineers(email, name, surname);
+        List<Engineer> engineers = engineerService.searchEngineers(email, name, surname);
         return ResponseEntity.ok(engineers);
     }
 }
