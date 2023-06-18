@@ -1,6 +1,7 @@
 package com.example.newsecurity.Controller;
 
 import com.example.newsecurity.DTO.*;
+import com.example.newsecurity.Model.Engineer;
 import com.example.newsecurity.Model.RegistrationRequest;
 import com.example.newsecurity.Model.Test;
 import com.example.newsecurity.Model.User;
@@ -200,5 +201,16 @@ public class AuthenticationController {
         }
         List<RegistrationRequest> list = registrationRequestService.getAllUnresponded();
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/forgotPassword/{username}")
+    public ResponseEntity<?> forgotPassword(@PathVariable String username) {
+        userService.resetPasswordMail(username);
+        return ResponseEntity.ok("Mail send");
+    }
+
+    @PutMapping("/resetPassword/{username}")
+    public User resetPassword(@PathVariable String username, @RequestBody String newPassword){
+        return userService.resetPassword(username, newPassword);
     }
 }

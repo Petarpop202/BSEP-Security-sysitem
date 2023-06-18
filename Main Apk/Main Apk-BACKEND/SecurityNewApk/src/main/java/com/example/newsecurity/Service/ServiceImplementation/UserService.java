@@ -13,8 +13,12 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -32,7 +36,8 @@ public class UserService implements IUserService {
     private ISystemAdministratorRepository _systemAdministratorRepository;
     @Autowired
     private IEncryptService encryptService;
-
+    @Autowired
+    private IEmailService _emailService;
     UserService(IUserRepository userRepository,IRoleService roleService,IRegistrationRequestService registrationRequestService){_userRepository = userRepository;_roleService = roleService;_registrationRequestService=registrationRequestService;}
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -179,6 +184,39 @@ public class UserService implements IUserService {
                 }
             }
         });
+    }
+
+    public boolean resetPasswordMail(String username) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        User user = findByUsername(username);
+        Future<?> future = executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                MailDetails mail = new MailDetails();
+                mail.setRecipient(user.getMail());
+                mail.setSubject("Forgot password");
+                mail.setMsgBody("https://localhost:3000/resetPassword/?username=" + username);
+                try {
+                    _emailService.sendSimpleMail(mail);
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public User resetPassword(String username, String newPassword) {
+        User user = _userRepository.findByUsername(username);
+        if(user == null){
+            throw new NoSuchElementException("User not found!");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        return _userRepository.save(user);
     }
 
 }

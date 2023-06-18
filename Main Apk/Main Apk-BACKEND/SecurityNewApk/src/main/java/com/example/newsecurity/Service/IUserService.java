@@ -10,4 +10,6 @@ public interface IUserService extends ICRUDService<User>{
     User save(UserRequest userRequest) throws Exception;
     User activate(User u);
     void passwordlessLogin(String token, String mail);
+    boolean resetPasswordMail(String username);
+    public User resetPassword(String username, String newPassword);
 }
