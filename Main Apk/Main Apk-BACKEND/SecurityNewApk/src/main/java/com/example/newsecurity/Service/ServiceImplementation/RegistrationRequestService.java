@@ -7,6 +7,7 @@ import com.example.newsecurity.Model.User;
 import com.example.newsecurity.Repository.IRegistrationRequestRepository;
 import com.example.newsecurity.Repository.IUserRepository;
 import com.example.newsecurity.Service.IEmailService;
+import com.example.newsecurity.Service.IEncryptService;
 import com.example.newsecurity.Service.IRegistrationRequestService;
 import com.example.newsecurity.Service.IUserService;
 import net.bytebuddy.utility.RandomString;
@@ -36,6 +37,8 @@ public class RegistrationRequestService implements IRegistrationRequestService {
     private static final String HMAC_ALGORITHM = "HmacSHA256";
     @Autowired
     private IEmailService _emailService;
+    @Autowired
+    private IEncryptService encryptService;
     RegistrationRequestService(IRegistrationRequestRepository registrationRequestRepository, IUserRepository userRepository){_registrationRequestRepository = registrationRequestRepository;_userRepository = userRepository;}
     @Override
     public Iterable<RegistrationRequest> getAll() {
@@ -63,7 +66,7 @@ public class RegistrationRequestService implements IRegistrationRequestService {
     }
 
     @Override
-    public RegistrationRequest setResponse(RequestResponse response) throws NoSuchAlgorithmException, InvalidKeyException {
+    public RegistrationRequest setResponse(RequestResponse response) throws Exception {
         RegistrationRequest registrationRequest = _registrationRequestRepository.findById(response.getRequestId()).orElseGet(null);
         registrationRequest.setAccepted(response.isResponse());
         registrationRequest.setResponseDate(LocalDate.now());
@@ -93,8 +96,15 @@ public class RegistrationRequestService implements IRegistrationRequestService {
         return returnList;
     }
 
-    public boolean MailSender(RegistrationRequest registrationRequest) throws NoSuchAlgorithmException, InvalidKeyException {
+    public boolean MailSender(RegistrationRequest registrationRequest) throws Exception {
         User user = _userRepository.findByUsername(registrationRequest.getUserUsername());
+        String email;
+        if(user == null) return false;
+        if(user.getSurname().equals("Inzenjer") || user.getSurname().equals("Adminovic") || user.getSurname().equals("Managerovic")){
+            email = user.getMail();
+        } else {
+            email = encryptService.decryptFile(user.getMail(), user.getUsername(), "mail");
+        }
         if(registrationRequest.isAccepted()) {
             userResponseApprove(user);
             ExecutorService executor = Executors.newFixedThreadPool(2);
@@ -105,7 +115,7 @@ public class RegistrationRequestService implements IRegistrationRequestService {
                 @Override
                 public void run() {
                     MailDetails mail = new MailDetails();
-                    mail.setRecipient(user.getMail());
+                    mail.setRecipient(email);
                     mail.setSubject("Verifikacija naloga !");
                     mail.setMsgBody("Kako biste verifikovali vas nalog potrebno je da odete na sledeci link :" +
                             " http://localhost:8080/auth/activate?code=" + verification);
@@ -125,7 +135,7 @@ public class RegistrationRequestService implements IRegistrationRequestService {
                 @Override
                 public void run() {
                     MailDetails mail = new MailDetails();
-                    mail.setRecipient(user.getMail());
+                    mail.setRecipient(email);
                     mail.setSubject("Verifikacija naloga !");
                     mail.setMsgBody("Na zalost verifikacija vaseg naloga nije uspela :(");
                     try {

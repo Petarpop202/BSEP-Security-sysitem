@@ -24,6 +24,9 @@ import ManagerCVs from "../../features/hr-manager/ManagerCVs"
 import LogsMonitoring from "../../features/admin/LogsMonitoring"
 import AlarmsMonitoring from "../../features/admin/AlarmsMonitoring"
 import GoogleAuthLogin from "../../features/account/GoogleAuthLogin"
+import ForgotPassword from "../../features/account/ForgotPassword"
+import ResetPassword from "../../features/account/ResetPassword"
+
 
 export const router = createBrowserRouter([
   {
@@ -53,7 +56,9 @@ export const router = createBrowserRouter([
       { path: "manager-cvs", element: <ManagerCVs/> },
       { path: "logs", element: <LogsMonitoring/> },
       { path: "alarms", element: <AlarmsMonitoring/>},
-      { path: "googleAuthLogin", element: <GoogleAuthLogin/>}
+      { path: "googleAuthLogin", element: <GoogleAuthLogin/>},
+      { path: "forgotPassword", element: <ForgotPassword/>},
+      { path: "resetPassword", element: <ResetPassword/>}
     ],
   },
 ])

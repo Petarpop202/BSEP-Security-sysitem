@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public interface IRegistrationRequestService extends ICRUDService<RegistrationRequest>{
-    public RegistrationRequest setResponse(RequestResponse response) throws NoSuchAlgorithmException, InvalidKeyException;
+    public RegistrationRequest setResponse(RequestResponse response) throws Exception;
 
     void Activate(String code) throws NoSuchAlgorithmException, InvalidKeyException;
 

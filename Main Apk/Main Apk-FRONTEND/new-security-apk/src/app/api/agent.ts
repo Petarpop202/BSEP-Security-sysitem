@@ -31,8 +31,11 @@ const Account = {
     response: (values: any) => requests.put('auth/response', values),
     passwordlessLogin: (values: any) => requests.post('auth/passwordlessLogin', { mail: values }),
     generateQR: (username: any) => requests.get(`code/generate/${username}`),
-    validateCode: (values: any) => requests.post(`code/validate/key`,values)
-}
+    validateCode: (values: any) => requests.post(`code/validate/key`,values),
+    forgotPassword: (values: any) => requests.get(`auth/forgotPassword/${values}`),
+    resetPassword: (username: any, newPassword: any) => requests.put(`auth/resetPassword/${username}`, newPassword),
+  }
+
 
 const Engineer = {
     getByUsername: (username: any) => requests.get(`engineers/username=${username}`),
@@ -85,7 +88,9 @@ const Administrator = {
     getAllLogs: () => requests.get('system-administrators/logs'),
     getAllAlarms: () => requests.get('system-administrators/alarms'),
     isAlarmedAdmin: () => requests.get('system-administrators/isAlarmed'),
-    alarmSystem: () => requests.get('system-administrators/setAlarm')
+    alarmSystem: () => requests.get('system-administrators/setAlarm'),
+    blockUser: (username: any) => requests.put(`system-administrators/blockUser/${username}`, {}),
+    unblockUser: (username: any) => requests.put(`system-administrators/unblockUser/${username}`, {})
 }
 
 const agent = {

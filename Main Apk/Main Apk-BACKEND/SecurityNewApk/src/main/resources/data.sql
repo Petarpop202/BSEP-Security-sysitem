@@ -171,6 +171,7 @@ insert into users (name, surname, gender, username, password, jmbg, enabled, mai
 insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved, mfa) values ('Inzenjer1', 'Inzenjer', 0, 'engineer1', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789111', true, 'engineer1@gmail.com', '065/123-111', 3, true, false);
 insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved, mfa) values ('Inzenjer2', 'Inzenjer', 0, 'engineer2', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789222', true, 'engineer2@gmail.com', '065/123-222', 4, true, false);
 insert into users (name, surname, gender, username, password, jmbg, enabled, mail, phone_number, address_id, request_approved, mfa) values ('Inzenjer3', 'Inzenjer', 0, 'engineer3', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '123456789333', true, 'engineer3@gmail.com', '065/123-333', 5, true, false);
+
 insert into engineers (id) values (2);
 insert into engineers (id) values (6);
 insert into engineers (id) values (7);

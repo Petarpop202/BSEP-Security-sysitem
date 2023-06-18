@@ -101,6 +101,13 @@ export default function Login() {
         </LoadingButton>
         <Grid container>
           <Grid item>
+            <Link to="/forgotPassword" style={{ textDecoration: "none" }}>
+              {"Forgot password?"}
+            </Link>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item>
             <Link to="/register" style={{ textDecoration: "none" }}>
               {"Don't have an account? Sign Up"}
             </Link>

@@ -11,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button, TextField, Grid } from '@mui/material';
 import { Manager } from "../../app/models/Manager";
+import { toast } from "react-toastify";
 
 export default function ShowEmployees() {
   const navigate = useNavigate();
@@ -70,6 +71,25 @@ export default function ShowEmployees() {
     getManagers();
   };
 
+  const handleBlock = (username: any) => {
+    agent.Administrator.blockUser(username)
+        .then(() => {
+            toast.success("User successfully blocked!")
+        })
+        .catch(() => {
+            toast.error('error!')
+        })
+  }
+  const handleUnblock = (username: any) => {
+    agent.Administrator.unblockUser(username)
+        .then(() => {
+            toast.success("User successfully unblocked!")
+        })
+        .catch(() => {
+            toast.error('error!')
+        })
+  }
+
   return (
     <>
       <Grid container spacing={2} alignItems="center">
@@ -126,6 +146,7 @@ export default function ShowEmployees() {
               <TableCell align="left">Username</TableCell>
               <TableCell align="left">Phone number</TableCell>
               <TableCell align="left">Address</TableCell>
+              <TableCell align="left"></TableCell>              
             </TableRow>
           </TableHead>
           {managers && (
@@ -139,10 +160,21 @@ export default function ShowEmployees() {
                   <TableCell>{manager.surname}</TableCell>
                   <TableCell>{manager.mail}</TableCell>
                   <TableCell>{manager.username}</TableCell>
-                  <TableCell>{manager.phoneNumber}</TableCell>
+                  <TableCell>{manager.phoneNumber} {manager.blocked}</TableCell>
                   <TableCell>
                     {manager.address.city} {manager.address.street} {manager.address.streetNum}
                   </TableCell>
+                  {manager.blocked === false &&
+                    <TableCell>
+                      <Button onClick={() => handleBlock(manager.username)} variant="outlined" color="error" sx={{ml: 5}}>Block</Button>
+                    </TableCell>
+                  }
+                  {manager.blocked &&
+                    <TableCell>
+                      <Button onClick={() => handleUnblock(manager.username)} variant="outlined" sx={{ml: 5}}>Unblock</Button>
+                    </TableCell>
+                  }
+                  
                 </TableRow>
               ))}
             </TableBody>
