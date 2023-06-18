@@ -12,4 +12,6 @@ public interface IUserService extends ICRUDService<User>{
     void passwordlessLogin(String token, String mail);
     boolean resetPasswordMail(String username) throws Exception;
     public User resetPassword(String username, String newPassword);
+    User blockUser(String username);
+    User unblockUser(String username);
 }

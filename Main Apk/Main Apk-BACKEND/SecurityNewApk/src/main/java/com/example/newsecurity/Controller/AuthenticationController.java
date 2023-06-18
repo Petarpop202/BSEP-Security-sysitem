@@ -75,6 +75,9 @@ public class AuthenticationController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             User user = (User) authentication.getPrincipal();
+            if(user.isBlocked()){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
             String jwt = tokenUtils.generateToken(user);
             String refreshJwt = tokenUtils.generateRefreshToken(user);
 
@@ -165,7 +168,7 @@ public class AuthenticationController {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String token_username = tokenUtils.getUsernameFromToken(jwtToken);
         User token_user = userService.findByUsername(token_username);
-        if (!token_user.hasPermission("REFRESH_ACCESS_TOKEN")){
+        if (!token_user.hasPermission("REFRESH_ACCESS_TOKEN")  || token_user.isBlocked()){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -213,4 +216,6 @@ public class AuthenticationController {
     public User resetPassword(@PathVariable String username, @RequestBody String newPassword){
         return userService.resetPassword(username, newPassword);
     }
+
+
 }
