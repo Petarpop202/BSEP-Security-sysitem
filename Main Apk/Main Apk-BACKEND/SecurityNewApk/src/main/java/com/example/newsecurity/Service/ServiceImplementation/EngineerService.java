@@ -7,12 +7,6 @@ import com.example.newsecurity.Repository.IEngineerRepository;
 import com.example.newsecurity.Service.IEncryptService;
 import com.example.newsecurity.Service.IEngineerService;
 import com.example.newsecurity.Service.IFileService;
-import com.sun.jarsigner.ContentSigner;
-import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.BasicConstraints;
-import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.bouncycastle.asn1.x509.X509Extensions;
-import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,22 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import javax.security.auth.x500.X500Principal;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.math.BigInteger;
-import java.security.*;
-import java.security.cert.Certificate;
-import java.security.cert.X509Certificate;
 import java.time.LocalDate;
-import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EngineerService implements IEngineerService {
@@ -149,6 +134,31 @@ public class EngineerService implements IEngineerService {
         }
         File files = new File(path);
         return Arrays.stream(files.list()).filter(cv -> cv.contains(engineer.getUsername())).toList().get(0);
+    }
+
+    @Override
+    public List<Engineer> searchEngineers(String email, String name, String surname) {
+        List<Engineer> engineers = engineerRepository.findAll();
+
+        if (!email.equals("")) {
+            engineers = engineers.stream()
+                    .filter(engineer -> engineer.getMail().toLowerCase().contains(email.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (!name.equals("")) {
+            engineers = engineers.stream()
+                    .filter(engineer -> engineer.getName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (!surname.equals("")) {
+            engineers = engineers.stream()
+                    .filter(engineer -> engineer.getSurname().toLowerCase().contains(surname.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        return engineers;
     }
 
     public Engineer readEngineer(Engineer engineerToRead) throws Exception {

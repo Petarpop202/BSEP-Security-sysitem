@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.PrivateKey;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,4 +26,5 @@ public interface IEngineerService {
     void updateEngineerSkills(EngineerUpdateSkillsDTO engineerUpdateSkillsDTO) throws Exception;
     Engineer updatePassword(Long id, String newPassword);
     String uploadCV(Long id, MultipartFile file) throws Exception;
+    List<Engineer> searchEngineers(String email, String name, String surname);
 }
