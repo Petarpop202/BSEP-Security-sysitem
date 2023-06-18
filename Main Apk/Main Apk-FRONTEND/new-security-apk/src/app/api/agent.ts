@@ -29,8 +29,10 @@ const Account = {
     getString: () => requests.get('auth/getString'),
     getRequests: () => requests.get('auth/getRequests'),
     response: (values: any) => requests.put('auth/response', values),
-    passwordlessLogin: (values: any) => requests.post('auth/passwordlessLogin', { mail: values })
-}
+    passwordlessLogin: (values: any) => requests.post('auth/passwordlessLogin', { mail: values }),
+    forgotPassword: (values: any) => requests.get(`auth/forgotPassword/${values}`),
+    resetPassword: (username: any, newPassword: any) => requests.put(`auth/resetPassword/${username}`, newPassword),
+  }
 
 const Engineer = {
     getByUsername: (username: any) => requests.get(`engineers/username=${username}`),
