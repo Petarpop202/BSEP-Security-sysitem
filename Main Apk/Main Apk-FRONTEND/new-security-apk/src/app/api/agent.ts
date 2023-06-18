@@ -85,7 +85,9 @@ const Administrator = {
     getAllLogs: () => requests.get('system-administrators/logs'),
     getAllAlarms: () => requests.get('system-administrators/alarms'),
     isAlarmedAdmin: () => requests.get('system-administrators/isAlarmed'),
-    alarmSystem: () => requests.get('system-administrators/setAlarm')
+    alarmSystem: () => requests.get('system-administrators/setAlarm'),
+    blockUser: (username: any) => requests.put(`system-administrators/blockUser/${username}`, {}),
+    unblockUser: (username: any) => requests.put(`system-administrators/unblockUser/${username}`, {})
 }
 
 const agent = {

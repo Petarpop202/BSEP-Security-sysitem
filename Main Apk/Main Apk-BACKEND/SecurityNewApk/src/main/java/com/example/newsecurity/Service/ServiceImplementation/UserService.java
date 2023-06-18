@@ -225,5 +225,20 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(newPassword));
         return _userRepository.save(user);
     }
+    @Override
+    public User blockUser(String username){
+        User user = _userRepository.findByUsername(username);
+        if(user == null) return null;
+        user.setBlocked(true);
+        return _userRepository.save(user);
+    }
+
+    @Override
+    public User unblockUser(String username){
+        User user = _userRepository.findByUsername(username);
+        if(user == null) return null;
+        user.setBlocked(false);
+        return _userRepository.save(user);
+    }
 
 }

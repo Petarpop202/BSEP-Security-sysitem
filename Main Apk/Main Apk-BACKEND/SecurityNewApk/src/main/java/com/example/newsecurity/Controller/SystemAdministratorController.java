@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -130,5 +131,15 @@ public class SystemAdministratorController {
         String ipAddress = "192.168.1.1";
         alarmService.checkIp(ipAddress);
         return true;
+    }
+    @PutMapping("/blockUser/{username}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    public User blockUser(@PathVariable String username){
+        return userService.blockUser(username);
+    }
+    @PutMapping("/unblockUser/{username}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    public User unblockUser(@PathVariable String username){
+        return userService.unblockUser(username);
     }
 }
