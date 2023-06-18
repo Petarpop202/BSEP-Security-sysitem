@@ -42,6 +42,7 @@ const Engineer = {
     uploadCV: (file: FormData) => axios.post(`engineers/upload-cv`, file, { headers:{"Content-Type": "multipart/form-data"}}).then(responseBody),
     getCV: (username: string) => axios({url: `engineers/get-cv/${username}`, method: 'GET', responseType: 'arraybuffer'}).then(responseBody),
     downloadCV: (username: string) => axios({url: `engineers/download-cv/${username}`, method: 'GET', responseType: 'blob'}).then(responseBody),
+    searchEngineers: (searchCriteria: any) => requests.get(`/engineers/search?email=${encodeURIComponent(searchCriteria.email)}&name=${encodeURIComponent(searchCriteria.name)}&surname=${encodeURIComponent(searchCriteria.surname)}`),
   }
 
 const Employee = {
