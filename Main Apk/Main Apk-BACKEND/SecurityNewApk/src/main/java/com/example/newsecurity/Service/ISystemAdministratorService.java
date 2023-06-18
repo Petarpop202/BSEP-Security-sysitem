@@ -12,13 +12,13 @@ public interface ISystemAdministratorService {
     SystemAdministrator changePassword(Long id, String password);
     User getUserById(Long id);
 
-    List<SystemAdministrator> getAllAdministrators();
+    List<SystemAdministrator> getAllAdministrators() throws Exception;
 
-    SystemAdministrator getAdministratorById(Long id);
+    SystemAdministrator getAdministratorById(Long id) throws Exception;
 
     void deleteAdministratorById(Long id);
 
-    SystemAdministrator updateAdministrator(SystemAdministratorUpdateDTO adminDTO);
+    SystemAdministrator updateAdministrator(SystemAdministratorUpdateDTO adminDTO) throws Exception;
 
     SystemAdministrator updatePassword(Long id, String newPassword);
 }

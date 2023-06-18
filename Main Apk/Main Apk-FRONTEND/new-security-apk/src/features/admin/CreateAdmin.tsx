@@ -190,7 +190,7 @@ export default function CreateAdmin() {
                     fullWidth
                     label="Street Number"
                     autoFocus
-                    {...register('address.streetNumber', { required: 'Street number is required' })}
+                    {...register('address.streetNum', { required: 'Street number is required' })}
                     // error={!!errors.username}
                     // helperText={errors?.username?.message as string}
                 />

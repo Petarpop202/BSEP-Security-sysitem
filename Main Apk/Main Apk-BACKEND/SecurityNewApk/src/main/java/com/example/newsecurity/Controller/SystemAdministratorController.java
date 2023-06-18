@@ -41,7 +41,7 @@ public class SystemAdministratorController {
 
     private static final Logger logger = LogManager.getLogger(SystemAdministratorController.class);
     @GetMapping
-    public List<SystemAdministrator> getAllAdministrators(@RequestHeader("Authorization") String authorizationHeader){
+    public List<SystemAdministrator> getAllAdministrators(@RequestHeader("Authorization") String authorizationHeader) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
@@ -52,7 +52,7 @@ public class SystemAdministratorController {
     }
 
     @GetMapping("/{id}")
-    public SystemAdministrator getAdministratorById(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id){
+    public SystemAdministrator getAdministratorById(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
@@ -76,7 +76,7 @@ public class SystemAdministratorController {
     }
 
     @PutMapping
-    public SystemAdministrator updateAdministrator(@RequestHeader("Authorization") String authorizationHeader, @RequestBody SystemAdministratorUpdateDTO adminDTO){
+    public SystemAdministrator updateAdministrator(@RequestHeader("Authorization") String authorizationHeader, @RequestBody SystemAdministratorUpdateDTO adminDTO) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);

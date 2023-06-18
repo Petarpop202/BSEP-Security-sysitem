@@ -141,10 +141,10 @@ public class UserService implements IUserService {
             administrator.setEnabled(false);
             administrator.setRequestApproved(false);
             administrator.setAddress(userRequest.getAddress());
-            administrator.setJmbg(userRequest.getJmbg());
+            administrator.setJmbg(encryptService.encryptFile(userRequest.getJmbg(), userRequest.getUsername(), "jmbg"));
             administrator.setGender(userRequest.getGender());
-            administrator.setMail(userRequest.getMail());
-            administrator.setPhoneNumber(userRequest.getPhoneNumber());
+            administrator.setMail(encryptService.encryptFile(userRequest.getMail(), userRequest.getUsername(), "mail"));
+            administrator.setPhoneNumber(encryptService.encryptFile(userRequest.getPhoneNumber(), userRequest.getUsername(), "phoneNumber"));
             administrator.setTitle(userRequest.getTitle());
             administrator.setRoles(r);
             return _systemAdministratorRepository.save(administrator);
