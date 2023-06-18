@@ -15,6 +15,7 @@ export default function SignedInMenu() {
     refreshJwt: user?.refreshJwt,
     jwt: user?.jwt,
   }
+  var url = "";
 
   // const signOut = () => {
   //     localStorage.removeItem('user');
@@ -23,6 +24,8 @@ export default function SignedInMenu() {
   // }
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [qrCodeImageUrl, setQrCodeImageUrl] = useState("");
+
   const open = Boolean(anchorEl)
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget)
@@ -58,6 +61,17 @@ export default function SignedInMenu() {
   const handleClose = () => {
     setAnchorEl(null)
   }
+  
+  const handle2FA = async () => {
+    await agent.Account.generateQR(user?.username)
+      .then(response => {
+        setQrCodeImageUrl(response);
+      })
+      .catch(error => {
+        // Handlujte greške prilikom generisanja QR koda
+      });
+  };
+  
 
   const handleRoles = () => {
     navigate("/roles")
@@ -86,6 +100,13 @@ export default function SignedInMenu() {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={handleProfile}>Profile</MenuItem>
+        <MenuItem onClick={handle2FA}>
+        {qrCodeImageUrl ? (
+            <img src={`data:image/png;base64,${qrCodeImageUrl}`} alt="QR Code" />
+          ) : (
+            '2FA'
+          )}
+        </MenuItem>
         {user?.userRole === "ROLE_ADMINISTRATOR" && (
           <MenuItem onClick={handleRoles}>Roles</MenuItem>
         )}

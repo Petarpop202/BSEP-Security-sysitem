@@ -60,6 +60,7 @@ public class TokenUtils {
                 .claim("name", user.getName())
                 .claim("surname", user.getSurname())
                 .claim("id", user.getId())
+                .claim("mfa", user.isMfa())
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 
 
