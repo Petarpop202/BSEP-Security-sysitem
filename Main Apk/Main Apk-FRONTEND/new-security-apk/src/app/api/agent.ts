@@ -29,7 +29,9 @@ const Account = {
     getString: () => requests.get('auth/getString'),
     getRequests: () => requests.get('auth/getRequests'),
     response: (values: any) => requests.put('auth/response', values),
-    passwordlessLogin: (values: any) => requests.post('auth/passwordlessLogin', { mail: values })
+    passwordlessLogin: (values: any) => requests.post('auth/passwordlessLogin', { mail: values }),
+    generateQR: (username: any) => requests.get(`code/generate/${username}`),
+    validateCode: (values: any) => requests.post(`code/validate/key`,values)
 }
 
 const Engineer = {
@@ -42,8 +44,8 @@ const Engineer = {
     uploadCV: (file: FormData) => axios.post(`engineers/upload-cv`, file, { headers:{"Content-Type": "multipart/form-data"}}).then(responseBody),
     getCV: (username: string) => axios({url: `engineers/get-cv/${username}`, method: 'GET', responseType: 'arraybuffer'}).then(responseBody),
     downloadCV: (username: string) => axios({url: `engineers/download-cv/${username}`, method: 'GET', responseType: 'blob'}).then(responseBody),
-    searchEngineers: (searchCriteria: any) => requests.get(`/engineers/search?email=${encodeURIComponent(searchCriteria.email)}&name=${encodeURIComponent(searchCriteria.name)}&surname=${encodeURIComponent(searchCriteria.surname)}`),
-  }
+    searchEngineers: (searchCriteria: any) => requests.get(`/engineers/search?email=${encodeURIComponent(searchCriteria.email)}&name=${encodeURIComponent(searchCriteria.name)}&surname=${encodeURIComponent(searchCriteria.surname)}` )
+ }
 
 const Employee = {
     getProjectsByEmployeeId : (id: any) => requests.get(`employees/${id}/projects`),

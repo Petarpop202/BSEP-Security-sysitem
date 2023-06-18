@@ -57,7 +57,7 @@ public class UserService implements IUserService {
 
     @Override
     public User update(User entity) {
-        return null;
+        return _userRepository.save(entity);
     }
 
     @Override
@@ -88,6 +88,7 @@ public class UserService implements IUserService {
         u.setMail(userRequest.getMail());
         u.setPhoneNumber(userRequest.getPhoneNumber());
         u.setTitle(userRequest.getTitle());
+        u.setMfa(false);
         // u primeru se registruju samo obicni korisnici i u skladu sa tim im se i dodeljuje samo rola USER
         Role roles1 = _roleService.findByName(userRequest.getRole());
         List<Role> r = new ArrayList<>();

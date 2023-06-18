@@ -4,4 +4,5 @@ export interface DecodedToken {
   surname: string
   sub: string
   roles: string
+  mfa: boolean
 }

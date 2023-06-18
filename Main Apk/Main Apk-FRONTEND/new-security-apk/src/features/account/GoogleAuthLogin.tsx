@@ -11,7 +11,7 @@ import {
 } from "@mui/material"
 import { useForm } from "react-hook-form"
 import { FieldValues } from "react-hook-form/dist/types"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, Link, useLocation } from "react-router-dom"
 import { toast } from "react-toastify"
 import agent from "../../app/api/agent"
 import { useAppDispatch } from "../../app/apk/configureApk"
@@ -19,8 +19,9 @@ import { signInUser } from "./accountSlice"
 import { response } from "express"
 import { DecodedToken } from "../../app/models/DecodedToken"
 import { decodeToken } from "react-jwt"
+import { request } from "http"
 
-export default function Login() {
+export default function GoogleAuthLogin() {
   const {
     register,
     handleSubmit,
@@ -30,6 +31,30 @@ export default function Login() {
   })
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const username = searchParams.get("username");
+  const password = searchParams.get("password");
+
+  var requestBody = {
+    username: username,
+    code: 0
+  };
+
+  const Login = () => {
+    var data = {
+        username: username,
+        password: password
+      };
+    agent.Account.login(data)
+    .then((response) => {
+          navigate("/")
+          dispatch(signInUser(response))
+      })
+      .catch(() => {
+        toast.error("Invalid parameters!")
+      })
+  }
 
   return (
     <Container
@@ -52,42 +77,34 @@ export default function Login() {
         component="form"
         noValidate
         sx={{ mt: 1 }}
-        onSubmit={handleSubmit((data) =>
-          agent.Account.login(data)
+        onSubmit={handleSubmit((data) => {
+          requestBody.code = data.code
+          agent.Account.validateCode(requestBody)
             .then((response) => {
-              const decodedToken = decodeToken<DecodedToken>(response?.jwt)
-              if(decodedToken?.mfa){
-                navigate(`/googleAuthLogin?username=${encodeURIComponent(data.username)}&password=${encodeURIComponent(data.password)}`)
+              if(response){
+                Login();
+                dispatch(signInUser(response))
+                navigate("/")
               }
               else {
-                navigate("/")
-                dispatch(signInUser(response))
+                toast.error("Invalid Code!")
               }
             })
             .catch(() => {
               toast.error("Invalid parameters!")
-            })
+            }) 
+        }
         )}
       >
         <TextField
           margin="normal"
           required
           fullWidth
-          label="Username"
+          label="Code"
           autoFocus
-          {...register("username", { required: "Username is required" })}
-          error={!!errors.username}
-          helperText={errors?.username?.message as string}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Password"
-          type="password"
-          {...register("password", { required: "Username is required" })}
-          error={!!errors.password}
-          helperText={errors?.password?.message as string}
+          {...register("code", { required: "Code is required" })}
+          error={!!errors.code}
+          helperText={errors?.code?.message as string}
         />
         <LoadingButton
           loading={isSubmitting}
@@ -99,20 +116,6 @@ export default function Login() {
         >
           Sign in
         </LoadingButton>
-        <Grid container>
-          <Grid item>
-            <Link to="/register" style={{ textDecoration: "none" }}>
-              {"Don't have an account? Sign Up"}
-            </Link>
-          </Grid>
-        </Grid>
-        <Grid container>
-          <Grid item>
-            <Link to="/passwordless" style={{ textDecoration: "none" }}>
-              {"Passwordless login"}
-            </Link>
-          </Grid>
-        </Grid>
       </Box>
     </Container>
   )
