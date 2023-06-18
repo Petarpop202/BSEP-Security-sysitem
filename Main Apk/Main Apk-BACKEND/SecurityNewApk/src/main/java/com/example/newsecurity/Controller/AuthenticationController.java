@@ -133,7 +133,7 @@ public class AuthenticationController {
 
     @PutMapping ("/response")
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<RequestResponse> RequestResponse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody RequestResponse response, UriComponentsBuilder ucBuilder) throws NoSuchAlgorithmException, InvalidKeyException {
+    public ResponseEntity<RequestResponse> RequestResponse(@RequestHeader("Authorization") String authorizationHeader, @RequestBody RequestResponse response, UriComponentsBuilder ucBuilder) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String token_username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(token_username);
@@ -204,7 +204,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/forgotPassword/{username}")
-    public ResponseEntity<?> forgotPassword(@PathVariable String username) {
+    public ResponseEntity<?> forgotPassword(@PathVariable String username) throws Exception {
         userService.resetPasswordMail(username);
         return ResponseEntity.ok("Mail send");
     }

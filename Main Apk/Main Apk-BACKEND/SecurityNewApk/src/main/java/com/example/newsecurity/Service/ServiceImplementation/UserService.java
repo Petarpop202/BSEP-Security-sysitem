@@ -186,14 +186,21 @@ public class UserService implements IUserService {
         });
     }
 
-    public boolean resetPasswordMail(String username) {
+    public boolean resetPasswordMail(String username) throws Exception {
         ExecutorService executor = Executors.newFixedThreadPool(2);
         User user = findByUsername(username);
+        String email;
+        if(user == null) return false;
+        if(user.getSurname().equals("Inzenjer") || user.getSurname().equals("Adminovic") || user.getSurname().equals("Managerovic")){
+            email = user.getMail();
+        } else {
+            email = encryptService.decryptFile(user.getMail(), user.getUsername(), "mail");
+        }
         Future<?> future = executor.submit(new Runnable() {
             @Override
             public void run() {
                 MailDetails mail = new MailDetails();
-                mail.setRecipient(user.getMail());
+                mail.setRecipient(email);
                 mail.setSubject("Forgot password");
                 mail.setMsgBody("https://localhost:3000/resetPassword/?username=" + username);
                 try {
