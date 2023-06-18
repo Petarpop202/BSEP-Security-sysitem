@@ -4,6 +4,7 @@ import com.example.newsecurity.DTO.EngineerUpdateDTO;
 import com.example.newsecurity.DTO.EngineerUpdateSkillsDTO;
 import com.example.newsecurity.Model.Engineer;
 import com.example.newsecurity.Repository.IEngineerRepository;
+import com.example.newsecurity.Service.IEncryptService;
 import com.example.newsecurity.Service.IEngineerService;
 import com.example.newsecurity.Service.IFileService;
 import com.sun.jarsigner.ContentSigner;
@@ -46,6 +47,9 @@ public class EngineerService implements IEngineerService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private IFileService fileService;
+    @Autowired
+    private IEncryptService encryptService;
+
 
     @Override
     public Engineer newEngineer(Engineer engineer) {
@@ -53,26 +57,38 @@ public class EngineerService implements IEngineerService {
     }
 
     @Override
-    public List<Engineer> getAllEngineers() {
-        return engineerRepository.findAll();
+    public List<Engineer> getAllEngineers() throws Exception {
+        List<Engineer> engineers = engineerRepository.findAll();
+        List<Engineer> engineersDecrypted = new ArrayList<>();
+        if (engineers == null){
+            return null;
+        }
+        for (Engineer engineer : engineers){
+            engineersDecrypted.add(readEngineer(engineer));
+        }
+        return engineersDecrypted;
     }
 
     @Override
-    public Engineer getEngineerById(Long id) {
-        Optional<Engineer> engineer = engineerRepository.findById(id);
-        if(!engineer.isPresent()){
+    public Engineer getEngineerById(Long id) throws Exception {
+        Optional<Engineer> engineerOptional = engineerRepository.findById(id);
+        if(!engineerOptional.isPresent()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find engineer");
         }
-        return engineer.get();
+        return readEngineer(engineerOptional.get());
     }
 
     @Override
-    public Engineer getEngineerByUsername(String username){
-        Optional<Engineer> engineer = Optional.ofNullable(engineerRepository.findByUsername(username));
-        if (!engineer.isPresent()){
+    public Engineer getEngineerByUsername(String username) throws Exception {
+        Optional<Engineer> engineerOptional = Optional.ofNullable(engineerRepository.findByUsername(username));
+        if (!engineerOptional.isPresent()){
             throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find engineer");
         }
-        return engineer.get();
+//        Engineer engineer = engineerOptional.get();
+//        engineer.setPhoneNumber(encryptService.decryptFile(engineerOptional.get().getPhoneNumber(), engineerOptional.get().getUsername(), "phoneNumber"));
+//        engineer.setJmbg(encryptService.decryptFile(engineerOptional.get().getJmbg(), engineerOptional.get().getUsername(), "jmbg"));
+//        engineer.setMail(encryptService.decryptFile(engineerOptional.get().getMail(), engineerOptional.get().getUsername(), "mail"));
+        return readEngineer(engineerOptional.get());
     }
 
     @Override
@@ -81,14 +97,16 @@ public class EngineerService implements IEngineerService {
     }
 
     @Override
-    public void updateEngineer(EngineerUpdateDTO engineerUpdateDTO) {
+    public void updateEngineer(EngineerUpdateDTO engineerUpdateDTO) throws Exception {
         Engineer engineer = getEngineerById(engineerUpdateDTO.getId());
+        String engineerMail = engineer.getMail();
         if(engineer != null){
             engineer.setName(engineerUpdateDTO.getName());
             engineer.setSurname(engineerUpdateDTO.getSurname());
             engineer.setUsername(engineerUpdateDTO.getUsername());
-            engineer.setPhoneNumber(engineerUpdateDTO.getPhoneNumber());
-            engineer.setJmbg(engineerUpdateDTO.getJmbg());
+            engineer.setPhoneNumber(encryptService.encryptFile(engineerUpdateDTO.getPhoneNumber(), engineer.getUsername(), "phoneNumber"));
+            engineer.setJmbg(encryptService.encryptFile(engineerUpdateDTO.getJmbg(), engineer.getUsername(), "jmbg"));
+            engineer.setMail(encryptService.encryptFile(engineerMail, engineer.getUsername(), "mail"));
             engineer.setGender(engineerUpdateDTO.getGender());
             engineer.setAddress(engineerUpdateDTO.getAddress());
             engineerRepository.save(engineer);
@@ -98,7 +116,7 @@ public class EngineerService implements IEngineerService {
     }
 
     @Override
-    public void updateEngineerSkills(EngineerUpdateSkillsDTO engineerUpdateSkillsDTO) {
+    public void updateEngineerSkills(EngineerUpdateSkillsDTO engineerUpdateSkillsDTO) throws Exception {
         Engineer engineer = getEngineerById(engineerUpdateSkillsDTO.getId());
         if(engineer != null){
             engineer.setSkills(engineerUpdateSkillsDTO.getSkills());
@@ -131,5 +149,16 @@ public class EngineerService implements IEngineerService {
         }
         File files = new File(path);
         return Arrays.stream(files.list()).filter(cv -> cv.contains(engineer.getUsername())).toList().get(0);
+    }
+
+    public Engineer readEngineer(Engineer engineerToRead) throws Exception {
+        Engineer engineer = engineerToRead;
+        if(engineer.getSurname().equals("Inzenjer")){
+            return engineer;
+        }
+        engineer.setPhoneNumber(encryptService.decryptFile(engineerToRead.getPhoneNumber(), engineerToRead.getUsername(), "phoneNumber"));
+        engineer.setJmbg(encryptService.decryptFile(engineerToRead.getJmbg(), engineerToRead.getUsername(), "jmbg"));
+        engineer.setMail(encryptService.decryptFile(engineerToRead.getMail(), engineerToRead.getUsername(), "mail"));
+        return engineer;
     }
 }

@@ -11,13 +11,13 @@ import java.util.List;
 public interface IManagerService {
     Manager newManager(Manager manager);
 
-    List<Manager> getAllManagers();
+    List<Manager> getAllManagers() throws Exception;
 
-    ManagerReadDTO getManagerById(Long id);
+    ManagerReadDTO getManagerById(Long id) throws Exception;
 
     void deleteManagerById(Long id);
 
-    Manager updateManager(ManagerUpdateDTO managerUpdateDTO);
+    Manager updateManager(ManagerUpdateDTO managerUpdateDTO) throws Exception;
 
     Manager updatePassword(Long id, String newPassword);
 }

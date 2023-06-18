@@ -52,7 +52,7 @@ public class EngineerController {
 
     private static final Logger logger = LogManager.getLogger(EngineerController.class);
     @PostMapping
-    public Engineer newEngineer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Engineer engineer) {
+    public Engineer newEngineer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Engineer engineer) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
@@ -62,7 +62,7 @@ public class EngineerController {
         return engineerService.newEngineer(engineer);
     }
     @GetMapping
-    public List<Engineer> getAllEngineers(@RequestHeader("Authorization") String authorizationHeader){
+    public List<Engineer> getAllEngineers(@RequestHeader("Authorization") String authorizationHeader) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
@@ -73,7 +73,7 @@ public class EngineerController {
     }
 
     @GetMapping("/{id}")
-    public Engineer getEngineerById(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id){
+    public Engineer getEngineerById(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
@@ -84,7 +84,7 @@ public class EngineerController {
     }
 
     @GetMapping("/username={username}")
-    public Engineer getEngineerByUsername(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String username){
+    public Engineer getEngineerByUsername(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String username) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String token_username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(token_username);
@@ -106,7 +106,7 @@ public class EngineerController {
         return "Engineer deleted successfully!";
     }
     @PutMapping
-    public void updateEngineer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody EngineerUpdateDTO engineerUpdateDTO){
+    public void updateEngineer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody EngineerUpdateDTO engineerUpdateDTO) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
@@ -116,7 +116,7 @@ public class EngineerController {
         engineerService.updateEngineer(engineerUpdateDTO);
     }
     @PutMapping("/skills-update")
-    public void updateEnginnerSkills(@RequestHeader("Authorization") String authorizationHeader, @RequestBody EngineerUpdateSkillsDTO engineerUpdateSkillsDTO){
+    public void updateEnginnerSkills(@RequestHeader("Authorization") String authorizationHeader, @RequestBody EngineerUpdateSkillsDTO engineerUpdateSkillsDTO) throws Exception {
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String username = tokenUtils.getUsernameFromToken(jwtToken);
         User user = userService.findByUsername(username);
